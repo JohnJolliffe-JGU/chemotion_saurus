@@ -75,6 +75,7 @@ jobs:
           echo "OPENBABEL"
           find -name openbabel.so
           #gem install bundler -v 1.17.3 --no-document && bundle install -j 3 --path ~/shared/bundle
-          RAILS_ENV=test bundle exec rake db:test:prepare --trace
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+          #RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          npm test
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
