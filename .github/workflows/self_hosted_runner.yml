@@ -13,13 +13,13 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: "gitlab-runner"
+          files: "chemotion_ELN"
       - name: docker pull
         # todo check for newer tag
         if: steps.check_files.outputs.files_exists == 'false'
         run: |
           docker pull complat/complat-ubuntu-runner:0.10.20
-          docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
+          docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/chemotion_ELN .
           # todo check if fully pulled
 
   checkout:
@@ -30,14 +30,14 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: "gitlab-runner/app"
+          files: "chemotion_ELN/app"
       - name: init checkout ELN
       # todo always checkout?
         if: steps.check_files.outputs.files_exists == 'false' 
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
-          path: gitlab-runner
+          path: chemotion_ELN
 
   config_files:
     needs: checkout
@@ -47,7 +47,7 @@ jobs:
         run: |
             pwd
             ls
-            cd gitlab-runner/config
+            cd chemotion_ELN/config
             cp database.yml.gitlab database.yml
             cp -f storage.yml.example storage.yml
             touch datacollectors.yml
@@ -71,13 +71,13 @@ jobs:
     steps:
       # - name: testjs
       #   run: |
-      #     cd gitlab-runner
+      #     cd chemotion_ELN
       #     pwd
       #     #RAILS_ENV=test bundle exec rake db:test:prepare --trace
       #     npm test
       - name: testrb
         run: |
-          cd gitlab-runner
+          cd chemotion_ELN
           echo "OPENBABEL"
           find -name openbabel.so
           #gem install bundler -v 1.17.3 --no-document && 
