@@ -79,3 +79,11 @@ jobs:
           npm test
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
+      - name: testrb
+        run: |
+          #cd gitlab-runner
+          echo "PWD"
+          pwd
+          bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+
+
