@@ -52,8 +52,8 @@ jobs:
             cp -f storage.yml.example storage.yml
             touch datacollectors.yml
             # new
-            # cp -f config/profile_default.yml.example config/profile_default.yml
-            # touch config/klasses.json
+            cp -f profile_default.yml.example profile_default.yml
+            touch klasses.json
 
   db:
     needs: config_files
@@ -80,7 +80,8 @@ jobs:
           cd gitlab-runner
           echo "OPENBABEL"
           find -name openbabel.so
-          gem install bundler -v 1.17.3 --no-document && bundle install -j 3 --path ~/shared/bundle --force
+          #gem install bundler -v 1.17.3 --no-document && 
+          bundle install -j 3 --path ~/shared/bundle --force
           bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
