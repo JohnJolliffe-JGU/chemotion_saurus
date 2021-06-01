@@ -32,6 +32,7 @@ jobs:
         with:
           files: "gitlab-runner/app"
       - name: init checkout ELN
+      # todo always checkout?
         if: steps.check_files.outputs.files_exists == 'false' 
         uses: actions/checkout@v2
         with:
@@ -81,7 +82,7 @@ jobs:
       #   uses: mxschmitt/action-tmate@v3
       - name: testrb
         run: |
-          #cd gitlab-runner
+          cd gitlab-runner
           echo "PWD"
           pwd
           bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
