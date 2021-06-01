@@ -13,13 +13,13 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: "chemotion_ELN"
+          files: "gitlab-runner"
       - name: docker pull
         # todo check for newer tag
         if: steps.check_files.outputs.files_exists == 'false'
         run: |
           docker pull complat/complat-ubuntu-runner:0.10.20
-          docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/chemotion_ELN .
+          docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
           # todo check if fully pulled
 
   checkout:
@@ -30,14 +30,14 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: "chemotion_ELN/app"
+          files: "gitlab-runner/app"
       - name: init checkout ELN
       # todo always checkout?
         if: steps.check_files.outputs.files_exists == 'false' 
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
-          path: chemotion_ELN
+          path: gitlab-runner
 
   config_files:
     needs: checkout
@@ -47,7 +47,7 @@ jobs:
         run: |
             pwd
             ls
-            cd chemotion_ELN/config
+            cd gitlab-runner/config
             cp database.yml.gitlab database.yml
             cp -f storage.yml.example storage.yml
             touch datacollectors.yml
@@ -71,17 +71,17 @@ jobs:
     steps:
       # - name: testjs
       #   run: |
-      #     cd chemotion_ELN
+      #     cd gitlab-runner
       #     pwd
       #     #RAILS_ENV=test bundle exec rake db:test:prepare --trace
       #     npm test
       - name: testrb
         run: |
-          cd chemotion_ELN
+          cd gitlab-runner
           echo "OPENBABEL"
           find -name openbabel.so
           #gem install bundler -v 1.17.3 --no-document && 
-          bundle install -j 3 --path ~/shared/bundle --force
+          bundle install -j 3 --path ~/shared/bundle
           bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
