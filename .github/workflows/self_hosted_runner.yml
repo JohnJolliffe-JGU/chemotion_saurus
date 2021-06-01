@@ -72,8 +72,9 @@ jobs:
         run: |
           cd gitlab-runner
           pwd
-          find -name /home/ira/actions-runner/chemotion_saurus_github/chemotion_saurus/chemotion_saurus/gitlab-runner/shared/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/openbabel.so
+          echo "OPENBABEL"
+          find -name openbabel.so
           #gem install bundler -v 1.17.3 --no-document && bundle install -j 3 --path ~/shared/bundle
           RAILS_ENV=test bundle exec rake db:test:prepare --trace
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
