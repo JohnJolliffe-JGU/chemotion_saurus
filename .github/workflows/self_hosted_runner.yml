@@ -51,8 +51,8 @@ jobs:
             cp -f storage.yml.example storage.yml
             touch datacollectors.yml
             # new
-            cp -f config/profile_default.yml.example config/profile_default.yml
-            touch config/klasses.json
+            # cp -f config/profile_default.yml.example config/profile_default.yml
+            # touch config/klasses.json
 
   db:
     needs: config_files
