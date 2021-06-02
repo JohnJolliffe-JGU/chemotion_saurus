@@ -22,11 +22,11 @@ jobs:
           docker pull complat/complat-ubuntu-runner:0.10.20
           docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
           # todo check if fully pulled
-      - name: Check shared files existence
-        run: |
-          echo "CHECK SHARED"
-          cd gitlab-runner/shared
-          ls
+      # - name: Check shared files existence
+      #   run: |
+      #     echo "CHECK SHARED"
+      #     cd gitlab-runner/shared
+      #     ls
 
   checkout:
     needs: docker
@@ -36,14 +36,14 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: "gitlab-runner/app"
+          files: "chemotion_ELN/app"
       - name: init checkout ELN
       # todo always checkout?
         if: steps.check_files.outputs.files_exists == 'false' 
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
-          path: gitlab-runner
+          path: chemotion_ELN
 
   config_files:
     needs: checkout
@@ -74,6 +74,12 @@ jobs:
           POSTGRES_PASSWORD: "123456"
           ports: 5432:5432
     steps:
+      - uses: actions/cache@v2
+        with:
+          path: chemotion_ELN/shared/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
       # - name: testjs
       #   run: |
       #     cd gitlab-runner
@@ -82,16 +88,17 @@ jobs:
       #     npm test
       - name: testrb
         run: |
-          cd gitlab-runner
+          cd chemotion_ELN
+          bundle install -j 3 --path shared/bundle
           #gem install bundler -v 1.17.3 --no-document && 
           #bundle install -j 3 --path shared/bundle
-          cd shared/bundle
-          gem install openbabel
+          #cd shared/bundle
+          #gem install openbabel
           #gem install --install-dir shared/bundle openbabel
           echo "OPENBABEL"
           #find -name openbabel.so
           gem which openbabel
-          cd ../..
+          #cd ../..
           bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
