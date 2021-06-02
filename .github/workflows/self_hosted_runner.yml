@@ -90,17 +90,12 @@ jobs:
       - name: testrb
         run: |
           cd chemotion_ELN
-          bundle install -j 3 --path shared/bundle
           #gem install bundler -v 1.17.3 --no-document && 
-          #bundle install -j 3 --path shared/bundle
-          #cd shared/bundle
-          #gem install openbabel
-          #gem install --install-dir shared/bundle openbabel
+          bundle install -j 3 --path shared/bundle
           echo "OPENBABEL"
           #find -name openbabel.so
           gem which openbabel
-          #cd ../..
-          bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       # do new commit
