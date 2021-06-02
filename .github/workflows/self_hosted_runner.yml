@@ -85,7 +85,7 @@ jobs:
           cd gitlab-runner
           #gem install bundler -v 1.17.3 --no-document && 
           #bundle install -j 3 --path shared/bundle
-          gem install openbabel --path shared/bundle
+          gem install --install-dir shared/bundle openbabel
           echo "OPENBABEL"
           #find -name openbabel.so
           gem which openbabel
