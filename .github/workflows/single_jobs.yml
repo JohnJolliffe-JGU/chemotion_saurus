@@ -61,7 +61,7 @@ jobs:
     steps:
         - run: |
             cd gitlab-runner
-            npm install
+            source ~/.nvm/nvm.sh && nvm use && npm install
             bundle install -j 3 --path shared/bundle
             echo "GEMS"
             gem list
