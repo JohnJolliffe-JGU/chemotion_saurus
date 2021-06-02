@@ -28,25 +28,25 @@ jobs:
       #     cd gitlab-runner/shared
       #     ls
 
-  # checkout:
-  #   needs: docker
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Check file existence
-  #       id: check_files
-  #       uses: andstor/file-existence-action@v1
-  #       with:
-  #         files: "chemotion_ELN/app"
-  #     - name: init checkout ELN
-  #     # todo always checkout?
-  #       if: steps.check_files.outputs.files_exists == 'false' 
-  #       uses: actions/checkout@v2
-  #       with:
-  #         repository: ComPlat/chemotion_ELN
-  #         path: chemotion_ELN
+  checkout:
+    needs: docker
+    runs-on: self-hosted
+    steps:
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "chemotion_ELN/app"
+      - name: init checkout ELN
+      # todo always checkout?
+        if: steps.check_files.outputs.files_exists == 'false' 
+        uses: actions/checkout@v2
+        with:
+          repository: ComPlat/chemotion_ELN
+          path: chemotion_ELN
 
   config_files:
-    #needs: checkout
+    needs: checkout
     runs-on: self-hosted
     steps:
       - name: change config files
@@ -90,16 +90,16 @@ jobs:
       #     pwd
       #     #RAILS_ENV=test bundle exec rake db:test:prepare --trace
       #     npm test
-      - name: testrb
-        run: |
-          cd chemotion_ELN
-          #gem install bundler -v 1.17.3 --no-document && 
-          bundle install -j 3 --path shared/bundle
-          rspec --exclude-pattern spec/{features}/**/*_spec.rb
-          #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
+      # - name: testrb
+      #   run: |
+      #     cd chemotion_ELN
+      #     #gem install bundler -v 1.17.3 --no-document && 
+      #     bundle install -j 3 --path shared/bundle
+      #     rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      #     #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      #   env:
+      #     POSTGRES_HOST: localhost
+      #     POSTGRES_PORT: 5432
       - name: testacceptance
         run: |
           cd chemotion_ELN
