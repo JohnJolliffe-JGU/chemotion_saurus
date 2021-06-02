@@ -91,6 +91,7 @@ jobs:
           echo "OPENBABEL"
           #find -name openbabel.so
           gem which openbabel
+          cd ../..
           bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
