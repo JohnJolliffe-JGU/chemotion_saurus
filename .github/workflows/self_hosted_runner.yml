@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ ELN ]
+# https://docs.knapsackpro.com/2021/how-to-load-ruby-gems-from-cache-on-github-actions
 
 jobs:
   docker:
@@ -21,6 +22,11 @@ jobs:
           docker pull complat/complat-ubuntu-runner:0.10.20
           docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
           # todo check if fully pulled
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "gitlab-runner/shared"
 
   checkout:
     needs: docker
@@ -80,8 +86,9 @@ jobs:
           cd gitlab-runner
           echo "OPENBABEL"
           find -name openbabel.so
+          # ERROR ~/shared/bundle path wrong
           #gem install bundler -v 1.17.3 --no-document && 
-          bundle install -j 3 --path ~/shared/bundle
+          bundle install -j 3 --path shared/bundle
           bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
