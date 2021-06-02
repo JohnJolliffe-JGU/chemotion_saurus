@@ -53,7 +53,7 @@ jobs:
         run: |
             pwd
             ls
-            cd gitlab-runner/config
+            cd chemotion_ELN/config
             cp database.yml.gitlab database.yml
             cp -f storage.yml.example storage.yml
             touch datacollectors.yml
@@ -82,8 +82,9 @@ jobs:
             ${{ runner.os }}-gems-
       # - name: testjs
       #   run: |
-      #     cd gitlab-runner
+      #     cd chemotion_ELN
       #     pwd
+      #     cp chemotion_ELN/shared/node_modules chemotion_ELN/shared/node_modules
       #     #RAILS_ENV=test bundle exec rake db:test:prepare --trace
       #     npm test
       - name: testrb
