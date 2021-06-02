@@ -59,9 +59,15 @@ jobs:
     # needs: docker
     runs-on: self-hosted
     steps:
-        - run: |
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - run: |
             cd gitlab-runner
-            source ~/.nvm/nvm.sh && nvm use && npm install
+            #source ~/.nvm/nvm.sh && nvm use && npm install
             # bundle install -j 3 --path shared/bundle
             # echo "GEMS"
             # gem list
@@ -73,7 +79,7 @@ jobs:
     steps:
         - run: |
             cd gitlab-runner
-            source ~/.nvm/nvm.sh && nvm use && npm install
+            #source ~/.nvm/nvm.sh && nvm use && npm install
             echo "NPM"
             #npm list
             npm test
