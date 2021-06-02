@@ -85,10 +85,9 @@ jobs:
         run: |
           cd gitlab-runner
           echo "OPENBABEL"
-          find -name openbabel.so
-          # ERROR ~/shared/bundle path wrong
-          #gem install bundler -v 1.17.3 --no-document && 
-          bundle install -j 3 --path shared/bundle
+          #find -name openbabel.so
+          gem which openbabel
+          gem install bundler -v 1.17.3 --no-document && bundle install -j 3 --path shared/bundle
           bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
