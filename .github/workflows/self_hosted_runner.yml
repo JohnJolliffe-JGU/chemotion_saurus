@@ -70,11 +70,11 @@ jobs:
         image: postgres:12-alpine
         env:
           POSTGRES_DB: chemotion_test
-          POSTGRES_USER: postgres
-          #POSTGRES_USER: chemotion_test
-          POSTGRES_PASSWORD: "123"
-          POSTGRES_HOST: localhost
-          #POSTGRES_PASSWORD: "123456"
+          #POSTGRES_USER: postgres
+          POSTGRES_USER: chemotion_test
+          #POSTGRES_PASSWORD: "123"
+          #POSTGRES_HOST: localhost
+          POSTGRES_PASSWORD: "123456"
           #POSTGRES_HOST: postgres
           #ports: 5432:5432
     steps:
@@ -101,6 +101,11 @@ jobs:
           #gem which openbabel
           rspec --exclude-pattern spec/{features}/**/*_spec.rb
           #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       # do new commit
