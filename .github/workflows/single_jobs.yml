@@ -39,29 +39,29 @@ jobs:
   #         repository: ComPlat/chemotion_ELN
   #         path: chemotion_ELN
 
-  # config_files:
-  #   needs: checkout
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: change config files
-  #       run: |
-  #           pwd
-  #           ls
-  #           cd chemotion_ELN/config
-  #           cp database.yml.gitlab database.yml
-  #           cp -f storage.yml.example storage.yml
-  #           touch datacollectors.yml
-  #           cp -f profile_default.yml.example profile_default.yml
-  #           touch klasses.json
-
-  testjs:
-    # TODO change to config_files
-    needs: docker
+  config_files:
+    #needs: checkout
     runs-on: self-hosted
     steps:
-        - run: |
-            cd gitlab-runner
-            npm test
+      - name: change config files
+        run: |
+            pwd
+            ls
+            cd chemotion_ELN/config
+            cp database.yml.gitlab database.yml
+            cp -f storage.yml.example storage.yml
+            touch datacollectors.yml
+            cp -f profile_default.yml.example profile_default.yml
+            touch klasses.json
+
+  # testjs:
+  #   # TODO change to config_files
+  #   needs: docker
+  #   runs-on: self-hosted
+  #   steps:
+  #       - run: |
+  #           cd gitlab-runner
+  #           npm test
     
   bundle:
     # TODO change to config_files
@@ -74,27 +74,51 @@ jobs:
             echo "GEMS"
             gem list
   
-  testrb:
-    needs: bundle
-    runs-on: self-hosted
-    steps:
-        - run: |
-            cd gitlab-runner
-            rspec --exclude-pattern spec/{features}/**/*_spec.rb
-    env:
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: 5432
+  # testrb:
+  #   needs: bundle
+  #   runs-on: self-hosted
+  #   steps:
+  #       - run: |
+  #           cd gitlab-runner
+  #           rspec --exclude-pattern spec/{features}/**/*_spec.rb
+  #   env:
+  #     POSTGRES_HOST: localhost
+  #     POSTGRES_PORT: 5432
 
-  testacceptance:
-    needs: bundle
+  # testacceptance:
+  #   needs: bundle
+  #   runs-on: self-hosted
+  #   steps:
+  #       - run: |
+  #           cd gitlab-runner
+  #           bundle exec rspec spec/features
+  #   env:
+  #     POSTGRES_HOST: localhost
+  #     POSTGRES_PORT: 5432
+
+  db:
+    needs: config_files
     runs-on: self-hosted
+    services:
+      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_DB: chemotion_test
+          POSTGRES_USER: chemotion_test
+          POSTGRES_PASSWORD: "123456"
+          ports: 5432:5432
     steps:
-        - run: |
-            cd gitlab-runner
-            bundle exec rspec spec/features
-    env:
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: 5432
+      - name: testjs
+        run: |
+          cd gitlab-runner
+          pwd
+          echo "OPENBABEL"
+          find -name openbabel.so
+          #gem install bundler -v 1.17.3 --no-document && bundle install -j 3 --path ~/shared/bundle
+          #RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          npm test
 
 
 
