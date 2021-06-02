@@ -54,7 +54,6 @@ jobs:
             pwd
             ls
             cd chemotion_ELN/config
-            #cp database.yml.gitlab database.yml
             cp -f storage.yml.example storage.yml
             touch datacollectors.yml
             cp -f profile_default.yml.example profile_default.yml
