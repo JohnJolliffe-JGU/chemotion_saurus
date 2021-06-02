@@ -1,0 +1,100 @@
+name: self-hosted runner 2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ ELN ]
+
+jobs:
+  docker:
+    runs-on: self-hosted
+    steps:
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "gitlab-runner/shared"
+      - name: docker pull
+        # todo check for newer tag
+        if: steps.check_files.outputs.files_exists == 'false'
+        run: |
+          docker pull complat/complat-ubuntu-runner:0.10.20
+          docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
+          # todo check if fully pulled
+
+  # checkout:
+  #   needs: docker
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Check file existence
+  #       id: check_files
+  #       uses: andstor/file-existence-action@v1
+  #       with:
+  #         files: "chemotion_ELN/app"
+  #     - name: init checkout ELN
+  #     # todo always checkout?
+  #       if: steps.check_files.outputs.files_exists == 'false' 
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository: ComPlat/chemotion_ELN
+  #         path: chemotion_ELN
+
+  # config_files:
+  #   needs: checkout
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: change config files
+  #       run: |
+  #           pwd
+  #           ls
+  #           cd chemotion_ELN/config
+  #           cp database.yml.gitlab database.yml
+  #           cp -f storage.yml.example storage.yml
+  #           touch datacollectors.yml
+  #           cp -f profile_default.yml.example profile_default.yml
+  #           touch klasses.json
+
+  testjs:
+    # TODO change to config_files
+    needs: docker
+    runs-on: self-hosted
+    steps:
+        - run: |
+            cd gitlab-runner
+            npm test
+    
+  bundle:
+    # TODO change to config_files
+    needs: docker
+    runs-on: self-hosted
+    steps:
+        - run: |
+            cd gitlab-runner
+            bundle install -j 3 --path shared/bundle
+            echo "GEMS"
+            gem list
+  
+  testrb:
+    needs: bundle
+    runs-on: self-hosted
+    steps:
+        - run: |
+            cd gitlab-runner
+            rspec --exclude-pattern spec/{features}/**/*_spec.rb
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+
+  testacceptance:
+    needs: bundle
+    runs-on: self-hosted
+    steps:
+        - run: |
+            cd gitlab-runner
+            bundle exec rspec spec/features
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+
+
+
