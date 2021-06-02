@@ -53,29 +53,30 @@ jobs:
             touch datacollectors.yml
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
-
-  testjs:
-    needs: config_files
-    #needs: docker
-    runs-on: self-hosted
-    steps:
-        - run: |
-            cd gitlab-runner
-            npm test
-    
-  bundle:
+  
+  packages:
     needs: config_files
     # needs: docker
     runs-on: self-hosted
     steps:
         - run: |
             cd gitlab-runner
+            npm install
             bundle install -j 3 --path shared/bundle
             echo "GEMS"
             gem list
+
+  testjs:
+    needs: packages
+    #needs: docker
+    runs-on: self-hosted
+    steps:
+        - run: |
+            cd gitlab-runner
+            npm test
   
   testrb:
-    needs: bundle
+    needs: packages
     runs-on: self-hosted
     steps:
         - run: |
@@ -86,7 +87,7 @@ jobs:
       POSTGRES_PORT: 5432
 
   testacceptance:
-    needs: bundle
+    needs: packages
     runs-on: self-hosted
     steps:
         - run: |
