@@ -1,0 +1,79 @@
+name: wo_docker
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ ELN ]
+# https://docs.knapsackpro.com/2021/how-to-load-ruby-gems-from-cache-on-github-actions
+
+jobs:
+
+  checkout:
+    runs-on: self-hosted
+    steps:
+      # - name: Check file existence
+      #   id: check_files
+      #   uses: andstor/file-existence-action@v1
+      #   with:
+      #     files: "gitlab-runner/app"
+      - name: init checkout ELN
+      # todo always checkout?
+        #if: steps.check_files.outputs.files_exists == 'false' 
+        uses: actions/checkout@v2
+        with:
+          repository: ComPlat/chemotion_ELN
+          #path: gitlab-runner
+      - name: check checkout
+        run: |
+            echo "CHECKOUT"
+            pwd 
+            ls
+
+  # config_files:
+  #   needs: checkout
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: change config files
+  #       run: |
+  #           pwd
+  #           ls
+  #           cd gitlab-runner/config
+  #           cp database.yml.gitlab database.yml
+  #           cp -f storage.yml.example storage.yml
+  #           touch datacollectors.yml
+  #           cp -f profile_default.yml.example profile_default.yml
+  #           touch klasses.json
+
+  # db:
+  #   needs: config_files
+  #   runs-on: self-hosted
+  #   services:
+  #     # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+  #     # Label used to access the service container
+  #     postgres:
+  #       image: postgres:12-alpine
+  #       env:
+  #         POSTGRES_DB: chemotion_test
+  #         POSTGRES_USER: chemotion_test
+  #         POSTGRES_PASSWORD: "123456"
+  #         ports: 5432:5432
+  #   steps:
+  #     # - name: testjs
+  #     #   run: |
+  #     #     cd gitlab-runner
+  #     #     pwd
+  #     #     #RAILS_ENV=test bundle exec rake db:test:prepare --trace
+  #     #     npm test
+  #     - name: testrb
+  #       run: |
+  #         cd gitlab-runner
+  #         #gem install bundler -v 1.17.3 --no-document && 
+  #         bundle install -j 3 --path shared/bundle
+  #         echo "OPENBABEL"
+  #         #find -name openbabel.so
+  #         gem which openbabel
+  #         bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+  #     # - name: Setup tmate session
+  #     #   uses: mxschmitt/action-tmate@v3
+
+
