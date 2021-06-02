@@ -23,7 +23,6 @@ jobs:
           docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
           # todo check if fully pulled
       - name: Check shared files existence
-        id: check shared files
         run: |
           echo "CHECK SHARED"
           cd gitlab-runner/shared
