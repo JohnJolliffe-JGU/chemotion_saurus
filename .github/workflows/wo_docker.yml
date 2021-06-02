@@ -84,21 +84,18 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-      # - name: testjs
-      #   run: |
-      #     cd chemotion_ELN
-      #     pwd
-      #     cp chemotion_ELN/shared/node_modules chemotion_ELN/shared/node_modules
-      #     #RAILS_ENV=test bundle exec rake db:test:prepare --trace
-      #     npm test
+      - name: testjs
+        run: |
+          cp gitlab-runner/shared/node_modules chemotion_ELN/shared/node_modules
+          cd chemotion_ELN
+          pwd
+          #RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          npm test
       - name: testrb
         run: |
           cd chemotion_ELN
           #gem install bundler -v 1.17.3 --no-document && 
           bundle install -j 3 --path shared/bundle
-          #echo "OPENBABEL"
-          #find -name openbabel.so
-          #gem which openbabel
           rspec --exclude-pattern spec/{features}/**/*_spec.rb
           #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
         env:
