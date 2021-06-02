@@ -28,25 +28,25 @@ jobs:
       #     cd gitlab-runner/shared
       #     ls
 
-  checkout:
-    needs: docker
-    runs-on: self-hosted
-    steps:
-      - name: Check file existence
-        id: check_files
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "chemotion_ELN/app"
-      - name: init checkout ELN
-      # todo always checkout?
-        if: steps.check_files.outputs.files_exists == 'false' 
-        uses: actions/checkout@v2
-        with:
-          repository: ComPlat/chemotion_ELN
-          path: chemotion_ELN
+  # checkout:
+  #   needs: docker
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Check file existence
+  #       id: check_files
+  #       uses: andstor/file-existence-action@v1
+  #       with:
+  #         files: "chemotion_ELN/app"
+  #     - name: init checkout ELN
+  #     # todo always checkout?
+  #       if: steps.check_files.outputs.files_exists == 'false' 
+  #       uses: actions/checkout@v2
+  #       with:
+  #         repository: ComPlat/chemotion_ELN
+  #         path: chemotion_ELN
 
   config_files:
-    needs: checkout
+    #needs: checkout
     runs-on: self-hosted
     steps:
       - name: change config files
