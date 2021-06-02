@@ -83,13 +83,17 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-      # - name: testjs
-      #   run: |
-      #     cp -r gitlab-runner/shared/node_modules chemotion_ELN/shared/node_modules
-      #     cd chemotion_ELN
-      #     pwd
-      #     #RAILS_ENV=test bundle exec rake db:test:prepare --trace
-      #     npm test
+      - name: npm install
+        run: |
+          cd chemotion_ELN
+          npm install --prefix shared/bundle
+      - name: testjs
+        run: |
+          cp -r gitlab-runner/shared/node_modules chemotion_ELN/shared/node_modules
+          cd chemotion_ELN
+          pwd
+          #RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          npm test
       # - name: testrb
       #   run: |
       #     cd chemotion_ELN
