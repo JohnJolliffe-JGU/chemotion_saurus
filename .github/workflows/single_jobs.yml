@@ -67,7 +67,8 @@ jobs:
       #       ${{ runner.os }}-gems-
       - run: |
             cd gitlab-runner
-            #source ~/.nvm/nvm.sh && nvm use && npm install
+            npm cache clean
+            source ~/.nvm/nvm.sh && nvm use && npm install --prefix shared/node_modules
             # bundle install -j 3 --path shared/bundle
             # echo "GEMS"
             # gem list
