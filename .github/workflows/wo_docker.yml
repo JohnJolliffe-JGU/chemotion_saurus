@@ -1,4 +1,4 @@
-name: self-hosted runner
+name: self-hosted runner 1
 
 on:
   workflow_dispatch:
@@ -84,13 +84,13 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-      - name: testjs
-        run: |
-          cp -r gitlab-runner/shared/node_modules chemotion_ELN/shared/node_modules
-          cd chemotion_ELN
-          pwd
-          #RAILS_ENV=test bundle exec rake db:test:prepare --trace
-          npm test
+      # - name: testjs
+      #   run: |
+      #     cp -r gitlab-runner/shared/node_modules chemotion_ELN/shared/node_modules
+      #     cd chemotion_ELN
+      #     pwd
+      #     #RAILS_ENV=test bundle exec rake db:test:prepare --trace
+      #     npm test
       - name: testrb
         run: |
           cd chemotion_ELN
@@ -99,9 +99,15 @@ jobs:
           rspec --exclude-pattern spec/{features}/**/*_spec.rb
           #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
         env:
-          # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
-          # The default PostgreSQL port
           POSTGRES_PORT: 5432
+      - name: testacceptance
+        run: |
+          cd chemotion_ELN
+          bundle exec rspec spec/features
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
