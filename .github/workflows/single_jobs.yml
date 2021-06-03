@@ -108,26 +108,26 @@ jobs:
     steps:
       - uses: actions/cache@v2
         with:
-          path: gitlab-runner/shared
+          path: gitlab-runner/shared/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: install packages
         run: |
             cd gitlab-runner
-            bundle config path shared/bundle
+            echo "BUNDLE"
             bundle install -j 3 --path shared/bundle  --retry 3
+            bundle config list
             # source ~/.nvm/nvm.sh && nvm use && npm i
             # echo "NPM"
             # npm list | grep react@
-            echo "GEMS"
-            gem list
-            # echo "OPENBAEL"
-            # gem which openbabel
-      # - name: testrb
-      #   run: |
-      #     cd gitlab-runner
-      #     rspec --exclude-pattern spec/{features}/**/*_spec.rb
+            #echo "GEMS"
+            echo "OPENBAEL"
+            gem which openbabel
+      - name: testrb
+        run: |
+          cd gitlab-runner
+          rspec --exclude-pattern spec/{features}/**/*_spec.rb
     env:
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
