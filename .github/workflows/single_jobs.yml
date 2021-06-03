@@ -116,6 +116,7 @@ jobs:
       - name: install packages
         run: |
             cd gitlab-runner
+            rm Gemfile.lock
             source ~/.nvm/nvm.sh && nvm use && npm i
             echo "NPM"
             npm list | grep react@
