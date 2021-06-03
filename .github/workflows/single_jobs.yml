@@ -74,6 +74,8 @@ jobs:
             npm list | grep react@
             echo "GEMS"
             gem list
+            echo "OPENBAEL"
+            gem which openbabel
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       #   with:
