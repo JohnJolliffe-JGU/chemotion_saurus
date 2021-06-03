@@ -108,7 +108,7 @@ jobs:
     steps:
       - uses: actions/cache@v2
         with:
-          path: shared/bundle
+          path: vendor/bundle
           #path: gitlab-runner/shared/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
