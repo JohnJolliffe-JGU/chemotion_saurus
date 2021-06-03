@@ -87,8 +87,8 @@ jobs:
             cd gitlab-runner
             #echo "NPM"
             #npm test
-            source ~/.nvm/nvm.sh && nvm use && npm test
-            #source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare --trace && npm test
+            #source ~/.nvm/nvm.sh && nvm use && npm test
+            source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare --trace && npm test
             #source ~/.rvm/scripts/rvm && 
           env:
             POSTGRES_HOST: localhost
