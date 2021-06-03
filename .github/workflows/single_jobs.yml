@@ -68,7 +68,7 @@ jobs:
       - run: |
             cd gitlab-runner
             #bundle install -j 3 --path shared/bundle
-            source ~/.nvm/nvm.sh && nvm use && npm install
+            source ~/.nvm/nvm.sh && nvm use && npm i
             echo "NPM"
             npm list | grep react@
             # echo "GEMS"
@@ -87,7 +87,8 @@ jobs:
             cd gitlab-runner
             echo "NPM"
             #npm test
-            source ~/.nvm/nvm.sh && nvm use && npm test
+            #source ~/.nvm/nvm.sh && nvm use && npm test
+            source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
   #       - name: Setup tmate session
   #         uses: mxschmitt/action-tmate@v3
   #         with:
