@@ -67,8 +67,8 @@ jobs:
       #       ${{ runner.os }}-gems-
       - run: |
             cd gitlab-runner
+            npm cache verify
             source ~/.nvm/nvm.sh && nvm use && npm i
-            npm i react
             #source ~/.nvm/nvm.sh && nvm use && npm install --prefix shared/node_modules
             #bundle install -j 3 --path shared/bundle
             echo "NPM"
