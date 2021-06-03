@@ -54,29 +54,29 @@ jobs:
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
   
-  packages:
-    needs: config_files
-    # needs: docker
-    runs-on: self-hosted
-    steps:
-      - uses: actions/cache@v2
-        with:
-          path: gitlab-runner/shared
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - run: |
-            cd gitlab-runner
-            # && gem install bundler -v 1.17.3 --no-document 
-            #source ~/.rvm/scripts/rvm && 
-            bundle install -j 3 --path shared/bundle
-            source ~/.nvm/nvm.sh && nvm use && npm i
-            echo "NPM"
-            npm list | grep react@
-            echo "GEMS"
-            gem list
-            echo "OPENBAEL"
-            gem which openbabel
+  # packages:
+  #   needs: config_files
+  #   # needs: docker
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: gitlab-runner/shared
+  #         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-gems-
+  #     - run: |
+  #           cd gitlab-runner
+  #           # && gem install bundler -v 1.17.3 --no-document 
+  #           #source ~/.rvm/scripts/rvm && 
+  #           bundle install -j 3 --path shared/bundle
+  #           source ~/.nvm/nvm.sh && nvm use && npm i
+  #           echo "NPM"
+  #           npm list | grep react@
+  #           echo "GEMS"
+  #           gem list
+  #           echo "OPENBAEL"
+  #           gem which openbabel
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       #   with:
@@ -106,6 +106,24 @@ jobs:
     needs: packages
     runs-on: self-hosted
     steps:
+      - uses: actions/cache@v2
+        with:
+          path: gitlab-runner/shared
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - run: |
+            cd gitlab-runner
+            # && gem install bundler -v 1.17.3 --no-document 
+            #source ~/.rvm/scripts/rvm && 
+            bundle install -j 3 --path shared/bundle
+            # source ~/.nvm/nvm.sh && nvm use && npm i
+            # echo "NPM"
+            # npm list | grep react@
+            echo "GEMS"
+            gem list
+            echo "OPENBAEL"
+            gem which openbabel
         - run: |
             cd gitlab-runner
             rspec --exclude-pattern spec/{features}/**/*_spec.rb
