@@ -117,6 +117,7 @@ jobs:
         run: |
             cd gitlab-runner
             rm Gemfile.lock
+            # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
             echo "NPM"
             npm list | grep react@
@@ -126,8 +127,8 @@ jobs:
             #  
             # bundle config list
             #echo "GEMS"
-            echo "OPENBAEL"
-            gem which openbabel
+            # echo "OPENBAEL"
+            # gem which openbabel
       - name: testrb
         run: |
           cd gitlab-runner
