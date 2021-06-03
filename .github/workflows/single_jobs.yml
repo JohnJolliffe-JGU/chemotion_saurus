@@ -117,7 +117,7 @@ jobs:
             cd gitlab-runner
             echo "BUNDLE"
             bundle install -j 3 --path shared/bundle  --retry 3
-            bundle config list
+            # bundle config list
             # source ~/.nvm/nvm.sh && nvm use && npm i
             # echo "NPM"
             # npm list | grep react@
