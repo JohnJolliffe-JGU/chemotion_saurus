@@ -125,10 +125,10 @@ jobs:
             gem list
             echo "OPENBAEL"
             gem which openbabel
-        - name: testrb
-          run: |
-            cd gitlab-runner
-            rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      - name: testrb
+        run: |
+          cd gitlab-runner
+          rspec --exclude-pattern spec/{features}/**/*_spec.rb
     env:
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
