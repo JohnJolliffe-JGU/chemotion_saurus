@@ -103,7 +103,8 @@ jobs:
   #           sudo: false
   
   test:
-    needs: config_files
+    needs: docker
+    #needs: config_files
     runs-on: self-hosted
     steps:
       - uses: actions/cache@v2
