@@ -68,6 +68,7 @@ jobs:
       - run: |
             cd gitlab-runner
             #bundle install -j 3 --path shared/bundle
+            source ~/.nvm/nvm.sh && nvm use && npm install
             echo "NPM"
             npm list | grep react@
             # echo "GEMS"
@@ -85,8 +86,8 @@ jobs:
         - run: |
             cd gitlab-runner
             echo "NPM"
-            npm test
-            #source ~/.nvm/nvm.sh && nvm use && npm test
+            #npm test
+            source ~/.nvm/nvm.sh && nvm use && npm test
   #       - name: Setup tmate session
   #         uses: mxschmitt/action-tmate@v3
   #         with:
