@@ -108,7 +108,7 @@ jobs:
     steps:
       - uses: actions/cache@v2
         with:
-          path: ~/shared/bundle
+          path: shared/bundle
           #path: gitlab-runner/shared/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
@@ -120,7 +120,7 @@ jobs:
             echo "NPM"
             npm list | grep react@
             echo "BUNDLE"
-            bundle install -j 3 --path ~/shared/bundle  --retry 3
+            bundle install -j 3 --path vendor/bundle  --retry 3
             #gem install --install-dir shared/bundle openbabel
             #  
             # bundle config list
