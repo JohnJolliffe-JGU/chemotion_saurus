@@ -90,6 +90,8 @@ jobs:
             #source ~/.nvm/nvm.sh && nvm use && npm test
         - name: Setup tmate session
           uses: mxschmitt/action-tmate@v3
+          with:
+            sudo: false
   
   # testrb:
   #   needs: packages
