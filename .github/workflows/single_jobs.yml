@@ -115,13 +115,13 @@ jobs:
       - name: install packages
         run: |
             cd gitlab-runner
-            echo "BUNDLE"
-            bundle install -j 3 --path vemdor/bundle  --retry 3
-            #  
-            # bundle config list
             source ~/.nvm/nvm.sh && nvm use && npm i
             echo "NPM"
             npm list | grep react@
+            echo "BUNDLE"
+            bundle install -j 3 --path vendor/bundle  --retry 3
+            #  
+            # bundle config list
             #echo "GEMS"
             echo "OPENBAEL"
             gem which openbabel
