@@ -89,6 +89,9 @@ jobs:
             #npm test
             #source ~/.nvm/nvm.sh && nvm use && npm test
             source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
+          env:
+            POSTGRES_HOST: localhost
+            POSTGRES_PORT: 5432
   #       - name: Setup tmate session
   #         uses: mxschmitt/action-tmate@v3
   #         with:
