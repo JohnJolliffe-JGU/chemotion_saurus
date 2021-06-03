@@ -68,8 +68,11 @@ jobs:
       - run: |
             cd gitlab-runner
             source ~/.nvm/nvm.sh && nvm use && npm install
+            npm update
             #source ~/.nvm/nvm.sh && nvm use && npm install --prefix shared/node_modules
             bundle install -j 3 --path shared/bundle
+            echo "NPM"
+            npm list | grep react@
             # echo "GEMS"
             # gem list
       # - name: Setup tmate session
@@ -77,21 +80,21 @@ jobs:
       #   with:
       #     sudo: false
 
-  testjs:
-    needs: packages
-    #needs: docker
-    runs-on: self-hosted
-    steps:
-        - run: |
-            cd gitlab-runner
-            echo "NPM"
-            #npm list
-            #npm test
-            #source ~/.nvm/nvm.sh && nvm use && npm test
-        - name: Setup tmate session
-          uses: mxschmitt/action-tmate@v3
-          with:
-            sudo: false
+  # testjs:
+  #   needs: packages
+  #   #needs: docker
+  #   runs-on: self-hosted
+  #   steps:
+  #       - run: |
+  #           cd gitlab-runner
+  #           echo "NPM"
+  #           #npm list
+  #           #npm test
+  #           #source ~/.nvm/nvm.sh && nvm use && npm test
+  #       - name: Setup tmate session
+  #         uses: mxschmitt/action-tmate@v3
+  #         with:
+  #           sudo: false
   
   # testrb:
   #   needs: packages
