@@ -67,12 +67,12 @@ jobs:
       #       ${{ runner.os }}-gems-
       - run: |
             cd gitlab-runner
-            #bundle install -j 3 --path shared/bundle
+            bundle install -j 3 --path shared/bundle
             source ~/.nvm/nvm.sh && nvm use && npm i
             echo "NPM"
             npm list | grep react@
-            # echo "GEMS"
-            # gem list
+            echo "GEMS"
+            gem list
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       #   with:
