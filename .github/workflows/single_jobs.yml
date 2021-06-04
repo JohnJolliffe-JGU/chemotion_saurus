@@ -129,10 +129,10 @@ jobs:
             gem env
             # echo "OPENBAEL"
             # gem which openbabel
-      - name: testrb
-        run: |
-          cd gitlab-runner
-          rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      # - name: testrb
+      #   run: |
+      #     cd gitlab-runner
+      #     rspec --exclude-pattern spec/{features}/**/*_spec.rb
       - name: testjs
         run: |
           cd gitlab-runner
