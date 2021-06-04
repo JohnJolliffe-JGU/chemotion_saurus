@@ -49,7 +49,7 @@ jobs:
             pwd
             ls
             cd gitlab-runner/config
-            cp database.yml.example database.yml
+            #cp database.yml.example database.yml
             cp -f storage.yml.example storage.yml
             touch datacollectors.yml
             cp -f profile_default.yml.example profile_default.yml
