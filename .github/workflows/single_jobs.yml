@@ -22,26 +22,26 @@ jobs:
           docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
           # todo check if fully pulled
 
-  # checkout:
-  #   needs: docker
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Check file existence
-  #       id: check_files
-  #       uses: andstor/file-existence-action@v1
-  #       with:
-  #         files: "gitlab-runner/app"
-  #     - name: init checkout ELN
-  #     # todo always checkout?
-  #       if: steps.check_files.outputs.files_exists == 'false' 
-  #       uses: actions/checkout@v2
-  #       with:
-  #         repository: ComPlat/chemotion_ELN
-  #         path: gitlab-runner
+  checkout:
+    needs: docker
+    runs-on: self-hosted
+    steps:
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "gitlab-runner/app"
+      - name: init checkout ELN
+      # todo always checkout?
+        if: steps.check_files.outputs.files_exists == 'false' 
+        uses: actions/checkout@v2
+        with:
+          repository: ComPlat/chemotion_ELN
+          path: gitlab-runner
 
   config_files:
-    needs: docker
-    #needs: checkout
+    #needs: docker
+    needs: checkout
     runs-on: self-hosted
     steps:
       - name: change config files
@@ -129,14 +129,15 @@ jobs:
             gem env
             # echo "OPENBAEL"
             # gem which openbabel
-      # - name: testrb
-      #   run: |
-      #     cd gitlab-runner
-      #     rspec --exclude-pattern spec/{features}/**/*_spec.rb
       - name: testjs
         run: |
           cd gitlab-runner
           source ~/.nvm/nvm.sh && nvm use && npm test 
+      - name: testrb
+        run: |
+          cd gitlab-runner
+          rspec --exclude-pattern spec/{features}/**/*_spec.rb
+
     env:
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
