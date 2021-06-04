@@ -103,9 +103,18 @@ jobs:
   #         with:
   #           sudo: false
   
-  test:
+  db:
     needs: config_files
     runs-on: self-hosted
+    services:
+      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_DB: chemotion_test
+          POSTGRES_USER: chemotion_test
+          POSTGRES_PASSWORD: "123456"
     steps:
       - uses: actions/cache@v2
         with:
@@ -137,10 +146,9 @@ jobs:
         run: |
           cd gitlab-runner
           rspec --exclude-pattern spec/{features}/**/*_spec.rb
-
-    env:
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: 5432
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
 
   # testacceptance:
   #   needs: packages
