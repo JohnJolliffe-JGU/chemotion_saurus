@@ -120,20 +120,23 @@ jobs:
             rm Gemfile.lock
             # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
-            echo "NPM"
-            npm list | grep react@
             echo "BUNDLE"
             bundle install -j 3 --path vendor/bundle  --retry 3
             #gem install --install-dir shared/bundle openbabel
             #  
             # bundle config list
-            #echo "GEMS"
+            echo "GEMS"
+            Gem env
             # echo "OPENBAEL"
             # gem which openbabel
       - name: testrb
         run: |
           cd gitlab-runner
           rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      - name: testjs
+        run: |
+          cd gitlab-runner
+          source ~/.nvm/nvm.sh && nvm use && npm test 
     env:
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
