@@ -126,7 +126,7 @@ jobs:
             #  
             # bundle config list
             echo "GEMS"
-            Gem env
+            gem env
             # echo "OPENBAEL"
             # gem which openbabel
       - name: testrb
