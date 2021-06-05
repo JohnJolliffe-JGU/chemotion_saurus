@@ -1,4 +1,4 @@
-name: self-hosted runner 2
+name: ELN GitHub Actions
 
 on:
   workflow_dispatch:
