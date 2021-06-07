@@ -136,8 +136,8 @@ jobs:
             #  
             # bundle config list
             echo "BROWSERIFY-RAILS"
-            gem list browserify-rails
-            gem which browserify-rails
+            # gem list browserify-rails
+            # gem which browserify-rails
             
       # - name: testjs
       #   run: |
@@ -149,10 +149,10 @@ jobs:
       #     cd gitlab-runner
       #     rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
-      # - name: testacceptance
-      #   run: |
-      #     cd gitlab-runner
-      #     rspec spec/features
+      - name: testacceptance
+        run: |
+          cd gitlab-runner
+          rspec spec/features
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
