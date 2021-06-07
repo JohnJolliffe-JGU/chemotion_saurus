@@ -128,10 +128,9 @@ jobs:
         run: |
             cd gitlab-runner
             rm Gemfile.lock
-            # TODO check existence
             #cp -r shared/bundle vendor/bundle # not working
-            echo "BUNDLE FILES"
-            ls -la vendor/bundle
+            # echo "BUNDLE FILES"
+            # ls -la vendor/bundle
             # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
             #bundle config set --local path vendor/bundle #TODO?
