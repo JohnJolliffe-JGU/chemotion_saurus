@@ -141,20 +141,20 @@ jobs:
             # gem list browserify-rails
             # gem which browserify-rails
             
-      # - name: testjs
-      #   run: |
-      #     cd gitlab-runner
-      #     source ~/.nvm/nvm.sh && nvm use && npm test 
+      - name: testjs
+        run: |
+          cd gitlab-runner
+          source ~/.nvm/nvm.sh && nvm use && npm test 
 
-      # - name: testrb
-      #   run: |
-      #     cd gitlab-runner
-      #     rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      - name: testrb
+        run: |
+          cd gitlab-runner
+          rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
-      # - name: testacceptance
-      #   run: |
-      #     cd gitlab-runner
-      #     rspec spec/features/sample_management_spec.rb
+      - name: testacceptance
+        run: |
+          cd gitlab-runner
+          rspec spec/features/sample_management_spec.rb
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
