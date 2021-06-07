@@ -61,20 +61,24 @@ jobs:
     steps:
       - uses: actions/cache@v2
         with:
-          path: gitlab-runner/shared
+          path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-      - run: |
+      - name: install gems & node modules
+          run: |
             cd gitlab-runner
             rm Gemfile.lock
-            # npm install -g npm@7.11.1
+            # TODO matrix for versions
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+            nvm install v12.22.1
+            npm install -g npm@7.11.1
             source .nvm/nvm.sh && nvm use && npm i
             #bundle config set --local path vendor/bundle #TODO?
             bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
             echo "CONFIGS"
-            bundle config list
+            #bundle config list
             bundle -v
             rails -v
             ruby -v
@@ -91,7 +95,8 @@ jobs:
     #needs: docker
     runs-on: self-hosted
     steps:
-        - run: |
+        - name: testjs
+          run: |
             cd gitlab-runner
             source .nvm/nvm.sh && nvm use && npm test 
 
