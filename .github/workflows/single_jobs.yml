@@ -110,8 +110,8 @@ jobs:
       # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
       # Label used to access the service container
       postgres:
-        image: postgres
-        #image: postgres:12-alpine
+        #image: postgres
+        image: postgres:12-alpine
         env:
           POSTGRES_DB: chemotion_test
           POSTGRES_USER: chemotion_test
