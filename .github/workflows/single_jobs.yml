@@ -139,22 +139,31 @@ jobs:
             gem env
             # echo "OPENBAEL"
             # gem which openbabel
-      - name: testjs
-        run: |
-          cd gitlab-runner
-          source ~/.nvm/nvm.sh && nvm use && npm test 
-      - name: testrb
-        run: |
-          cd gitlab-runner
-          rspec --exclude-pattern spec/{features}/**/*_spec.rb
-      - name: testacceptance
-        run: |
-          cd gitlab-runner
-          rspec spec/features
+      # - name: testjs
+      #   run: |
+      #     cd gitlab-runner
+      #     source ~/.nvm/nvm.sh && nvm use && npm test 
+
+      # - name: testrb
+      #   run: |
+      #     cd gitlab-runner
+      #     rspec --exclude-pattern spec/{features}/**/*_spec.rb
+
+      # - name: testacceptance
+      #   run: |
+      #     cd gitlab-runner
+      #     rspec spec/features
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3s
+        with:
+          sudo: false
+
         env:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
           #POSTGRES_PASSWORD: 123456
+
 
   # testacceptance:
   #   needs: packages
