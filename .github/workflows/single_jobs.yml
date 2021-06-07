@@ -136,9 +136,10 @@ jobs:
             #  
             # bundle config list
             echo "GEMS"
-            gem env
-            # echo "OPENBAEL"
-            # gem which openbabel
+            #gem env
+            echo "BROWSERIFY-RAILS"
+            gem which browserify-rails
+            gem list browserify-rails
       # - name: testjs
       #   run: |
       #     cd gitlab-runner
@@ -154,10 +155,10 @@ jobs:
       #     cd gitlab-runner
       #     rspec spec/features
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          sudo: true
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     sudo: true
 
         env:
           POSTGRES_HOST: localhost
