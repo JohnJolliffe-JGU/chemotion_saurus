@@ -70,7 +70,7 @@ jobs:
           cd gitlab-runner
           rm Gemfile.lock
           # TODO matrix for versions
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          #curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
           nvm install v12.22.1
           npm install -g npm@7.11.1
           source .nvm/nvm.sh && nvm use && npm i
