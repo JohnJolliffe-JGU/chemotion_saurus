@@ -84,7 +84,7 @@ jobs:
             # echo "BUNDLE FILES"
             # ls -la vendor/bundle
             # npm install -g npm@7.11.1
-            source .nvm/nvm.sh && nvm use && npm i
+            source ~/.nvm/nvm.sh && nvm use && npm i
             #bundle config set --local path vendor/bundle #TODO?
             bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
@@ -104,8 +104,8 @@ jobs:
       - name: testjs
         run: |
           cd gitlab-runner
-          # TODO source.nvm/nvm.sh ?
-          source .nvm/nvm.sh && nvm use && npm test 
+          #nvm install v12.22.1
+          source ~/.nvm/nvm.sh && nvm use && npm test 
 
       - name: testrb
         run: |
@@ -115,7 +115,7 @@ jobs:
       - name: testacceptance
         run: |
           cd gitlab-runner
-          source .rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
@@ -126,5 +126,3 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
           #POSTGRES_PASSWORD: 123456
-
-
