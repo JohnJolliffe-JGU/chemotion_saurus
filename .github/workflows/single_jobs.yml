@@ -128,7 +128,7 @@ jobs:
         run: |
             cd gitlab-runner
             rm Gemfile.lock
-            cp shared/bundle vendor/bundle
+            cp -r shared/bundle vendor/bundle
             echo "BUNDLE FILES"
             ls -la vendor/bundle
             # npm install -g npm@7.11.1
