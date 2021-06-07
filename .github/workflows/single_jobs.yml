@@ -101,6 +101,7 @@ jobs:
         - name: testjs
           run: |
             cd gitlab-runner
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -136,19 +137,6 @@ jobs:
       #       source .nvm/nvm.sh && nvm use && npm i
       #       #bundle config set --local path vendor/bundle #TODO?
       #       bundle install -j 3 --retry 3 --full-index --path vendor/bundle
-
-      #       echo "CONFIGS"
-      #       bundle config list
-      #       bundle -v
-      #       rails -v
-      #       ruby -v
-      #       node -v
-      #       npm -v
-      #       nvm -v
-      #       echo "BROWSERIFY-RAILS"
-      #       bundle info browserify-rails
-      #       echo "OPENBABEL"
-      #       bundle info openbabel
             
       # - name: testjs
       #   run: |
