@@ -135,11 +135,10 @@ jobs:
             #gem install --install-dir shared/bundle openbabel
             #  
             # bundle config list
-            echo "GEMS"
-            #gem env
             echo "BROWSERIFY-RAILS"
-            gem which browserify-rails
             gem list browserify-rails
+            gem which browserify-rails
+            
       # - name: testjs
       #   run: |
       #     cd gitlab-runner
