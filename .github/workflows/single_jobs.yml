@@ -66,29 +66,29 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: install gems & node modules
-          run: |
-            cd gitlab-runner
-            rm Gemfile.lock
-            # TODO matrix for versions
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-            nvm install v12.22.1
-            npm install -g npm@7.11.1
-            source .nvm/nvm.sh && nvm use && npm i
-            #bundle config set --local path vendor/bundle #TODO?
-            bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+        run: |
+          cd gitlab-runner
+          rm Gemfile.lock
+          # TODO matrix for versions
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          nvm install v12.22.1
+          npm install -g npm@7.11.1
+          source .nvm/nvm.sh && nvm use && npm i
+          #bundle config set --local path vendor/bundle #TODO?
+          bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
-            echo "CONFIGS"
-            #bundle config list
-            bundle -v
-            rails -v
-            ruby -v
-            node -v
-            npm -v
-            nvm -v
-            echo "BROWSERIFY-RAILS"
-            bundle info browserify-rails
-            echo "OPENBABEL"
-            bundle info openbabel
+          echo "CONFIGS"
+          #bundle config list
+          bundle -v
+          rails -v
+          ruby -v
+          node -v
+          npm -v
+          nvm -v
+          echo "BROWSERIFY-RAILS"
+          bundle info browserify-rails
+          echo "OPENBABEL"
+          bundle info openbabel
 
   testjs:
     needs: packages
