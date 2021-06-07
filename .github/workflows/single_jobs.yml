@@ -128,15 +128,15 @@ jobs:
         run: |
             cd gitlab-runner
             rm Gemfile.lock
-            cp -r shared/bundle vendor/bundle
+            # TODO check existence
+            #cp -r shared/bundle vendor/bundle
             echo "BUNDLE FILES"
             ls -la vendor/bundle
             # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
-            bundle config set --local path vendor/bundle 
-            bundle install -j 3 --retry 3 --full-index
-            #  
-            # bundle config list
+            #bundle config set --local path vendor/bundle 
+            bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+
             echo "CONFIGS"
             bundle config list
             bundle -v
@@ -163,7 +163,7 @@ jobs:
       - name: testacceptance
         run: |
           cd gitlab-runner
-          rspec spec/features/sample_management_spec.rb
+          RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
