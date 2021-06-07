@@ -155,7 +155,7 @@ jobs:
       #     rspec spec/features
 
       - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3s
+        uses: mxschmitt/action-tmate@v3
         with:
           sudo: false
 
