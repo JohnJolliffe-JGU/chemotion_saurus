@@ -152,12 +152,12 @@ jobs:
       - name: testacceptance
         run: |
           cd gitlab-runner
-          rspec spec/features
+          rspec spec/features/sample_management_spec.rb
 
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
-      #   with:
-      #     sudo: true
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          sudo: true
 
         env:
           POSTGRES_HOST: localhost
