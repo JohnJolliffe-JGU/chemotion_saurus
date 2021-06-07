@@ -16,7 +16,7 @@ jobs:
           files: "gitlab-runner/shared"
       - name: docker pull
         # todo check for newer tag
-        if: steps.check_files.outputs.files_exists == 'false'
+        #if: steps.check_files.outputs.files_exists == 'false'
         run: |
           docker pull complat/complat-ubuntu-runner:0.10.20
           docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
@@ -131,7 +131,7 @@ jobs:
             # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
             echo "BUNDLE"
-            bundle install -j 3 --path shared/bundle  --retry 3
+            bundle install -j 3 --path shared/bundle/ruby/2.6.0/bundler/gems  --retry 3
             #bundle install -j 3 --path vendor/bundle  --retry 3
             #gem install --install-dir shared/bundle openbabel
             #  
