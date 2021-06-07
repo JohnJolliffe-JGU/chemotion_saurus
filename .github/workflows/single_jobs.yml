@@ -96,7 +96,7 @@ jobs:
             source .nvm/nvm.sh && nvm use && npm test 
 
   db:
-    needs: config_files
+    needs: packages
     runs-on: self-hosted
     services:
       # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
