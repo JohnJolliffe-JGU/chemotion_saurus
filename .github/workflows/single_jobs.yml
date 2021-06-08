@@ -82,26 +82,6 @@ jobs:
       #   uses: mxschmitt/action-tmate@v3
       #   with:
       #     sudo: false
-
-  # testjs:
-  #   needs: packages
-  #   #needs: docker
-  #   runs-on: self-hosted
-  #   steps:
-  #       - run: |
-  #           cd gitlab-runner
-  #           #echo "NPM"
-  #           source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare --trace && npm test
-  #           #source ~/.rvm/scripts/rvm && 
-  #                       #npm test
-  #           #source ~/.nvm/nvm.sh && nvm use && npm test
-  #         env:
-  #           POSTGRES_HOST: localhost
-  #           POSTGRES_PORT: 5432
-  #       - name: Setup tmate session
-  #         uses: mxschmitt/action-tmate@v3
-  #         with:
-  #           sudo: false
   
   db:
     needs: config_files
@@ -133,7 +113,7 @@ jobs:
             # echo "BUNDLE FILES"
             # ls -la vendor/bundle
             # npm install -g npm@7.11.1
-            source .nvm/nvm.sh && nvm use && npm i
+            source ~/.nvm/nvm.sh && nvm use && npm i
             echo "BABELIFY"
             npm list | grep babelify
 
@@ -157,8 +137,7 @@ jobs:
       - name: testjs
         run: |
           cd gitlab-runner
-          # TODO source.nvm/nvm.sh ?
-          source .nvm/nvm.sh && nvm use && npm test 
+          source ~/.nvm/nvm.sh && nvm use && npm test 
 
       - name: testrb
         run: |
@@ -168,7 +147,7 @@ jobs:
       - name: testacceptance
         run: |
           cd gitlab-runner
-          source .rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
@@ -179,15 +158,3 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
           #POSTGRES_PASSWORD: 123456
-
-
-  # testacceptance:
-  #   needs: packages
-  #   runs-on: self-hosted
-  #   steps:
-  #       - run: |
-  #           cd gitlab-runner
-  #           rspec spec/features
-  #   env:
-  #     POSTGRES_HOST: localhost
-  #     POSTGRES_PORT: 5432
