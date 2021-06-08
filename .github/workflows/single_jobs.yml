@@ -85,11 +85,12 @@ jobs:
             # ls -la vendor/bundle
             # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
+            echo "BABELIFY"
+            npm list | grep babelify
             #bundle config set --local path vendor/bundle #TODO?
             bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
             echo "CONFIGS"
-            bundle config list
             bundle -v
             rails -v
             ruby -v
