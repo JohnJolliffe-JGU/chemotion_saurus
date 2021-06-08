@@ -102,7 +102,7 @@ jobs:
           path: ~/shared/bundle
           #path: vendor/bundle
           #path: gitlab-runner/shared/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/lockfiles') }}
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: install packages
