@@ -55,6 +55,54 @@ jobs:
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
   
+  # packages:
+  #   needs: config_files
+  #   # needs: docker
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: gitlab-runner/shared
+  #         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-gems-
+  #     - run: |
+  #           cd gitlab-runner
+  #           # && gem install bundler -v 1.17.3 --no-document 
+  #           #source ~/.rvm/scripts/rvm && 
+  #           bundle install -j 3 --path shared/bundle
+  #           source ~/.nvm/nvm.sh && nvm use && npm i
+  #           echo "NPM"
+  #           npm list | grep react@
+  #           echo "GEMS"
+  #           gem list
+  #           echo "OPENBAEL"
+  #           gem which openbabel
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     sudo: false
+
+  # testjs:
+  #   needs: packages
+  #   #needs: docker
+  #   runs-on: self-hosted
+  #   steps:
+  #       - run: |
+  #           cd gitlab-runner
+  #           #echo "NPM"
+  #           source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare --trace && npm test
+  #           #source ~/.rvm/scripts/rvm && 
+  #                       #npm test
+  #           #source ~/.nvm/nvm.sh && nvm use && npm test
+  #         env:
+  #           POSTGRES_HOST: localhost
+  #           POSTGRES_PORT: 5432
+  #       - name: Setup tmate session
+  #         uses: mxschmitt/action-tmate@v3
+  #         with:
+  #           sudo: false
+  
   db:
     needs: config_files
     runs-on: self-hosted
@@ -71,7 +119,8 @@ jobs:
     steps:
       - uses: actions/cache@v2
         with:
-          path: vendor/bundle
+          path: ~/shared/bundle
+          #path: vendor/bundle
           #path: gitlab-runner/shared/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
@@ -84,13 +133,16 @@ jobs:
             # echo "BUNDLE FILES"
             # ls -la vendor/bundle
             # npm install -g npm@7.11.1
-            source ~/.nvm/nvm.sh && nvm use && npm i
+            source .nvm/nvm.sh && nvm use && npm i
             echo "BABELIFY"
             npm list | grep babelify
+
             #bundle config set --local path vendor/bundle #TODO?
-            bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+            bundle install -j 3 --retry 3 --full-index --path ~/shared/bundle
+            #bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
             echo "CONFIGS"
+            #bundle config list
             bundle -v
             rails -v
             ruby -v
@@ -105,8 +157,8 @@ jobs:
       - name: testjs
         run: |
           cd gitlab-runner
-          #nvm install v12.22.1
-          source ~/.nvm/nvm.sh && nvm use && npm test 
+          # TODO source.nvm/nvm.sh ?
+          source .nvm/nvm.sh && nvm use && npm test 
 
       - name: testrb
         run: |
@@ -116,7 +168,7 @@ jobs:
       - name: testacceptance
         run: |
           cd gitlab-runner
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
+          source .rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
@@ -127,3 +179,15 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
           #POSTGRES_PASSWORD: 123456
+
+
+  # testacceptance:
+  #   needs: packages
+  #   runs-on: self-hosted
+  #   steps:
+  #       - run: |
+  #           cd gitlab-runner
+  #           rspec spec/features
+  #   env:
+  #     POSTGRES_HOST: localhost
+  #     POSTGRES_PORT: 5432
