@@ -39,21 +39,21 @@ jobs:
           repository: ComPlat/chemotion_ELN
           path: gitlab-runner
 
-  config_files:
-    #needs: docker
-    needs: checkout
-    runs-on: self-hosted
-    steps:
-      - name: change config files
-        run: |
-            pwd
-            ls
-            cd gitlab-runner/config
-            #cp database.yml.example database.yml
-            cp -f storage.yml.example storage.yml
-            touch datacollectors.yml
-            cp -f profile_default.yml.example profile_default.yml
-            touch klasses.json
+  # config_files:
+  #   #needs: docker
+  #   needs: checkout
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: change config files
+  #       run: |
+  #           pwd
+  #           ls
+  #           cd gitlab-runner/config
+  #           #cp database.yml.example database.yml
+  #           cp -f storage.yml.example storage.yml
+  #           touch datacollectors.yml
+  #           cp -f profile_default.yml.example profile_default.yml
+  #           touch klasses.json
 
   db:
     needs: config_files
@@ -90,8 +90,8 @@ jobs:
             npm list | grep babelify
 
             #bundle config set --local path vendor/bundle #TODO?
-            #bundle install -j 3 --retry 3 --full-index --path ~/shared/bundle
-            bundle install -j 3 --retry 3 --full-index --path shared/bundle
+            #bundle install -j 3 --retry 3 --full-index --path shared/bundle
+            bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
             echo "CONFIGS"
             #bundle config list
