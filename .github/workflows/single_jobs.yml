@@ -119,7 +119,7 @@ jobs:
         run: |
           #cd gitlab-runner
           # source ~/.rvm/scripts/rvm && # change? 
-          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features/sample_management_spec.rb
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
