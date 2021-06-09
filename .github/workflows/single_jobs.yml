@@ -106,10 +106,10 @@ jobs:
             echo "OPENBABEL"
             bundle info openbabel
 
-      - name: testjs
-        run: |
-          cd gitlab-runner
-          source ~/.nvm/nvm.sh && nvm use && npm test
+      # - name: testjs
+      #   run: |
+      #     cd gitlab-runner
+      #     source ~/.nvm/nvm.sh && nvm use && npm test
 
       - name: testrb
         run: |
