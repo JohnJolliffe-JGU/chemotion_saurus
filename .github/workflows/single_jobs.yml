@@ -22,26 +22,26 @@ jobs:
           docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
           # todo check if fully pulled
 
-  # checkout:
-  #   needs: docker
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Check file existence
-  #       id: check_files
-  #       uses: andstor/file-existence-action@v1
-  #       with:
-  #         files: "gitlab-runner/app"
-  #     - name: init checkout ELN
-  #     # todo always checkout?
-  #       if: steps.check_files.outputs.files_exists == 'false'
-  #       uses: actions/checkout@v2
-  #       with:
-  #         repository: ComPlat/chemotion_ELN
-  #         path: gitlab-runner
+  checkout:
+    needs: docker
+    runs-on: self-hosted
+    steps:
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "gitlab-runner/app"
+      - name: init checkout ELN
+      # todo always checkout?
+        if: steps.check_files.outputs.files_exists == 'false'
+        uses: actions/checkout@v2
+        with:
+          repository: ComPlat/chemotion_ELN
+          path: gitlab-runner
 
   config_files:
-    needs: docker
-    #needs: checkout
+    #needs: docker
+    needs: checkout
     runs-on: self-hosted
     steps:
       - name: change config files
@@ -83,78 +83,78 @@ jobs:
       #   with:
       #     sudo: false
 
-  db:
-    needs: config_files
-    runs-on: self-hosted
-    services:
-      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
-      # Label used to access the service container
-      postgres:
-        #image: postgres
-        image: postgres:12-alpine
-        env:
-          POSTGRES_DB: chemotion_test
-          POSTGRES_USER: chemotion_test
-          #POSTGRES_PASSWORD: 123456
-    steps:
-      - uses: actions/cache@v2
-        with:
-          path: ~/shared/bundle
-          #path: vendor/bundle
-          #path: gitlab-runner/shared/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: install packages
-        run: |
-            cd gitlab-runner
-            rm Gemfile.lock
-            #cp -r shared/bundle vendor/bundle # not working
-            # echo "BUNDLE FILES"
-            # ls -la vendor/bundle
-            # npm install -g npm@7.11.1
-            source ~/.nvm/nvm.sh && nvm use && npm i
-            echo "BABELIFY"
-            npm list | grep babelify
+  # db:
+  #   needs: config_files
+  #   runs-on: self-hosted
+  #   services:
+  #     # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+  #     # Label used to access the service container
+  #     postgres:
+  #       #image: postgres
+  #       image: postgres:12-alpine
+  #       env:
+  #         POSTGRES_DB: chemotion_test
+  #         POSTGRES_USER: chemotion_test
+  #         #POSTGRES_PASSWORD: 123456
+  #   steps:
+  #     # - uses: actions/cache@v2
+  #     #   with:
+  #     #     path: ~/shared/bundle
+  #     #     #path: vendor/bundle
+  #     #     #path: gitlab-runner/shared/bundle
+  #     #     key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+  #     #     restore-keys: |
+  #     #       ${{ runner.os }}-gems-
+  #     - name: install packages
+  #       run: |
+  #           cd gitlab-runner
+  #           #rm Gemfile.lock
+  #           #cp -r shared/bundle vendor/bundle # not working
+  #           # echo "BUNDLE FILES"
+  #           # ls -la vendor/bundle
+  #           # npm install -g npm@7.11.1
+  #           source ~/.nvm/nvm.sh && nvm use && npm i
+  #           echo "BABELIFY"
+  #           npm list | grep babelify
 
-            #bundle config set --local path vendor/bundle #TODO?
-            bundle install -j 3 --retry 3 --full-index --path ~/shared/bundle
-            #bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+  #           #bundle config set --local path vendor/bundle #TODO?
+  #           #bundle install -j 3 --retry 3 --full-index --path ~/shared/bundle
+  #           bundle install -j 3 --retry 3 --full-index --path shared/bundle
 
-            echo "CONFIGS"
-            #bundle config list
-            bundle -v
-            rails -v
-            ruby -v
-            node -v
-            npm -v
-            nvm -v
-            echo "BROWSERIFY-RAILS"
-            bundle info browserify-rails
-            echo "OPENBABEL"
-            bundle info openbabel
+  #           echo "CONFIGS"
+  #           #bundle config list
+  #           bundle -v
+  #           rails -v
+  #           ruby -v
+  #           node -v
+  #           npm -v
+  #           nvm -v
+  #           echo "BROWSERIFY-RAILS"
+  #           bundle info browserify-rails
+  #           echo "OPENBABEL"
+  #           bundle info openbabel
 
-      - name: testjs
-        run: |
-          cd gitlab-runner
-          source ~/.nvm/nvm.sh && nvm use && npm test
+  #     - name: testjs
+  #       run: |
+  #         cd gitlab-runner
+  #         source ~/.nvm/nvm.sh && nvm use && npm test
 
-      - name: testrb
-        run: |
-          cd gitlab-runner
-          rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      # - name: testrb
+      #   run: |
+      #     cd gitlab-runner
+      #     rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
-      - name: testacceptance
-        run: |
-          cd gitlab-runner
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
+      # - name: testacceptance
+      #   run: |
+      #     cd gitlab-runner
+      #     source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && rspec spec/features/sample_management_spec.rb
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       #   with:
       #     sudo: true
 
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
+        # env:
+        #   POSTGRES_HOST: localhost
+        #   POSTGRES_PORT: 5432
           #POSTGRES_PASSWORD: 123456
