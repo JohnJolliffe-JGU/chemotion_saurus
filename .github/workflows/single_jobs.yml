@@ -81,7 +81,7 @@ jobs:
       - name: install packages
         run: |
             cd gitlab-runner
-            #rm Gemfile.lock
+            rm Gemfile.lock
             #cp -r shared/bundle vendor/bundle # not working
             # echo "BUNDLE FILES"
             # ls -la vendor/bundle
