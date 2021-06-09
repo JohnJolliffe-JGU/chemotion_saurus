@@ -33,7 +33,7 @@ jobs:
       #     files: "gitlab-runner/app"
       - name: init checkout ELN
       # todo always checkout?
-        if: steps.check_files.outputs.files_exists == 'false'
+        #if: steps.check_files.outputs.files_exists == 'false'
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
