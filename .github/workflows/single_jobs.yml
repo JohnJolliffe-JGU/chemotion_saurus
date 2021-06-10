@@ -105,7 +105,7 @@ jobs:
     
     steps:
     - name: unit tests JS
-      if: ${{ env.SKIPALL == 'false' }} && ${{ env.SKIPJS == 'false' }} 
+      if: ${{ env.SKIPALL == 'false' && env.SKIPJS == 'false' }}
       run: |
         source ~/.nvm/nvm.sh && nvm use && npm test
 
