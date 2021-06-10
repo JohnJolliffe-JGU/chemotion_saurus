@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches: [ ELN ]
+  env:
+    SKIPALL: "!contains(github.event.commits[0].message, 'skip alltests')"
+    SKIPJS: "!contains(github.event.commits[0].message, 'skip unitjs')"
 
 jobs:
 
@@ -18,7 +21,6 @@ jobs:
         run: |
           #echo "${{ github.event.head_commit.message[0] }}"
           echo " ${{ github.event.commits[0].message }} "
-          #echo " ${{ github }}"
 
   # checkout:
   #   #needs: docker
@@ -90,18 +92,11 @@ jobs:
 
 
   testjs:
-  #contains('Hello world', 'llo')
-    # if: |
-    #   "!contains(github.event.commits[0].message, 'skip unitjs')" || 
-    #   "!contains(github.event.commits[0].message, 'skip alltests')"
-    #if: ("!contains(github.event.commits[0].message, 'skip alltests')"  "!contains(github.event.commits[0].message, 'skip alltests')")
-    
-    #if: !$skipall
     #needs: gems_and_modules
     runs-on: self-hosted
-    env:
-      SKIPALL: "!contains(github.event.commits[0].message, 'skip alltests')"
-      SKIPJS: "!contains(github.event.commits[0].message, 'skip unitjs')"
+    # env:
+    #   SKIPALL: "!contains(github.event.commits[0].message, 'skip alltests')"
+    #   SKIPJS: "!contains(github.event.commits[0].message, 'skip unitjs')"
     
     steps:
     - name: unit tests JS
