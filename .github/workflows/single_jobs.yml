@@ -91,7 +91,7 @@ jobs:
 
   testjs:
   #contains('Hello world', 'llo')
-    if: "!contains(github.event.commits[0].message, 'skip unitjs')"
+    if: "!contains(github.event.commits[0].message, 'skip unitjs') || !contains(github.event.commits[0].message, 'skip allunits')"
     #if: ${{ github.event.commits[0].message }}
     #needs: gems_and_modules
     runs-on: self-hosted
@@ -101,7 +101,7 @@ jobs:
         source ~/.nvm/nvm.sh && nvm use && npm test
 
   # testrb:
-    # if: |
+    #if: "!contains(github.event.commits[0].message, 'skip unitrb')"
   #   needs: gems_and_modules
   #   runs-on: self-hosted
   #   services:
