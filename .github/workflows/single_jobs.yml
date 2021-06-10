@@ -99,13 +99,14 @@ jobs:
     #if: !$skipall
     #needs: gems_and_modules
     runs-on: self-hosted
+    env:
+      skipall: "!contains(github.event.commits[0].message, 'skip alltests')"
     steps:
     - name: unit tests JS
       run: |
         echo "$skipall"
         #source ~/.nvm/nvm.sh && nvm use && npm test
-      env:
-        skipall: "!contains(github.event.commits[0].message, 'skip alltests')"
+
 
   # testrb:
     #if: "!contains(github.event.commits[0].message, 'skip unitrb')"
