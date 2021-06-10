@@ -21,6 +21,11 @@ jobs:
         run: |
           echo " ${{ github.event.commits[0].message }} "
           echo " ${{ env.SKIP_ALL }} "
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          sudo: true
+      
 
 
   # checkout:
