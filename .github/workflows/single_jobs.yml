@@ -94,13 +94,16 @@ jobs:
     # if: |
     #   "!contains(github.event.commits[0].message, 'skip unitjs')" || 
     #   "!contains(github.event.commits[0].message, 'skip alltests')"
-    if: ("!contains(github.event.commits[0].message, 'skip alltests')" || "!contains(github.event.commits[0].message, 'skip alltests')")
+    #if: ("!contains(github.event.commits[0].message, 'skip alltests')"  "!contains(github.event.commits[0].message, 'skip alltests')")
+    if: !skipall
     #needs: gems_and_modules
     runs-on: self-hosted
     steps:
     - name: unit tests JS
       run: |
         source ~/.nvm/nvm.sh && nvm use && npm test
+      env:
+        skipall: "!contains(github.event.commits[0].message, 'skip alltests')"
 
   # testrb:
     #if: "!contains(github.event.commits[0].message, 'skip unitrb')"
