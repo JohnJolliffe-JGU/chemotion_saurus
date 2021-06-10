@@ -20,7 +20,7 @@ jobs:
       - name: Logging
         run: |
           echo " ${{ github.event.commits[0].message }} "
-          echo ${{ env.$SKIP_ALL }}
+          echo ${{ env.SKIP_ALL }}
 
 
   # checkout:
