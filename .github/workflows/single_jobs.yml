@@ -7,6 +7,10 @@ on:
 
 jobs:
 
+  # (skip unitrb)
+# (skip allunits)
+# acceptance
+# unitjs
   log:
     runs-on: self-hosted
     steps:
@@ -85,15 +89,19 @@ jobs:
   #           bundle info openbabel
 
 
-  # testjs:
-  #   needs: gems_and_modules
-  #   runs-on: self-hosted
-  #   steps:
-  #   - name: unit tests JS
-  #     run: |
-  #       source ~/.nvm/nvm.sh && nvm use && npm test
+  testjs:
+  #contains('Hello world', 'llo')
+    if: !contains(${{ github.event.commits[0].message }}, 'skip unitjs')
+    #if: ${{ github.event.commits[0].message }}
+    needs: gems_and_modules
+    runs-on: self-hosted
+    steps:
+    - name: unit tests JS
+      run: |
+        source ~/.nvm/nvm.sh && nvm use && npm test
 
   # testrb:
+    # if: |
   #   needs: gems_and_modules
   #   runs-on: self-hosted
   #   services:
@@ -111,6 +119,7 @@ jobs:
   #         RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
   # testacceptance:
+    # if: |
   #   needs: gems_and_modules
   #   runs-on: self-hosted
   #   services:
