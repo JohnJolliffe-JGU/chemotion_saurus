@@ -4,16 +4,15 @@ on:
   workflow_dispatch:
   push:
     branches: [ ELN ]
+    
 env:
-  SKIPALL: "!contains(github.event.commits[0].message, 'skip alltests')"
-  SKIPJS: "!contains(github.event.commits[0].message, 'skip unitjs')"
+  SKIP_ALL: "!contains(github.event.commits[0].message, 'skip all tests')"
+  SKIP_JS: "!contains(github.event.commits[0].message, 'skip unitjs')"
+  SKIP_RB: "!contains(github.event.commits[0].message, 'skip unitrb')"
+  SKIP_ACC: "!contains(github.event.commits[0].message, 'skip acceptance')"
 
 jobs:
 
-  # (skip unitrb)
-# (skip allunits)
-# acceptance
-# unitjs
   log:
     runs-on: self-hosted
     steps:
@@ -39,110 +38,104 @@ jobs:
   #         repository: ComPlat/chemotion_ELN
           #path:
 
-  # config_files:
-  #   #needs: checkout
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: change config files
-  #       run: |
-  #           pwd
-  #           ls
-  #           cd config
-  #           #cp database.yml.example database.yml
-  #           cp -f storage.yml.example storage.yml
-  #           touch datacollectors.yml
-  #           cp -f profile_default.yml.example profile_default.yml
-  #           touch klasses.json
+  config_files:
+    #needs: checkout
+    runs-on: self-hosted
+    steps:
+      - name: change config files
+        run: |
+            pwd
+            ls
+            cd config
+            #cp database.yml.example database.yml
+            cp -f storage.yml.example storage.yml
+            touch datacollectors.yml
+            cp -f profile_default.yml.example profile_default.yml
+            touch klasses.json
 
-  # gems_and_modules:
-  #   needs: config_files
-  #   runs-on: self-hosted
-  #   steps:
-  #     - uses: actions/cache@v2
-  #       with:
-  #         path: node_modules
-  #         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-gems-
-  #     - name: install packages
-  #       run: |
-  #           #cd gitlab-runner
-  #           #rm Gemfile.lock
-  #           # echo "BUNDLE FILES"
-  #           # ls -la vendor/bundle
-  #           # npm install -g npm@7.11.1
-  #           source ~/.nvm/nvm.sh && nvm use && npm i
+  gems_and_modules:
+    needs: config_files
+    runs-on: self-hosted
+    steps:
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: install packages
+        run: |
+            #cd gitlab-runner
+            #rm Gemfile.lock
+            # echo "BUNDLE FILES"
+            # ls -la vendor/bundle
+            # npm install -g npm@7.11.1
+            source ~/.nvm/nvm.sh && nvm use && npm i
 
-  #           #bundle config set --local path vendor/bundle
-  #           #bundle install -j 3 --retry 3 --full-index --path shared/bundle
-  #           bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+            #bundle config set --local path vendor/bundle
+            #bundle install -j 3 --retry 3 --full-index --path shared/bundle
+            bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
-  #           echo "CONFIGS"
-  #           #bundle config list
-  #           bundle -v
-  #           rails -v
-  #           ruby -v
-  #           node -v
-  #           npm -v
-  #           nvm -v
-  #           echo "BROWSERIFY-RAILS"
-  #           bundle info browserify-rails
-  #           echo "OPENBABEL"
-  #           bundle info openbabel
+            echo "CONFIGS"
+            #bundle config list
+            bundle -v
+            rails -v
+            ruby -v
+            node -v
+            npm -v
+            nvm -v
+            echo "BROWSERIFY-RAILS"
+            bundle info browserify-rails
+            echo "OPENBABEL"
+            bundle info openbabel
 
 
   testjs:
-    #needs: gems_and_modules
+    needs: gems_and_modules
     runs-on: self-hosted
-    # env:
-    #   SKIPALL: "!contains(github.event.commits[0].message, 'skip alltests')"
-    #   SKIPJS: "!contains(github.event.commits[0].message, 'skip unitjs')"
     
     steps:
     - name: unit tests JS
-      if: ${{ env.SKIPALL == 'false' && env.SKIPJS == 'false' }}
+      if: ${{ env.SKIP_ALL == 'false' && env.SKIP_JS == 'false' }}
       run: |
         source ~/.nvm/nvm.sh && nvm use && npm test
 
 
-  # testrb:
-    #if: "!contains(github.event.commits[0].message, 'skip unitrb')"
-  #   needs: gems_and_modules
-  #   runs-on: self-hosted
-  #   services:
-  #     # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
-  #     # Label used to access the service container
-  #     postgres:
-  #       image: postgres:12-alpine
-  #       #env:
-  #         # POSTGRES_DB: chemotion_test
-  #         # POSTGRES_USER: chemotion_test
-  #         #POSTGRES_PASSWORD: 123456
-  #   steps:
-  #     - name: unit tests ruby
-  #       run: |
-  #         RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+  testrb:
+    needs: gems_and_modules
+    runs-on: self-hosted
+    services:
+      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
 
-  # testacceptance:
-    # if: |
-  #   needs: gems_and_modules
-  #   runs-on: self-hosted
-  #   services:
-  #     # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
-  #     # Label used to access the service container
-  #     postgres:
-  #       image: postgres:12-alpine
+    steps:
+      - name: unit tests ruby
+        if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
+        run: |
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
-  #   steps:
-  #     - name: acceptance tests
-  #       run: |
-  #         RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
+  testacceptance:
+    needs: gems_and_modules
+    runs-on: self-hosted
+    services:
+      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
 
-  #     # - name: Setup tmate session
-  #     #   uses: mxschmitt/action-tmate@v3
-  #     #   with:
-  #     #     sudo: true
+    steps:
+      - name: acceptance tests
+        if: ${{ env.SKIP_ALL == 'false' && env.SKIP_ACC == 'false' }}
+        run: |
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
 
-  #       env:
-  #         POSTGRES_HOST: localhost
-  #         POSTGRES_PORT: 5432
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     sudo: true
+
+        # env:
+        #   POSTGRES_HOST: localhost
+        #   POSTGRES_PORT: 5432
