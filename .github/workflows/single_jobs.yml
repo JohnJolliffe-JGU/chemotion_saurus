@@ -83,6 +83,7 @@ jobs:
   testjs:
     needs: gems_and_modules
     runs-on: self-hosted
+    steps:
     - name: testjs
       run: |
         source ~/.nvm/nvm.sh && nvm use && npm test
