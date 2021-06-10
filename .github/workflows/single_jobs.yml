@@ -96,7 +96,8 @@ jobs:
     steps:
     - name: unit tests JS
       # && env.SKIP_JS == 'false'
-      if: ${{ env.SKIP_ALL == 'false' }}
+      #if: ${{ env.SKIP_ALL == 'false' }}
+      if: "!contains(github.event.commits[0].message, 'skip unitjs')"
       run: |
         source ~/.nvm/nvm.sh && nvm use && npm test
 
