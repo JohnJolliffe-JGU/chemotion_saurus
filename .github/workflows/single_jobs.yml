@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches: [ ELN ]
-  env:
-    SKIPALL: "!contains(github.event.commits[0].message, 'skip alltests')"
-    SKIPJS: "!contains(github.event.commits[0].message, 'skip unitjs')"
+env:
+  SKIPALL: "!contains(github.event.commits[0].message, 'skip alltests')"
+  SKIPJS: "!contains(github.event.commits[0].message, 'skip unitjs')"
 
 jobs:
 
