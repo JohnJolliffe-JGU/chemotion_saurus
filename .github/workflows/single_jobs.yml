@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
   push:
     branches: [ ELN ]
-    
+
 env:
   SKIP_ALL: "!contains(github.event.commits[0].message, 'skip all tests')"
   SKIP_JS: "!contains(github.event.commits[0].message, 'skip unitjs')"
   SKIP_RB: "!contains(github.event.commits[0].message, 'skip unitrb')"
   SKIP_ACC: "!contains(github.event.commits[0].message, 'skip acceptance')"
+  SKIP_INSTALL: "!contains(github.event.commits[0].message, 'skip installation')"
 
 jobs:
 
@@ -64,16 +65,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: install packages
+        if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
         run: |
-            #cd gitlab-runner
             #rm Gemfile.lock
-            # echo "BUNDLE FILES"
-            # ls -la vendor/bundle
             # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
 
             #bundle config set --local path vendor/bundle
-            #bundle install -j 3 --retry 3 --full-index --path shared/bundle
             bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
             echo "CONFIGS"
