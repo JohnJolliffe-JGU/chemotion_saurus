@@ -5,11 +5,12 @@ on:
   push:
     branches: [ ELN ]
 
-env:
-  SKIP_ALL: "!contains(github.event.commits[0].message, 'skip all tests')"
-  SKIP_JS: "!contains(github.event.commits[0].message, 'skip unitjs')"
-  SKIP_RB: "!contains(github.event.commits[0].message, 'skip unitrb')"
-  SKIP_ACC: "!contains(github.event.commits[0].message, 'skip acceptance')"
+#TODO: github actions save expression as environment variable
+# env:
+#   SKIP_ALL: "!contains(github.event.commits[0].message, 'skip all tests')"
+#   SKIP_JS: "!contains(github.event.commits[0].message, 'skip unitjs')"
+#   SKIP_RB: "!contains(github.event.commits[0].message, 'skip unitrb')"
+#   SKIP_ACC: "!contains(github.event.commits[0].message, 'skip acceptance')"
   #SKIP_INSTALL: "!contains(github.event.commits[0].message, 'skip installation')"
 
 jobs:
@@ -95,8 +96,7 @@ jobs:
     
     steps:
     - name: unit tests JS
-      # && env.SKIP_JS == 'false'
-      #if: ${{ env.SKIP_ALL == 'false' }}
+      #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_JS == 'false'}}
       if: "!contains(github.event.commits[0].message, 'skip unitjs')"
       run: |
         source ~/.nvm/nvm.sh && nvm use && npm test
@@ -113,7 +113,8 @@ jobs:
 
     steps:
       - name: unit tests ruby
-        if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
+        if: "!contains(github.event.commits[0].message, 'skip unitrb')"
+        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
         run: |
           RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
@@ -128,7 +129,8 @@ jobs:
 
     steps:
       - name: acceptance tests
-        if: ${{ env.SKIP_ALL == 'false' && env.SKIP_ACC == 'false' }}
+        if: "!contains(github.event.commits[0].message, 'skip acceptance')"
+        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_ACC == 'false' }}
         run: |
           RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
 
