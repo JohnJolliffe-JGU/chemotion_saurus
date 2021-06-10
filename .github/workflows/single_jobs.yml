@@ -101,9 +101,10 @@ jobs:
     runs-on: self-hosted
     env:
       skipall: "!contains(github.event.commits[0].message, 'skip alltests')"
-    if: ${{ env.skipall == 'false' }}
+    
     steps:
     - name: unit tests JS
+      if: ${{ env.skipall == 'false' }}
       run: |
         echo "$skipall"
         #source ~/.nvm/nvm.sh && nvm use && npm test
