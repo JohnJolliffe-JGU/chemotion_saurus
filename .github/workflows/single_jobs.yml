@@ -7,6 +7,13 @@ on:
 
 jobs:
 
+  log:
+    runs-on: self-hosted
+    steps:
+      - name: Logging
+        run: |
+          echo "${{ github.event.head_commit.message }}"
+
   # checkout:
   #   #needs: docker
   #   runs-on: self-hosted
@@ -53,15 +60,12 @@ jobs:
         run: |
             #cd gitlab-runner
             #rm Gemfile.lock
-            #cp -r shared/bundle vendor/bundle # not working
             # echo "BUNDLE FILES"
             # ls -la vendor/bundle
             # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
-            echo "BABELIFY"
-            npm list | grep babelify
 
-            #bundle config set --local path vendor/bundle #TODO?
+            #bundle config set --local path vendor/bundle
             #bundle install -j 3 --retry 3 --full-index --path shared/bundle
             bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
@@ -112,10 +116,7 @@ jobs:
       # Label used to access the service container
       postgres:
         image: postgres:12-alpine
-        #env:
-          # POSTGRES_DB: chemotion_test
-          # POSTGRES_USER: chemotion_test
-          #POSTGRES_PASSWORD: 123456
+
     steps:
       - name: acceptance tests
         run: |
@@ -129,4 +130,3 @@ jobs:
         env:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
-          #POSTGRES_PASSWORD: 123456
