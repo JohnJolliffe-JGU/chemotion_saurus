@@ -10,7 +10,7 @@ env:
   SKIP_JS: "!contains(github.event.commits[0].message, 'skip unitjs')"
   SKIP_RB: "!contains(github.event.commits[0].message, 'skip unitrb')"
   SKIP_ACC: "!contains(github.event.commits[0].message, 'skip acceptance')"
-  SKIP_INSTALL: "!contains(github.event.commits[0].message, 'skip installation')"
+  #SKIP_INSTALL: "!contains(github.event.commits[0].message, 'skip installation')"
 
 jobs:
 
@@ -65,7 +65,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
       - name: install packages
-        if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
+        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
         run: |
             #rm Gemfile.lock
             # npm install -g npm@7.11.1
