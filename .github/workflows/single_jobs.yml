@@ -6,21 +6,6 @@ on:
     branches: [ ELN ]
 
 jobs:
-  #docker:
-    # runs-on: self-hosted
-    # steps:
-    #   - name: Check file existence
-    #     id: check_files
-    #     uses: andstor/file-existence-action@v1
-    #     with:
-    #       files: "gitlab-runner/shared"
-    #   - name: docker pull
-    #     # todo check for newer tag
-    #     #if: steps.check_files.outputs.files_exists == 'false'
-    #     run: |
-    #       docker pull complat/complat-ubuntu-runner:0.10.20
-    #       docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
-    #       # todo check if fully pulled
 
   # checkout:
   #   #needs: docker
@@ -55,71 +40,77 @@ jobs:
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
 
-  db:
-    #needs: docker
+  gems_and_modules:
     needs: config_files
+    runs-on: self-hosted
+    - uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+    - name: install packages
+      run: |
+          #cd gitlab-runner
+          #rm Gemfile.lock
+          #cp -r shared/bundle vendor/bundle # not working
+          # echo "BUNDLE FILES"
+          # ls -la vendor/bundle
+          # npm install -g npm@7.11.1
+          source ~/.nvm/nvm.sh && nvm use && npm i
+          echo "BABELIFY"
+          npm list | grep babelify
+
+          #bundle config set --local path vendor/bundle #TODO?
+          #bundle install -j 3 --retry 3 --full-index --path shared/bundle
+          bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+
+          echo "CONFIGS"
+          #bundle config list
+          bundle -v
+          rails -v
+          ruby -v
+          node -v
+          npm -v
+          nvm -v
+          echo "BROWSERIFY-RAILS"
+          bundle info browserify-rails
+          echo "OPENBABEL"
+          bundle info openbabel
+
+
+  testjs:
+    needs: gems_and_modules
+    runs-on: self-hosted
+    - name: testjs
+      run: |
+        source ~/.nvm/nvm.sh && nvm use && npm test
+
+  testrb:
+    #needs: config_files
+    needs: gems_and_modules
     runs-on: self-hosted
     services:
       # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
       # Label used to access the service container
       postgres:
-        #image: postgres
         image: postgres:12-alpine
         env:
-          POSTGRES_DB: chemotion_test
-          POSTGRES_USER: chemotion_test
+          # POSTGRES_DB: chemotion_test
+          # POSTGRES_USER: chemotion_test
           #POSTGRES_PASSWORD: 123456
     steps:
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: install packages
-        run: |
-            #cd gitlab-runner
-            #rm Gemfile.lock
-            #cp -r shared/bundle vendor/bundle # not working
-            # echo "BUNDLE FILES"
-            # ls -la vendor/bundle
-            # npm install -g npm@7.11.1
-            source ~/.nvm/nvm.sh && nvm use && npm i
-            echo "BABELIFY"
-            npm list | grep babelify
-
-            #bundle config set --local path vendor/bundle #TODO?
-            #bundle install -j 3 --retry 3 --full-index --path shared/bundle
-            bundle install -j 3 --retry 3 --full-index --path vendor/bundle
-
-            echo "CONFIGS"
-            #bundle config list
-            bundle -v
-            rails -v
-            ruby -v
-            node -v
-            npm -v
-            nvm -v
-            echo "BROWSERIFY-RAILS"
-            bundle info browserify-rails
-            echo "OPENBABEL"
-            bundle info openbabel
 
       - name: testrb
         run: |
-          #cd gitlab-runner
           RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
-      - name: testjs
-        run: |
-          #cd gitlab-runner
-          source ~/.nvm/nvm.sh && nvm use && npm test
 
-      - name: testacceptance
-        run: |
-          #cd gitlab-runner
-          # source ~/.rvm/scripts/rvm && # change? 
-          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
+
+      # - name: testacceptance
+      #   run: |
+      #     # source ~/.rvm/scripts/rvm && # change? 
+      #     RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
@@ -129,4 +120,4 @@ jobs:
         env:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
-          POSTGRES_PASSWORD: 123456
+          #POSTGRES_PASSWORD: 123456
