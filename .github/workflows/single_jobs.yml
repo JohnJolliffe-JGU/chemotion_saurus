@@ -25,7 +25,6 @@ jobs:
           #path:
 
   config_files:
-    #needs: docker
     #needs: checkout
     runs-on: self-hosted
     steps:
@@ -84,12 +83,11 @@ jobs:
     needs: gems_and_modules
     runs-on: self-hosted
     steps:
-    - name: testjs
+    - name: unit tests JS
       run: |
         source ~/.nvm/nvm.sh && nvm use && npm test
 
   testrb:
-    #needs: config_files
     needs: gems_and_modules
     runs-on: self-hosted
     services:
@@ -102,14 +100,26 @@ jobs:
           # POSTGRES_USER: chemotion_test
           #POSTGRES_PASSWORD: 123456
     steps:
-      - name: testrb
+      - name: unit tests ruby
         run: |
           RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
-      # - name: testacceptance
-      #   run: |
-      #     # source ~/.rvm/scripts/rvm && # change? 
-      #     RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
+  testacceptance:
+    needs: gems_and_modules
+    runs-on: self-hosted
+    services:
+      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
+        #env:
+          # POSTGRES_DB: chemotion_test
+          # POSTGRES_USER: chemotion_test
+          #POSTGRES_PASSWORD: 123456
+    steps:
+      - name: acceptance tests
+        run: |
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
