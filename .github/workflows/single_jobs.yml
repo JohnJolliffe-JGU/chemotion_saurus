@@ -91,7 +91,7 @@ jobs:
 
   testjs:
   #contains('Hello world', 'llo')
-    if: "!contains(github.event.commits[0].message, 'skip unitjs') || !contains(github.event.commits[0].message, 'skip allunits')"
+    if: "!contains(github.event.commits[0].message, 'skip unitjs')" || "!contains(github.event.commits[0].message, 'skip allunits')"
     #needs: gems_and_modules
     runs-on: self-hosted
     steps:
