@@ -23,9 +23,6 @@ jobs:
           echo " ${{ env.SKIP_ALL }} "
           echo "!contains(github.event.commits[0].message, 'skip all tests')"
 
-      
-
-
   # checkout:
   #   #needs: docker
   #   runs-on: self-hosted
@@ -98,7 +95,8 @@ jobs:
     
     steps:
     - name: unit tests JS
-      if: ${{ env.SKIP_ALL == 'false' && env.SKIP_JS == 'false' }}
+      # && env.SKIP_JS == 'false'
+      if: ${{ env.SKIP_ALL == 'false' }}
       run: |
         source ~/.nvm/nvm.sh && nvm use && npm test
 
