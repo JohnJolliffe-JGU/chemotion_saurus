@@ -113,7 +113,7 @@ jobs:
           POSTGRES_PASSWORD: 123456
           POSTGRES_DB: chemotion_test
           POSTGRES_USER: chemotion_test
-          POSTGRES_PASSWORD: "123456"
+          POSTGRES_PASSWORD: 123456
           # Set health checks to wait until postgres has started
           options: >-
             --health-cmd pg_isready
