@@ -39,99 +39,102 @@ jobs:
         with:
           repository: ComPlat/chemotion_ELN
           #path:
+      - run: |
+        pwd
+        ls
 
-  config_files:
-    #needs: checkout
-    runs-on: ubuntu-latest
-    steps:
-      - name: change config files
-        run: |
-            pwd
-            ls
-            cd config
-            cp database.yml.gitlab database.yml
-            cp -f storage.yml.example storage.yml
-            touch datacollectors.yml
-            cp -f profile_default.yml.example profile_default.yml
-            touch klasses.json
+  # config_files:
+  #   #needs: checkout
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: change config files
+  #       run: |
+  #           pwd
+  #           ls
+  #           # cd config
+  #           # cp database.yml.gitlab database.yml
+  #           # cp -f storage.yml.example storage.yml
+  #           # touch datacollectors.yml
+  #           # cp -f profile_default.yml.example profile_default.yml
+  #           # touch klasses.json
 
-  gems_and_modules:
-    needs: config_files
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: install packages
-        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
-        run: |
-            #rm Gemfile.lock
-            # npm install -g npm@7.11.1
-            source ~/.nvm/nvm.sh && nvm use && npm i
+  # gems_and_modules:
+  #   needs: config_files
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: node_modules
+  #         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-gems-
+  #     - name: install packages
+  #       #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
+  #       run: |
+  #           #rm Gemfile.lock
+  #           # npm install -g npm@7.11.1
+  #           source ~/.nvm/nvm.sh && nvm use && npm i
 
-            #bundle config set --local path vendor/bundle
-            bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+  #           #bundle config set --local path vendor/bundle
+  #           bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
-            echo "CONFIGS"
-            #bundle config list
-            bundle -v
-            rails -v
-            ruby -v
-            node -v
-            npm -v
-            nvm -v
-            echo "BROWSERIFY-RAILS"
-            bundle info browserify-rails
-            echo "OPENBABEL"
-            bundle info openbabel
+  #           echo "CONFIGS"
+  #           #bundle config list
+  #           bundle -v
+  #           rails -v
+  #           ruby -v
+  #           node -v
+  #           npm -v
+  #           nvm -v
+  #           echo "BROWSERIFY-RAILS"
+  #           bundle info browserify-rails
+  #           echo "OPENBABEL"
+  #           bundle info openbabel
 
 
-  testjs:
-    needs: gems_and_modules
-    runs-on: ubuntu-latest
+  # testjs:
+  #   needs: gems_and_modules
+  #   runs-on: ubuntu-latest
     
-    steps:
-    - name: unit tests JS
-      #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_JS == 'false'}}
-      if: "!contains(github.event.commits[0].message, 'skip unitjs')"
-      run: |
-        source ~/.nvm/nvm.sh && nvm use && npm test
+  #   steps:
+  #   - name: unit tests JS
+  #     #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_JS == 'false'}}
+  #     if: "!contains(github.event.commits[0].message, 'skip unitjs')"
+  #     run: |
+  #       source ~/.nvm/nvm.sh && nvm use && npm test
 
 
-  testrb:
-    needs: gems_and_modules
-    runs-on: ubuntu-latest
-    services:
-      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
-      # Label used to access the service container
-      postgres:
-        image: postgres:12-alpine
-        env:
-          POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: chemotion_test
-          POSTGRES_USER: chemotion_test
-          # Set health checks to wait until postgres has started
-          # options: >-
-          #   --health-cmd pg_isready
-          #   --health-interval 10s
-          #   --health-timeout 5s
-          #   --health-retries 5
-        ports:
-          # Maps tcp port 5432 on service container to the host
-          - 5432:5432
+  # testrb:
+  #   needs: gems_and_modules
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+  #     # Label used to access the service container
+  #     postgres:
+  #       image: postgres:12-alpine
+  #       env:
+  #         POSTGRES_PASSWORD: 123456
+  #         POSTGRES_DB: chemotion_test
+  #         POSTGRES_USER: chemotion_test
+  #         # Set health checks to wait until postgres has started
+  #         # options: >-
+  #         #   --health-cmd pg_isready
+  #         #   --health-interval 10s
+  #         #   --health-timeout 5s
+  #         #   --health-retries 5
+  #       ports:
+  #         # Maps tcp port 5432 on service container to the host
+  #         - 5432:5432
 
-    steps:
-      - name: unit tests ruby
-        if: "!contains(github.event.commits[0].message, 'skip unitrb')"
-        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
-        run: |
-          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
+  #   steps:
+  #     - name: unit tests ruby
+  #       if: "!contains(github.event.commits[0].message, 'skip unitrb')"
+  #       #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
+  #       run: |
+  #         RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+  #       env:
+  #         POSTGRES_HOST: localhost
+  #         POSTGRES_PORT: 5432
 
   # testacceptance:
   #   needs: gems_and_modules
