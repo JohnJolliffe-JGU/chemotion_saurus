@@ -40,8 +40,8 @@ jobs:
           repository: ComPlat/chemotion_ELN
           #path:
       - run: |
-        pwd
-        ls
+            pwd
+            ls
 
   # config_files:
   #   #needs: checkout
