@@ -79,6 +79,8 @@ jobs:
           node-version: 12.22.1
         #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
       - run: |
+            pwd
+            ls
             npm i && npm test
 
   #           #bundle config set --local path vendor/bundle
