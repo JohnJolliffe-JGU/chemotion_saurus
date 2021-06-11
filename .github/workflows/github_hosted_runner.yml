@@ -76,7 +76,7 @@ jobs:
       - name: install node_modules and test
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ 12.22.1 }}
+          node-version: 12.22.1
         #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
       - run: |
             npm i && npm test
