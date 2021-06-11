@@ -100,8 +100,8 @@ jobs:
             bundle info browserify-rails
             echo "OPENBABEL"
             bundle info openbabel
-        with:
-          path: ${{ github.workspace }}
+        # with:
+        #   path: ${{ github.workspace }}
 
 
   testjs:
