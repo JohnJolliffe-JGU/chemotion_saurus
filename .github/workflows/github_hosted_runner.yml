@@ -47,6 +47,21 @@ jobs:
             touch datacollectors.yml
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: install node_modules and test
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.22.1
+        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
+      - run: |
+            pwd
+            ls
+            npm i && npm test
 
   # config_files:
   #   #needs: checkout
@@ -63,25 +78,25 @@ jobs:
   #           # cp -f profile_default.yml.example profile_default.yml
   #           # touch klasses.json
 
-  gems_and_modules:
-    needs: checkout
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: install node_modules and test
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.22.1
-        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
-      - run: |
-            pwd
-            ls
-            npm i && npm test
+  # gems_and_modules:
+  #   needs: checkout
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/cache@v2
+  #       with:
+  #         path: node_modules
+  #         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-gems-
+  #     - name: install node_modules and test
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 12.22.1
+  #       #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
+  #     - run: |
+  #           pwd
+  #           ls
+  #           npm i && npm test
 
   #           #bundle config set --local path vendor/bundle
   #           bundle install -j 3 --retry 3 --full-index --path vendor/bundle
