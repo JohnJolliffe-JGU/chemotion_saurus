@@ -83,23 +83,24 @@ jobs:
         run: |
             #rm Gemfile.lock
             # npm install -g npm@7.11.1
-            source ~/.nvm/nvm.sh && nvm use && npm i
+            #source ~/.nvm/nvm.sh && nvm use && 
+            npm i
 
             #bundle config set --local path vendor/bundle
             bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
-            echo "CONFIGS"
-            #bundle config list
-            bundle -v
-            rails -v
-            ruby -v
-            node -v
-            npm -v
-            nvm -v
-            echo "BROWSERIFY-RAILS"
-            bundle info browserify-rails
-            echo "OPENBABEL"
-            bundle info openbabel
+            # echo "CONFIGS"
+            # #bundle config list
+            # bundle -v
+            # rails -v
+            # ruby -v
+            # node -v
+            # npm -v
+            # nvm -v
+            # echo "BROWSERIFY-RAILS"
+            # bundle info browserify-rails
+            # echo "OPENBABEL"
+            # bundle info openbabel
         # with:
         #   path: ${{ github.workspace }}
 
