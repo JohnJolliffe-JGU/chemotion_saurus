@@ -15,14 +15,13 @@ on:
 
 jobs:
 
-  log:
-    runs-on: self-hosted
-    steps:
-      - name: Logging
-        run: |
-          echo " ${{ github.event.commits[0].message }} "
-          echo " ${{ env.SKIP_ALL }} "
-          echo "!contains(github.event.commits[0].message, 'skip all tests')"
+  # log:
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Logging
+  #       run: |
+  #         echo " ${{ github.event.commits[0].message }} "s
+  #         echo "!contains(github.event.commits[0].message, 'skip all tests')"
 
   # checkout:
   #   #needs: docker
@@ -84,11 +83,6 @@ jobs:
             node -v
             npm -v
             nvm -v
-            echo "BROWSERIFY-RAILS"
-            bundle info browserify-rails
-            echo "OPENBABEL"
-            bundle info openbabel
-
 
   testjs:
     needs: gems_and_modules
@@ -138,7 +132,3 @@ jobs:
       #   uses: mxschmitt/action-tmate@v3
       #   with:
       #     sudo: true
-
-        # env:
-        #   POSTGRES_HOST: localhost
-        #   POSTGRES_PORT: 5432
