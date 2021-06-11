@@ -63,12 +63,6 @@ jobs:
   #           # cp -f profile_default.yml.example profile_default.yml
   #           # touch klasses.json
 
-  # node_modules:
-  #   needs: checkout
-  #   runs-on: ubuntu-latest
-  #   steps:
-    
-
   gems_and_modules:
     needs: checkout
     runs-on: ubuntu-latest
