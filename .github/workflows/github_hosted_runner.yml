@@ -129,9 +129,9 @@ jobs:
         #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
         run: |
           RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
-      env:
-        POSTGRES_HOST: localhost
-        POSTGRES_PORT: 5432
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
 
   # testacceptance:
   #   needs: gems_and_modules
