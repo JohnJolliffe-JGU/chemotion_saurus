@@ -113,7 +113,6 @@ jobs:
           POSTGRES_PASSWORD: 123456
           POSTGRES_DB: chemotion_test
           POSTGRES_USER: chemotion_test
-          POSTGRES_PASSWORD: 123456
           # Set health checks to wait until postgres has started
           options: >-
             --health-cmd pg_isready
@@ -130,43 +129,45 @@ jobs:
         #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
         run: |
           RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
 
-  testacceptance:
-    needs: gems_and_modules
-    runs-on: ubuntu-latest
-    services:
-      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
-      # Label used to access the service container
-      postgres:
-        image: postgres:12-alpine
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: chemotion_test
-          POSTGRES_USER: chemotion_test
-          POSTGRES_PASSWORD: 123456
-          # Set health checks to wait until postgres has started
-          options: >-
-            --health-cmd pg_isready
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
-          ports:
-            # Maps tcp port 5432 on service container to the host
-            - 5432:5432
+  # testacceptance:
+  #   needs: gems_and_modules
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+  #     # Label used to access the service container
+  #     postgres:
+  #       image: postgres:12-alpine
+  #       env:
+  #         POSTGRES_DB: chemotion_test
+  #         POSTGRES_USER: chemotion_test
+  #         POSTGRES_PASSWORD: 123456
+  #         # Set health checks to wait until postgres has started
+  #         options: >-
+  #           --health-cmd pg_isready
+  #           --health-interval 10s
+  #           --health-timeout 5s
+  #           --health-retries 5
+  #         ports:
+  #           # Maps tcp port 5432 on service container to the host
+  #           - 5432:5432
 
-    steps:
-      - name: acceptance tests
-        if: "!contains(github.event.commits[0].message, 'skip acceptance')"
-        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_ACC == 'false' }}
-        run: |
-          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
+  #   steps:
+  #     - name: acceptance tests
+  #       if: "!contains(github.event.commits[0].message, 'skip acceptance')"
+  #       #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_ACC == 'false' }}
+  #       run: |
+  #         RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
 
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
-      #   with:
-      #     sudo: true
+  #     # - name: Setup tmate session
+  #     #   uses: mxschmitt/action-tmate@v3
+  #     #   with:
+  #     #     sudo: true
 
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
+  #       env:
+  #         POSTGRES_HOST: localhost
+  #         POSTGRES_PORT: 5432
 
