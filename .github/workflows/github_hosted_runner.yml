@@ -1,0 +1,172 @@
+name: ELN GitHub Actions 1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ ELN ]
+
+#TODO: github actions save expression as environment variable
+# env:
+#   SKIP_ALL: "!contains(github.event.commits[0].message, 'skip all tests')"
+#   SKIP_JS: "!contains(github.event.commits[0].message, 'skip unitjs')"
+#   SKIP_RB: "!contains(github.event.commits[0].message, 'skip unitrb')"
+#   SKIP_ACC: "!contains(github.event.commits[0].message, 'skip acceptance')"
+  #SKIP_INSTALL: "!contains(github.event.commits[0].message, 'skip installation')"
+
+jobs:
+
+  # log:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Logging
+  #       run: |
+  #         echo " ${{ github.event.commits[0].message }} "s
+  #         echo "!contains(github.event.commits[0].message, 'skip all tests')"
+
+  checkout:
+    #needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Check file existence
+      #   id: check_files
+      #   uses: andstor/file-existence-action@v1
+      #   with:
+      #     files: 
+      - name: init checkout ELN
+      # todo always checkout?
+        #if: steps.check_files.outputs.files_exists == 'false'
+        uses: actions/checkout@v2
+        with:
+          repository: ComPlat/chemotion_ELN
+          #path:
+
+  config_files:
+    #needs: checkout
+    runs-on: ubuntu-latest
+    steps:
+      - name: change config files
+        run: |
+            pwd
+            ls
+            cd config
+            cp database.yml.gitlab database.yml
+            cp -f storage.yml.example storage.yml
+            touch datacollectors.yml
+            cp -f profile_default.yml.example profile_default.yml
+            touch klasses.json
+
+  gems_and_modules:
+    needs: config_files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: install packages
+        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
+        run: |
+            #rm Gemfile.lock
+            # npm install -g npm@7.11.1
+            source ~/.nvm/nvm.sh && nvm use && npm i
+
+            #bundle config set --local path vendor/bundle
+            bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+
+            echo "CONFIGS"
+            #bundle config list
+            bundle -v
+            rails -v
+            ruby -v
+            node -v
+            npm -v
+            nvm -v
+            echo "BROWSERIFY-RAILS"
+            bundle info browserify-rails
+            echo "OPENBABEL"
+            bundle info openbabel
+
+
+  testjs:
+    needs: gems_and_modules
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: unit tests JS
+      #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_JS == 'false'}}
+      if: "!contains(github.event.commits[0].message, 'skip unitjs')"
+      run: |
+        source ~/.nvm/nvm.sh && nvm use && npm test
+
+
+  testrb:
+    needs: gems_and_modules
+    runs-on: ubuntu-latest
+    services:
+      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
+      env:
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: chemotion_test
+        POSTGRES_USER: chemotion_test
+        POSTGRES_PASSWORD: "123456"
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+    steps:
+      - name: unit tests ruby
+        if: "!contains(github.event.commits[0].message, 'skip unitrb')"
+        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
+        run: |
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+
+  testacceptance:
+    needs: gems_and_modules
+    runs-on: ubuntu-latest
+    services:
+      # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
+      # Label used to access the service container
+      postgres:
+        image: postgres:12-alpine
+      env:
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: chemotion_test
+        POSTGRES_USER: chemotion_test
+        POSTGRES_PASSWORD: "123456"
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+    steps:
+      - name: acceptance tests
+        if: "!contains(github.event.commits[0].message, 'skip acceptance')"
+        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_ACC == 'false' }}
+        run: |
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
+
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     sudo: true
+
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+
