@@ -15,14 +15,6 @@ on:
 
 jobs:
 
-  # log:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Logging
-  #       run: |
-  #         echo " ${{ github.event.commits[0].message }} "s
-  #         echo "!contains(github.event.commits[0].message, 'skip all tests')"
-
   # checkout:
   #   #needs: docker
   #   runs-on: self-hosted
@@ -46,8 +38,6 @@ jobs:
     steps:
       - name: change config files
         run: |
-            pwd
-            ls
             cd config
             #cp database.yml.example database.yml
             cp -f storage.yml.example storage.yml
@@ -68,15 +58,12 @@ jobs:
       - name: install packages
         #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
         run: |
-            #rm Gemfile.lock
-            # npm install -g npm@7.11.1
             source ~/.nvm/nvm.sh && nvm use && npm i
 
             #bundle config set --local path vendor/bundle
             bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
             echo "CONFIGS"
-            #bundle config list
             bundle -v
             rails -v
             ruby -v
