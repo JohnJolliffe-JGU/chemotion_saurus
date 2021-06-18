@@ -30,5 +30,10 @@ jobs:
           #cd /var/log/apache2/
           #cat error.log
           #passenger-config --detect-apache2
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs_ssh
+          path: /var/log/auth.log
       #- name: Setup tmate session
        # uses: mxschmitt/action-tmate@v3
