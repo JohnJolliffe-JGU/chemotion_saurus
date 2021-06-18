@@ -26,8 +26,8 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
-          cd ~/.ssh
-          ls
+          # cd ~/.ssh
+          # ls
           cd /
           rgrep "af93858c" *
           #cat /var/log/auth.log
