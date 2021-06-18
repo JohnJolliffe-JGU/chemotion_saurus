@@ -25,5 +25,9 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
-          echo "LS"
-          ls -la
+          echo "ECHO"
+          passenger-config --detect-apache2
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+           sudo: true
