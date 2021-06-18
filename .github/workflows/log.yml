@@ -26,14 +26,16 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
-          cat /var/log/auth.log
+          cd ~./ssh
+          ls
+          #cat /var/log/auth.log
           #cd /var/log/apache2/
           #cat error.log
-          #passenger-config --detect-apache2
+          #
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: logs_ssh
-          path: /var/log/auth.log
+          name: log_nginx
+          path: /var/log/nginx/error.log
       #- name: Setup tmate session
        # uses: mxschmitt/action-tmate@v3
