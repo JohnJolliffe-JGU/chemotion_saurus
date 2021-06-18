@@ -26,4 +26,4 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "LS"
-          ls
+          ls -la
