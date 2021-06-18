@@ -26,8 +26,9 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
-          cd /home/runner/runners/2.278.0/_diag/
-          ls
+          which passenger-config
+          #cd /home/runner/runners/2.278.0/_diag/
+          #ls
           # echo "RGREP"
           # cd /
           # rgrep "af93858c" *
@@ -35,13 +36,13 @@ jobs:
           #cd /var/log/apache2/
           #cat error.log
           #
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: log_runner_0
-          path: /home/runner/runners/2.278.0/_diag/
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: log_runner_1
-          path: /home/runner/work/_temp
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: log_runner_0
+      #     path: /home/runner/runners/2.278.0/_diag/
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: log_runner_1
+      #     path: /home/runner/work/_temp
