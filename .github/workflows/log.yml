@@ -9,25 +9,25 @@ jobs:
   log:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup ssh
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
+      # - name: Setup ssh
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      #   run: |
           #!/usr/bin/env bash
-          set -euo pipefail
-          eval $(ssh-agent -s);
-          mkdir ~/.ssh/
-          chmod 700 ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-add ~/.ssh/id_rsa
-          touch ~/.ssh/known_hosts
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-          ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
-          echo "ECHO"
-          cd ~./ssh
-          ls
+          # set -euo pipefail
+          # eval $(ssh-agent -s);
+          # mkdir ~/.ssh/
+          # chmod 700 ~/.ssh
+          # echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          # chmod 600 ~/.ssh/id_rsa
+          # ssh-add ~/.ssh/id_rsa
+          # touch ~/.ssh/known_hosts
+          # ssh-keyscan github.com >> ~/.ssh/known_hosts
+          # chmod 600 ~/.ssh/known_hosts
+          # ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
+          # echo "ECHO"
+          # cd ~/.ssh
+          # ls
           #cat /var/log/auth.log
           #cd /var/log/apache2/
           #cat error.log
