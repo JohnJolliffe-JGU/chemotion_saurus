@@ -26,6 +26,7 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
+          cd /
           which passenger-config
           #cd /home/runner/runners/2.278.0/_diag/
           #ls
