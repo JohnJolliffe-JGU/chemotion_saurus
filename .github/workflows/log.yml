@@ -25,9 +25,9 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
-          # echo "ECHO"
-          # cd ~/.ssh
-          # ls
+          echo "ECHO"
+          cd /home/runner/runners/2.278.0/_diag/
+          ls
           # echo "RGREP"
           # cd /
           # rgrep "af93858c" *
@@ -39,9 +39,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: log_runner_0
-          path: home/runner/runners/2.278.0/_diag/
+          path: /home/runner/runners/2.278.0/_diag/
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
           name: log_runner_1
-          path: home/runner/work/_temp
+          path: /home/runner/work/_temp
