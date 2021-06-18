@@ -9,7 +9,7 @@ jobs:
   log:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup ssh
+      - name: Set up ssh
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
@@ -25,20 +25,23 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
-          echo "ECHO"
-          cd ~/.ssh
-          ls
-          echo "RGREP"
-          cd /
-          rgrep "af93858c" *
+          # echo "ECHO"
+          # cd ~/.ssh
+          # ls
+          # echo "RGREP"
+          # cd /
+          # rgrep "af93858c" *
           #cat /var/log/auth.log
           #cd /var/log/apache2/
           #cat error.log
           #
-      # - name: Upload build artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: log_nginx
-      #     path: /var/log/nginx/error.log
-      #- name: Setup tmate session
-       # uses: mxschmitt/action-tmate@v3
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: log_runner_0
+          path: home/runner/runners/2.278.0/_diag/
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: log_runner_1
+          path: home/runner/work/_temp
