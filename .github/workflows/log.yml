@@ -29,5 +29,10 @@ jobs:
           cd /var/log/apache2/
           ls
           #passenger-config --detect-apache2
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs_apache2
+          path: /var/log/apache2/
+      #- name: Setup tmate session
+       # uses: mxschmitt/action-tmate@v3
