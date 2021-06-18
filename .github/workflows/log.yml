@@ -31,5 +31,3 @@ jobs:
           #passenger-config --detect-apache2
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
-        with:
-           sudo: true
