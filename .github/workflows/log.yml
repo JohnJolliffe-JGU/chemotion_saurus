@@ -26,7 +26,7 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
-          echo "NGINX"
+          #echo "NGINX"
           # cd /etc/nginx
           # cat nginx.conf
           # cd /var/log/nginx
@@ -34,7 +34,7 @@ jobs:
           #cat error.log
           echo "APACHE"
           cd /etc/apache2/
-          ls
+          cat apache2.conf
           # cd /var/log/apache2/
           # ls -la
           #cat error.log
