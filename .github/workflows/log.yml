@@ -26,15 +26,17 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
+          cd chemotion_saurus
+          ls -la
           #echo "NGINX"
           # cd /etc/nginx
           # cat nginx.conf
           # cd /var/log/nginx
           # ls -la
           #cat error.log
-          echo "APACHE"
-          cd /etc/apache2/
-          cat apache2.conf
+          # echo "APACHE"
+          # cd /etc/apache2/
+          # cat apache2.conf
           # cd /var/log/apache2/
           # ls -la
           #cat error.log
