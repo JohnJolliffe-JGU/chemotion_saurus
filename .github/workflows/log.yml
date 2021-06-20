@@ -26,12 +26,14 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
+          echo "NGINX"
           cd /var/log/nginx
           ls
-          cat error.log
+          #cat error.log
+          echo "APACHE"
           cd /var/log/apache2/
           ls
-          cat error.log
+          #cat error.log
           #which passenger-config
           #cd /home/runner/runners/2.278.0/_diag/
           #ls
