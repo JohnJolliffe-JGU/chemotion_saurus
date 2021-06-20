@@ -28,11 +28,11 @@ jobs:
           echo "ECHO"
           echo "NGINX"
           cd /var/log/nginx
-          ls
+          ls -la
           #cat error.log
           echo "APACHE"
           cd /var/log/apache2/
-          ls
+          ls -la
           #cat error.log
           #which passenger-config
           #cd /home/runner/runners/2.278.0/_diag/
