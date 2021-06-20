@@ -26,6 +26,7 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
+          whoami
           pwd
           ls -la
           #echo "NGINX"
