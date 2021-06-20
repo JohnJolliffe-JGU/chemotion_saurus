@@ -27,12 +27,14 @@ jobs:
           ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
           echo "ECHO"
           echo "NGINX"
-          cd /etc/nginx
-          cat nginx.conf
+          # cd /etc/nginx
+          # cat nginx.conf
           # cd /var/log/nginx
           # ls -la
           #cat error.log
-          # echo "APACHE"
+          echo "APACHE"
+          cd /etc/apache2/
+          ls
           # cd /var/log/apache2/
           # ls -la
           #cat error.log
