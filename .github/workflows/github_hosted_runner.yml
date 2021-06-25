@@ -46,6 +46,8 @@ jobs:
             docker pull complat/complat-ubuntu-runner:0.10.20
             docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
             echo "PWD: $(pwd)"
+            cd gitlab-runner
+            echo "PWD: $(pwd)"
             echo "LS: $(ls)"
 
       # - name: Check file existence
@@ -71,9 +73,9 @@ jobs:
             touch klasses.json
 
       - name: check
-        run: |
-            echo "PWD: $(pwd)"
+        run: |            
             cd gitlab-runner
+            echo "PWD: $(pwd)"
             echo "LS: $(ls)"
 
       - name: Set up Ruby
@@ -89,31 +91,31 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
     
-      - name: Bundle Install
-        run: |
-          cd gitlab-runner
-          echo "CONFIGS"
-          echo "BUNDLE: $(bundle -v)"
-          echo "RAILS(rails -v)"
-          echo "RUBY: $(ruby -v)"
-          bundle config path shared/bundle
-          bundle install -j 3 --retry 3 --full-index --path shared/bundle
-          echo "SIZE BUNDLE: $(du -bsh shared/bundle)"
-      - name: unit test ruby
-        env:
-          PG_DATABASE: chemotion_test
-          PG_HOST: localhost
-          PG_USER: chemotion_test
-          PG_PASSWORD: 123456
-          RAILS_ENV: test
-          # WITH_COVERAGE: true
-          # DISABLE_SPRING: 1
-        run: |
-          cd gitlab-runner
-          # bin/rails db:setup
-          # rm RAILS_ENV=test?
-          RAILS_ENV=test bundle exec rake db:test:prepare --trace && bundle exec rspec spec/api/user_api_spec.rb --trace
-          # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      # - name: Bundle Install
+      #   run: |
+      #     cd gitlab-runner
+      #     echo "CONFIGS"
+      #     echo "BUNDLE: $(bundle -v)"
+      #     echo "RAILS(rails -v)"
+      #     echo "RUBY: $(ruby -v)"
+      #     bundle config path shared/bundle
+      #     gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path shared/bundle
+      #     echo "SIZE BUNDLE: $(du -bsh shared/bundle)"
+      # - name: unit test ruby
+      #   env:
+      #     PG_DATABASE: chemotion_test
+      #     PG_HOST: localhost
+      #     PG_USER: chemotion_test
+      #     PG_PASSWORD: 123456
+      #     RAILS_ENV: test
+      #     # WITH_COVERAGE: true
+      #     # DISABLE_SPRING: 1
+      #   run: |
+      #     cd gitlab-runner
+      #     # bin/rails db:setup
+      #     # rm RAILS_ENV=test?
+      #     RAILS_ENV=test bundle exec rake db:test:prepare --trace && bundle exec rspec spec/api/user_api_spec.rb --trace
+      #     # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
 
       # - uses: actions/cache@v2
