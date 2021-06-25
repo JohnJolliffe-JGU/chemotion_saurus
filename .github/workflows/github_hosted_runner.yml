@@ -62,10 +62,11 @@ jobs:
             pwd
             #ls
             npm install -g npm@7.11.1
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
             echo "CONFIGS"
-            node -v
-            npm -v
-            #nvm -v
+            echo "Node: $(node -v)"
+            echo "npm: $(npm -v)"
+            echo "nvm: $(nvm -v)"
             npm i && npm test
 
   # config_files:
