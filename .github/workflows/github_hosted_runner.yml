@@ -68,6 +68,8 @@ jobs:
         run: |
             echo "SIZE: $(du -bsh node_modules)"
             echo "LS: $(ls node_modules)"
+            cd node_modules
+            ls
             npm install npm@7.11.1
             #npm install -g npm@7.11.1
             echo "CONFIGS"
@@ -75,7 +77,7 @@ jobs:
             echo "npm: $(npm -v)"
             #echo "nvm: $(nvm -v)"
             echo "NPM I"
-            npm i
+            npm i --force
             echo "NPM TEST"
             npm test
             # source ~/.nvm/nvm.sh && nvm use && npm i
