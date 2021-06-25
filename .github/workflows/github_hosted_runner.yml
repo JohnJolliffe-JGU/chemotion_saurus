@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     #container: "complat/complat-ubuntu-runner:0.12.20" # ERROR
 
-    services:
+    # services:
       # postgres:
       #   image: postgres:12
       #   ports: ["5432:5432"]
