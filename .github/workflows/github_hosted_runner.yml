@@ -81,14 +81,17 @@ jobs:
           # nvm use system
           # npm uninstall -g a_module
 
-          nvm install v12.22.1
+          #nvm install v12.22.1
           npm install -g npm@7.11.1
 
           echo "NPM: $(npm -v)"
-          echo "NVM: $(nvm -v)"
+          #echo "NVM: $(nvm -v)"
 
-          source ~/.nvm/nvm.sh && nvm use && npm i
-          source ~/.nvm/nvm.sh && nvm use && npm test
+          npm i
+          npm test
+
+          # source ~/.nvm/nvm.sh && nvm use && npm i
+          # source ~/.nvm/nvm.sh && nvm use && npm test
           
       
       # - name: test postgres
