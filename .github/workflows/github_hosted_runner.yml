@@ -11,8 +11,9 @@ jobs:
     steps:
       - name: Docker
         run: |
+            mkdir docker
+            cd docker
             docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
-            #tar cvfj node_modules.tar.bz2 node_modules
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
       
@@ -20,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
-          path: .
+          path: docker
         
       # - name: Docker
             # run: |
@@ -34,7 +35,7 @@ jobs:
 
       - name: check
         run: |            
-            #cd gitlab-runner
+            cd docker
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
       
