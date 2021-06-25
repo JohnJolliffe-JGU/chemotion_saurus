@@ -73,6 +73,7 @@ jobs:
       - name: check
         run: |
             echo "PWD: $(pwd)"
+            cd gitlab-runner
             echo "LS: $(ls)"
 
       # - name: Set up Ruby
