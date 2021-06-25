@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: gitlab-runner
-          path: gitlab-runner
+          path: gitlabRunner
 
       # TODO download?
 
@@ -68,12 +68,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
-          path: gitlab-runner
+          path: gitlabRunner
       - name: change config files
         run: |
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
-            cd gitlab-runner/config
+            cd gitlabRunner/config
             cp database.yml.gitlab database.yml
             cp -f storage.yml.example storage.yml
             touch datacollectors.yml
@@ -82,7 +82,7 @@ jobs:
 
       - name: check
         run: |            
-            cd gitlab-runner
+            cd gitlabRunner
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
 
