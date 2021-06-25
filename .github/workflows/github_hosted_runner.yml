@@ -26,7 +26,7 @@ jobs:
   checkout:
     #needs: docker
     runs-on: ubuntu-latest
-    container: "complat/complat-ubuntu-runner:0.12.20"
+    # container: "complat/complat-ubuntu-runner:0.12.20"
 
     services:
       postgres:
