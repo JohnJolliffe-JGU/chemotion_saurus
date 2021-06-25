@@ -5,54 +5,18 @@ on:
   push:
     branches: [ ELN ]
 
-#TODO: github actions save expression as environment variable
-# env:
-#   SKIP_ALL: "!contains(github.event.commits[0].message, 'skip all tests')"
-#   SKIP_JS: "!contains(github.event.commits[0].message, 'skip unitjs')"
-#   SKIP_RB: "!contains(github.event.commits[0].message, 'skip unitrb')"
-#   SKIP_ACC: "!contains(github.event.commits[0].message, 'skip acceptance')"
-  #SKIP_INSTALL: "!contains(github.event.commits[0].message, 'skip installation')"
-
-jobs:
-
-  # log:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Logging
-  #       run: |
-  #         echo " ${{ github.event.commits[0].message }} "s
-  #         echo "!contains(github.event.commits[0].message, 'skip all tests')"
-
-  checkout:
-    #needs: docker
+ docker:
     runs-on: ubuntu-latest
-    #container: "complat/complat-ubuntu-runner:0.12.20" # ERROR
-
-    # services:
-      # postgres:
-      #   image: postgres:12
-      #   ports: ["5432:5432"]
-      #   env:
-      #     POSTGRES_PASSWORD: 123456
-      #   options: >-
-      #     --health-cmd pg_isready 
-      #     --health-interval 10s 
-      #     --health-timeout 5s 
-      #     --health-retries 5
-
+    container: complat/complat-ubuntu-runner:0.10.20
     steps:
-      - uses: shrink/actions-docker-extract@v1
-        with:
-          image: complat/complat-ubuntu-runner:0.12.20
-          path: /home/gitlab-runner/.
-      - name: Upload Dist
-        uses: actions/upload-artifact@v2
-        with:
-          path: /home/gitlab-runner/
-          name: gitlab-runner
+      - name: check
+        run: |
+            echo "PWD: $(pwd)"
+            echo "LS: $(ls)"
+        
       # - name: Docker
             # run: |
-            # docker pull complat/complat-ubuntu-runner:0.10.20
+            # docker pull 
             # docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
             # # docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
             # echo "PWD: $(pwd)"
@@ -60,11 +24,11 @@ jobs:
             # # echo "PWD: $(pwd)"
             # echo "LS: $(ls)"
 
-      - name: check
-        run: |            
-            cd gitlab-runner
-            echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
+      # - name: check
+      #   run: |            
+      #       cd gitlab-runner
+      #       echo "PWD: $(pwd)"
+      #       echo "LS: $(ls)"
       
       # ERROR
       # - name: Upload Docker artifacts
@@ -78,28 +42,27 @@ jobs:
       #   uses: andstor/file-existence-action@v1
       #   with:
       #     files: 
-      - name: checkout
-        #if: steps.check_files.outputs.files_exists == 'false'
-        uses: actions/checkout@v2
-        with:
-          repository: ComPlat/chemotion_ELN
-          path: gitlab-runner
-      - name: change config files
-        run: |
-            echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
-            cd gitlab-runner/config
-            cp database.yml.gitlab database.yml
-            cp -f storage.yml.example storage.yml
-            touch datacollectors.yml
-            cp -f profile_default.yml.example profile_default.yml
-            touch klasses.json
+      # - name: checkout
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: ComPlat/chemotion_ELN
+      #     path: gitlab-runner
+      # - name: change config files
+      #   run: |
+      #       echo "PWD: $(pwd)"
+      #       echo "LS: $(ls)"
+      #       cd gitlab-runner/config
+      #       cp database.yml.gitlab database.yml
+      #       cp -f storage.yml.example storage.yml
+      #       touch datacollectors.yml
+      #       cp -f profile_default.yml.example profile_default.yml
+      #       touch klasses.json
 
-      - name: check
-        run: |            
-            cd gitlab-runner
-            echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
+      # - name: check
+      #   run: |            
+      #       cd gitlab-runner
+      #       echo "PWD: $(pwd)"
+      #       echo "LS: $(ls)"
 
       # - name: Download build artifacts
       #   uses: actions/download-artifact@v2
