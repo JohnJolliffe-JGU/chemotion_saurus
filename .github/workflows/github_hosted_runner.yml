@@ -61,6 +61,10 @@ jobs:
       - run: |
             pwd
             ls
+            echo "CONFIGS"
+            node -v
+            npm -v
+            nvm -v
             npm i && npm test
 
   # config_files:
