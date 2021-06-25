@@ -8,6 +8,19 @@ on:
 jobs:
  docker:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: 123456
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -15,18 +28,52 @@ jobs:
           repository: ComPlat/chemotion_ELN
           path: .
 
-      - name: Docker
+      - name: change config files
+        run: |
+            echo "PWD: $(pwd)"
+            echo "LS: $(ls)"
+            cd gitlab-runner/config
+            cp database.yml.gitlab database.yml
+            cp -f storage.yml.example storage.yml
+            touch datacollectors.yml
+            cp -f profile_default.yml.example profile_default.yml
+            touch klasses.json
+
+      - name: Docker copy
         run: |
             # mkdir docker
             # cd docker
-            echo "BEFORE"
-            echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
+            # echo "BEFORE"
+            # echo "PWD: $(pwd)"
+            # echo "LS: $(ls)"
             docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
-            echo "AFTER"
-            echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
+            #docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
+            # echo "AFTER"
+            # echo "PWD: $(pwd)"
+            # echo "LS: $(ls)"
       
+      - name: unit test JS
+        env:
+          PG_DATABASE: chemotion_test
+          PG_HOST: localhost
+          PG_USER: chemotion_test
+          PG_PASSWORD: 123456
+          RAILS_ENV: test
+          # WITH_COVERAGE: true
+          # DISABLE_SPRING: 1
+        uses: actions/setup-node@v1
+      #   # rmv?
+        with:
+          node-version: 12.22.1
+        run: |
+            echo "LS: $(ls)"
+            npm install -g npm@7.11.1
+            echo "CONFIGS"
+            echo "Node: $(node -v)"
+            echo "npm: $(npm -v)"
+            echo "nvm: $(nvm -v)"
+            source ~/.nvm/nvm.sh && nvm use && npm i
+            source ~/.nvm/nvm.sh && nvm use && npm test
 
         
       # - name: Docker
@@ -57,16 +104,6 @@ jobs:
       #   with:
       #     repository: ComPlat/chemotion_ELN
       #     path: gitlab-runner
-      # - name: change config files
-      #   run: |
-      #       echo "PWD: $(pwd)"
-      #       echo "LS: $(ls)"
-      #       cd gitlab-runner/config
-      #       cp database.yml.gitlab database.yml
-      #       cp -f storage.yml.example storage.yml
-      #       touch datacollectors.yml
-      #       cp -f profile_default.yml.example profile_default.yml
-      #       touch klasses.json
 
       # - name: check
       #   run: |            
