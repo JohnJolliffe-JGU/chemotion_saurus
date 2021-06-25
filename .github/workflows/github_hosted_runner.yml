@@ -66,8 +66,9 @@ jobs:
           # WITH_COVERAGE: true
           # DISABLE_SPRING: 1
         run: |
-            echo "LS: $(ls)"
-            npm install -g npm@7.11.1
+            echo "LS: $(du -bsh node_modules)"
+            npm install npm@7.11.1
+            #npm install -g npm@7.11.1
             echo "CONFIGS"
             echo "Node: $(node -v)"
             echo "npm: $(npm -v)"
