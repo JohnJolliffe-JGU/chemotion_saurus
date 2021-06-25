@@ -5,6 +5,7 @@ on:
   push:
     branches: [ ELN ]
 
+jobs:
  docker:
     runs-on: ubuntu-latest
     container: complat/complat-ubuntu-runner:0.10.20
