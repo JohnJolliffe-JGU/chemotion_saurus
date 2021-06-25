@@ -8,10 +8,10 @@ on:
 jobs:
  docker:
     runs-on: ubuntu-latest
-    container: complat/complat-ubuntu-runner:0.10.20
     steps:
-      - name: check
+      - name: Docker
         run: |
+            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
         
@@ -25,18 +25,18 @@ jobs:
             # # echo "PWD: $(pwd)"
             # echo "LS: $(ls)"
 
-      # - name: check
-      #   run: |            
-      #       cd gitlab-runner
-      #       echo "PWD: $(pwd)"
-      #       echo "LS: $(ls)"
+      - name: check
+        run: |            
+            cd gitlab-runner
+            echo "PWD: $(pwd)"
+            echo "LS: $(ls)"
       
       # ERROR
       # - name: Upload Docker artifacts
       #   uses: actions/upload-artifact@v2
       #   with:
       #     name: gitlab-runner
-      #     path: gitlabRunner
+      #     path: .
 
       # - name: Check file existence
       #   id: check_files
