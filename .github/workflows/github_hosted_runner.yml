@@ -79,6 +79,7 @@ jobs:
           npm install npm@7.11.1
           nvm install v12.22.1
 
+          echo "NPM: $(npm -v)"
           echo "NVM: $(nvm -v)"
 
           source ~/.nvm/nvm.sh && nvm use && npm i
