@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: shrink/actions-docker-extract@v1
         with:
-          image: my-example-image
+          image: complat/complat-ubuntu-runner:0.12.20
           path: /home/gitlab-runner/.
       - name: Upload Dist
         uses: actions/upload-artifact@v2
