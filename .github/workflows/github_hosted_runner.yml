@@ -21,7 +21,7 @@ jobs:
           --health-timeout 5s 
           --health-retries 5
 
-    # 1. checkout, before checkout working dir is removed
+    # 1. checkout, before working dir is removed
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -40,75 +40,60 @@ jobs:
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
 
-      - name: Docker copy
-        run: |
-            # mkdir docker
-            # cd docker
-            # echo "BEFORE"
-            # echo "PWD: $(pwd)"
-            # echo "LS: $(ls)"
-            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
-            #docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
-            # echo "AFTER"
-            # echo "PWD: $(pwd)"
-            # echo "LS: $(ls)"
+      # - name: Docker copy
+      #   run: |
+      #       docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
+      #       #docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
 
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12.22.1
-
-      - name: test postgres
-        env:
-          PG_DATABASE: chemotion_test
-          PG_HOST: localhost
-          PG_USER: chemotion_test
-          PG_PASSWORD: 123456
-          RAILS_ENV: test
-          # WITH_COVERAGE: true
-          # DISABLE_SPRING: 1
-        run: |
-            sudo -u postgres psql
+      # - uses: actions/setup-node@v1
+      #   with:
+      #     node-version: 12.22.1
       
       # TODO check diff work folders: https://github.community/t/copying-test-file-from-docker-container-to-github-repository/17977/2
       # docker --volume?
-      - name: unit test JS
-        env:
-          RAILS_ENV: test
-          # WITH_COVERAGE: true
-          # DISABLE_SPRING: 1
-        run: |
-            echo "PWD: $(pwd)"
-            echo "SIZE: $(du -bsh node_modules)"
-            echo "LS: $(ls)"
-            # cd node_modules
-            # ls
-            # npm install npm@7.11.1
-            # #npm install -g npm@7.11.1
-            # self install nvm + Node
-      #       # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-      #       # export NVM_DIR="$HOME/.nvm"
-      #       # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-      #       # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-      #       # nvm install v12.22.1
-            # echo "CONFIGS"
-            # echo "Node: $(node -v)"
-            # echo "npm: $(npm -v)"
-            # #echo "nvm: $(nvm -v)"
-            # echo "NPM I"
-            # npm i --force
-            # echo "NPM TEST"
-            # npm test
-            # source ~/.nvm/nvm.sh && nvm use && npm i
-            # source ~/.nvm/nvm.sh && nvm use && npm test
 
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+      - name: Install node modules
+        # if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          echo "PWD: $(pwd)"
+          echo "LS: $(ls)"
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+          nvm install v12.22.1
+          npm install npm@7.11.1
+
+          source ~/.nvm/nvm.sh && nvm use && npm i
+          source ~/.nvm/nvm.sh && nvm use && npm test
+          
+      
+      # - name: test postgres
+      #   env:
+      #     PG_DATABASE: chemotion_test
+      #     PG_HOST: localhost
+      #     PG_USER: chemotion_test
+      #     PG_PASSWORD: 123456
+      #     RAILS_ENV: test
+      #     # WITH_COVERAGE: true
+      #     # DISABLE_SPRING: 1
+      #   run: |
+      #       sudo -u postgres psql
       
       # - name: check
       #   run: |            
       #       cd docker
       #       echo "PWD: $(pwd)"
       #       echo "LS: $(ls)"
-      
-      # ERROR
 
       # - name: Check file existence
       #   id: check_files
@@ -131,14 +116,6 @@ jobs:
       #   uses: ruby/setup-ruby@v1
       #   with:
       #     ruby-version: 2.6.6
-
-      # - name: Cache Ruby Gems
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: gitlab-runner/shared/bundle
-      #     key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gems-
     
       # - name: Bundle Install
       #   run: |
