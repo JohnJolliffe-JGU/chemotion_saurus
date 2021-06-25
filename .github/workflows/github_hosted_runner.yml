@@ -54,22 +54,27 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-      - name: install node_modules and test
-        uses: actions/setup-node@v1
+      # - name: install node_modules and test
+      #   uses: actions/setup-node@v1
         # rmv?
-        with:
-          node-version: 12.22.1
+        # with:
+        #   node-version: 12.22.1
         #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
       - name: install & test
         run: |
             pwd
             #ls
+
+            # update npm 6 --> 7
             npm install -g npm@7.11.1
+
+            # self install nvm + Node
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             nvm install v12.22.1
+            
             echo "CONFIGS"
             echo "Node: $(node -v)"
             echo "npm: $(npm -v)"
