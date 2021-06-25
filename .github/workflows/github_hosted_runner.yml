@@ -26,6 +26,19 @@ jobs:
   checkout:
     #needs: docker
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: 123456
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
     steps:
       # - name: Check file existence
       #   id: check_files
@@ -74,8 +87,18 @@ jobs:
           bundle install -j 3 --retry 3 --full-index --path vendor/bundle
           echo "size bundle: $(du -bsh vendor/bundle)"
       - name: unit tests ruby
+        env:
+          PG_DATABASE: chemotion_test
+          PG_HOST: localhost
+          PG_USER: chemotion_test
+          PG_PASSWORD: 123456
+          RAILS_ENV: test
+          # WITH_COVERAGE: true
+          # DISABLE_SPRING: 1
         run: |
-          bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+          # bin/rails db:setup
+          bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/api/user_api_spec.rb
+          # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
 
       # - uses: actions/cache@v2
