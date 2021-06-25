@@ -72,7 +72,9 @@ jobs:
             echo "Node: $(node -v)"
             echo "npm: $(npm -v)"
             #echo "nvm: $(nvm -v)"
+            echo "NPM I"
             npm i
+            echo "NPM TEST"
             npm test
             # source ~/.nvm/nvm.sh && nvm use && npm i
             # source ~/.nvm/nvm.sh && nvm use && npm test
