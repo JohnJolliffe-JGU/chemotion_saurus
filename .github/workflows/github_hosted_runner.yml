@@ -21,6 +21,7 @@ jobs:
           --health-timeout 5s 
           --health-retries 5
 
+    # 1. checkout, before checkout working dir is removed
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -55,13 +56,23 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12.22.1
-      
-      - name: unit test JS
+
+      - name: test postgres
         env:
           PG_DATABASE: chemotion_test
           PG_HOST: localhost
           PG_USER: chemotion_test
           PG_PASSWORD: 123456
+          RAILS_ENV: test
+          # WITH_COVERAGE: true
+          # DISABLE_SPRING: 1
+        run: |
+            sudo -u postgres psql
+      
+      # TODO check diff work folders: https://github.community/t/copying-test-file-from-docker-container-to-github-repository/17977/2
+      # docker --volume?
+      - name: unit test JS
+        env:
           RAILS_ENV: test
           # WITH_COVERAGE: true
           # DISABLE_SPRING: 1
@@ -73,6 +84,12 @@ jobs:
             # ls
             # npm install npm@7.11.1
             # #npm install -g npm@7.11.1
+            # self install nvm + Node
+      #       # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+      #       # export NVM_DIR="$HOME/.nvm"
+      #       # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      #       # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+      #       # nvm install v12.22.1
             # echo "CONFIGS"
             # echo "Node: $(node -v)"
             # echo "npm: $(npm -v)"
@@ -84,17 +101,7 @@ jobs:
             # source ~/.nvm/nvm.sh && nvm use && npm i
             # source ~/.nvm/nvm.sh && nvm use && npm test
 
-        
-      # - name: Docker
-            # run: |
-            # docker pull 
-            # docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
-            # # docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
-            # echo "PWD: $(pwd)"
-            # # cd gitlab-runner
-            # # echo "PWD: $(pwd)"
-            # echo "LS: $(ls)"
-
+      
       # - name: check
       #   run: |            
       #       cd docker
@@ -113,12 +120,6 @@ jobs:
       #   with:
       #     repository: ComPlat/chemotion_ELN
       #     path: gitlab-runner
-
-      # - name: check
-      #   run: |            
-      #       cd gitlab-runner
-      #       echo "PWD: $(pwd)"
-      #       echo "LS: $(ls)"
 
       # - name: Download build artifacts
       #   uses: actions/download-artifact@v2
@@ -172,31 +173,3 @@ jobs:
       #     key: ${{ runner.os }}-gems-${{ hashFiles('**/package.json') }}
       #     restore-keys: |
       #       ${{ runner.os }}-gems-
-
-      # - name: install node_modules and test
-      #   uses: actions/setup-node@v1
-      #   # rmv?
-      #   with:
-      #     node-version: 12.22.1
-      #   #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
-      # - name: npm install & test
-      #   run: |
-      #       pwd
-      #       #ls
-
-      #       # update npm 6 --> 7
-      #       npm install -g npm@7.11.1
-
-      #       # self install nvm + Node
-      #       # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-      #       # export NVM_DIR="$HOME/.nvm"
-      #       # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-      #       # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-      #       # nvm install v12.22.1
-
-      #       echo "CONFIGS"
-      #       echo "Node: $(node -v)"
-      #       echo "npm: $(npm -v)"
-      #       echo "nvm: $(nvm -v)"
-      #       source ~/.nvm/nvm.sh && nvm use && npm i
-      #       source ~/.nvm/nvm.sh && nvm use && npm test
