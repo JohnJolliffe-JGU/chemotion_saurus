@@ -12,9 +12,15 @@ jobs:
       - name: Docker
         run: |
             docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
-            tar cvfj node_modules.tar.bz2 node_modules
+            #tar cvfj node_modules.tar.bz2 node_modules
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
+      
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          repository: ComPlat/chemotion_ELN
+          path: .
         
       # - name: Docker
             # run: |
@@ -33,25 +39,6 @@ jobs:
             echo "LS: $(ls)"
       
       # ERROR
-      - name: Upload Docker artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          # name: test
-          # path:  gitlab-runner/Gemfile
-          name: node_modules
-          path: node_modules.tar.bz2
-      
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: node_modules
-          path: node_modules.tar.bz2
-
-      - name: extract
-        run: |
-          tar -xvf node_modules.tar.bz2
-          echo "PWD: $(pwd)"
-          echo "LS: $(ls)"
 
       # - name: Check file existence
       #   id: check_files
