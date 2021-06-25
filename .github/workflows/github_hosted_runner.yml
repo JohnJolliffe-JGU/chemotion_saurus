@@ -32,14 +32,15 @@ jobs:
       #   uses: andstor/file-existence-action@v1
       #   with:
       #     files: 
-      - name: init checkout ELN
+      - name: checkout
       # todo always checkout?
         #if: steps.check_files.outputs.files_exists == 'false'
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
           #path:
-      - run: |
+      - name: change config files
+        run: |
             pwd
             cd config
             cp database.yml.gitlab database.yml
@@ -58,7 +59,8 @@ jobs:
         with:
           node-version: 12.22.1
         #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
-      - run: |
+      - name: install & test
+        run: |
             pwd
             #ls
             npm install -g npm@7.11.1
@@ -70,7 +72,8 @@ jobs:
             echo "Node: $(node -v)"
             echo "npm: $(npm -v)"
             echo "nvm: $(nvm -v)"
-            #npm i && npm test
+            source ~/.nvm/nvm.sh && nvm use && npm i
+            source ~/.nvm/nvm.sh && nvm use && npm test
 
   # config_files:
   #   #needs: checkout
