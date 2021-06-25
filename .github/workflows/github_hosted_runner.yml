@@ -72,8 +72,10 @@ jobs:
             echo "Node: $(node -v)"
             echo "npm: $(npm -v)"
             #echo "nvm: $(nvm -v)"
-            source ~/.nvm/nvm.sh && nvm use && npm i
-            source ~/.nvm/nvm.sh && nvm use && npm test
+            npm i
+            npm test
+            # source ~/.nvm/nvm.sh && nvm use && npm i
+            # source ~/.nvm/nvm.sh && nvm use && npm test
 
         
       # - name: Docker
