@@ -44,12 +44,19 @@ jobs:
       - name: Docker
         run: |
             docker pull complat/complat-ubuntu-runner:0.10.20
-            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner ./${{github.workspace}}
+            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
             # docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
             echo "PWD: $(pwd)"
             # cd gitlab-runner
             # echo "PWD: $(pwd)"
             echo "LS: $(ls)"
+      - name: Upload Docker artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitlab-runner
+          path: gitlab-runner
+
+      # TODO download?
 
       # - name: Check file existence
       #   id: check_files
@@ -78,6 +85,12 @@ jobs:
             cd gitlab-runner
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
+
+      # - name: Download build artifacts
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: gitlab-runner
+      #     path: gitlab-runner
 
       # - name: Set up Ruby
       #   uses: ruby/setup-ruby@v1
