@@ -9,19 +9,25 @@ jobs:
  docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Docker
-        run: |
-            mkdir docker
-            cd docker
-            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
-            echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
-      
       - name: checkout
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
-          path: docker
+          path: .
+
+      - name: Docker
+        run: |
+            # mkdir docker
+            # cd docker
+            echo "BEFORE"
+            echo "PWD: $(pwd)"
+            echo "LS: $(ls)"
+            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
+            echo "AFTER"
+            echo "PWD: $(pwd)"
+            echo "LS: $(ls)"
+      
+
         
       # - name: Docker
             # run: |
@@ -33,11 +39,11 @@ jobs:
             # # echo "PWD: $(pwd)"
             # echo "LS: $(ls)"
 
-      - name: check
-        run: |            
-            cd docker
-            echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
+      # - name: check
+      #   run: |            
+      #       cd docker
+      #       echo "PWD: $(pwd)"
+      #       echo "LS: $(ls)"
       
       # ERROR
 
