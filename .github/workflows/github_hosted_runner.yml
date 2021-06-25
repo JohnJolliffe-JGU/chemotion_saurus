@@ -66,6 +66,7 @@ jobs:
           # WITH_COVERAGE: true
           # DISABLE_SPRING: 1
         run: |
+            echo "PWD: $(pwd)"
             echo "SIZE: $(du -bsh node_modules)"
             echo "LS: $(ls node_modules)"
             cd node_modules
