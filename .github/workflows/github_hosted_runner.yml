@@ -26,6 +26,7 @@ jobs:
   checkout:
     #needs: docker
     runs-on: ubuntu-latest
+    container: "complat/complat-ubuntu-runner:0.12.20"
 
     services:
       postgres:
@@ -54,7 +55,6 @@ jobs:
           #path:
       - name: change config files
         run: |
-            pwd
             cd config
             cp database.yml.gitlab database.yml
             cp -f storage.yml.example storage.yml
@@ -62,44 +62,47 @@ jobs:
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
 
-      - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6.6
+      - name: Docker
+        run: |
+            pwd 
+            ls
 
-      - name: Cache Ruby Gems
-        uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+      # - name: Set up Ruby
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     ruby-version: 2.6.6
+
+      # - name: Cache Ruby Gems
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: vendor/bundle
+      #     key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gems-
     
-      - name: Bundle Install
-        run: |
-          echo "CONFIGS"
-          echo "BUNDLE: $(bundle -v)"
-          echo "RAILS(rails -v)"
-          echo "RUBY: $(ruby -v)"
-          bundle config path vendor/bundle
-          bundle install -j 3 --retry 3 --full-index --path vendor/bundle
-          echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
-      - name: unit tests ruby
-        env:
-          PG_DATABASE: chemotion_test
-          PG_HOST: localhost
-          PG_USER: chemotion_test
-          PG_PASSWORD: 123456
-          RAILS_ENV: test
-          # WITH_COVERAGE: true
-          # DISABLE_SPRING: 1
-        run: |
-          # bin/rails db:setup
-          # rm RAILS_ENV=test?
-          RAILS_ENV=test bundle exec rake db:test:prepare --trace && bundle exec rspec spec/api/user_api_spec.rb --trace
-          # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      # - name: Bundle Install
+      #   run: |
+      #     echo "CONFIGS"
+      #     echo "BUNDLE: $(bundle -v)"
+      #     echo "RAILS(rails -v)"
+      #     echo "RUBY: $(ruby -v)"
+      #     bundle config path vendor/bundle
+      #     bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+      #     echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
+      # - name: unit test ruby
+      #   env:
+      #     PG_DATABASE: chemotion_test
+      #     PG_HOST: localhost
+      #     PG_USER: chemotion_test
+      #     PG_PASSWORD: 123456
+      #     RAILS_ENV: test
+      #     # WITH_COVERAGE: true
+      #     # DISABLE_SPRING: 1
+      #   run: |
+      #     # bin/rails db:setup
+      #     # rm RAILS_ENV=test?
+      #     RAILS_ENV=test bundle exec rake db:test:prepare --trace && bundle exec rspec spec/api/user_api_spec.rb --trace
+      #     # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
 
       # - uses: actions/cache@v2
@@ -136,125 +139,3 @@ jobs:
       #       echo "nvm: $(nvm -v)"
       #       source ~/.nvm/nvm.sh && nvm use && npm i
       #       source ~/.nvm/nvm.sh && nvm use && npm test
-
-  # gems_and_modules:
-  #   needs: checkout
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/cache@v2
-  #       with:
-  #         path: node_modules
-  #         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-gems-
-  #     - name: install node_modules and test
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 12.22.1
-  #       #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
-  #     - run: |
-  #           pwd
-  #           ls
-  #           npm i && npm test
-
-  #           #bundle config set --local path vendor/bundle
-  #           bundle install -j 3 --retry 3 --full-index --path vendor/bundle
-
-  #           # echo "CONFIGS"
-  #           # #bundle config list
-  #           # bundle -v
-  #           # rails -v
-  #           # ruby -v
-  #           # node -v
-  #           # npm -v
-  #           # nvm -v
-  #           # echo "BROWSERIFY-RAILS"
-  #           # bundle info browserify-rails
-  #           # echo "OPENBABEL"
-  #           # bundle info openbabel
-  #       # with:
-        #   path: ${{ github.workspace }}
-
-
-  # testjs:
-  #   needs: gems_and_modules
-  #   runs-on: ubuntu-latest
-    
-  #   steps:
-  #   - name: unit tests JS
-  #     #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_JS == 'false'}}
-  #     if: "!contains(github.event.commits[0].message, 'skip unitjs')"
-  #     run: |
-  #       source ~/.nvm/nvm.sh && nvm use && npm test
-
-
-  # testrb:
-  #   needs: gems_and_modules
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
-  #     # Label used to access the service container
-  #     postgres:
-  #       image: postgres:12-alpine
-  #       env:
-  #         POSTGRES_PASSWORD: 123456
-  #         POSTGRES_DB: chemotion_test
-  #         POSTGRES_USER: chemotion_test
-  #         # Set health checks to wait until postgres has started
-  #         # options: >-
-  #         #   --health-cmd pg_isready
-  #         #   --health-interval 10s
-  #         #   --health-timeout 5s
-  #         #   --health-retries 5
-  #       ports:
-  #         # Maps tcp port 5432 on service container to the host
-  #         - 5432:5432
-
-  #   steps:
-  #     - name: unit tests ruby
-  #       if: "!contains(github.event.commits[0].message, 'skip unitrb')"
-  #       #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_RB == 'false' }}
-  #       run: |
-  #         RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
-  #       env:
-  #         POSTGRES_HOST: localhost
-  #         POSTGRES_PORT: 5432
-
-  # testacceptance:
-  #   needs: gems_and_modules
-  #   runs-on: ubuntu-latest
-  #   services:
-  #     # https://docs.github.com/en/actions/guides/creating-postgresql-service-containers#running-jobs-directly-on-the-runner-machine
-  #     # Label used to access the service container
-  #     postgres:
-  #       image: postgres:12-alpine
-  #       env:
-  #         POSTGRES_DB: chemotion_test
-  #         POSTGRES_USER: chemotion_test
-  #         POSTGRES_PASSWORD: 123456
-  #         # Set health checks to wait until postgres has started
-  #         options: >-
-  #           --health-cmd pg_isready
-  #           --health-interval 10s
-  #           --health-timeout 5s
-  #           --health-retries 5
-  #         ports:
-  #           # Maps tcp port 5432 on service container to the host
-  #           - 5432:5432
-
-  #   steps:
-  #     - name: acceptance testspath
-  #       if: "!contains(github.event.commits[0].message, 'skip acceptance')"
-  #       #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_ACC == 'false' }}
-  #       run: |
-  #         RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
-
-  #     # - name: Setup tmate session
-  #     #   uses: mxschmitt/action-tmate@v3
-  #     #   with:
-  #     #     sudo: true
-
-  #       env:
-  #         POSTGRES_HOST: localhost
-  #         POSTGRES_PORT: 5432
-
