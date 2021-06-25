@@ -60,11 +60,11 @@ jobs:
         #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
       - run: |
             pwd
-            ls
+            #ls
             echo "CONFIGS"
             node -v
             npm -v
-            nvm -v
+            #nvm -v
             npm i && npm test
 
   # config_files:
