@@ -81,7 +81,7 @@ jobs:
           # nvm use system
           # npm uninstall -g a_module
 
-          #nvm install v12.22.1
+          nvm install v12.22.1
           npm install -g npm@7.11.1
 
           echo "NPM: $(npm -v)"
