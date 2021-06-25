@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Docker
         run: |
-            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
+            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
+            tar cvfj node_modules.tar.bz2 
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
         
@@ -35,10 +36,10 @@ jobs:
       - name: Upload Docker artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: test
-          path:  gitlab-runner/Gemfile
-          # name: node_modules
-          # path: gitlab-runner/node_modules
+          # name: test
+          # path:  gitlab-runner/Gemfile
+          name: node_modules
+          path: node_modules.tar.bz2
 
       # - name: Check file existence
       #   id: check_files
