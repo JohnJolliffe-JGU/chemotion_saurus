@@ -48,54 +48,67 @@ jobs:
             touch datacollectors.yml
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
-      - uses: actions/cache@v2
+
+      - name: Set up Ruby
+    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+    # change this to (see https://github.com/ruby/setup-ruby#versioning):
+        uses: ruby/setup-ruby@v1
         with:
-          path: node_modules
+          ruby-version: 2.6.6
+
+      - name: Cache Ruby Gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
+    
+      - name: Bundle Install
+        run: |
+          echo "CONFIGS"
+          echo "bundle: $(bundle -v)"
+          echo "bundle: $(rails -v)"
+          echo "bundle: $(ruby -v)"
+          bundle config path vendor/bundle
+          bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          echo "size bundle: $(du -bsh vendor/bundle)"
+
+
+      # - uses: actions/cache@v2
+      #   with:
+      #     path: node_modules
+      #     key: ${{ runner.os }}-gems-${{ hashFiles('**/package.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gems-
+
       # - name: install node_modules and test
       #   uses: actions/setup-node@v1
-        # rmv?
-        # with:
-        #   node-version: 12.22.1
-        #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
-      - name: install & test
-        run: |
-            pwd
-            #ls
+      #   # rmv?
+      #   with:
+      #     node-version: 12.22.1
+      #   #if: ${{ env.SKIP_ALL == 'false' && env.SKIP_INSTALL == 'false' }}
+      # - name: npm install & test
+      #   run: |
+      #       pwd
+      #       #ls
 
-            # update npm 6 --> 7
-            npm install -g npm@7.11.1
+      #       # update npm 6 --> 7
+      #       npm install -g npm@7.11.1
 
-            # self install nvm + Node
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-            nvm install v12.22.1
-            
-            echo "CONFIGS"
-            echo "Node: $(node -v)"
-            echo "npm: $(npm -v)"
-            echo "nvm: $(nvm -v)"
-            source ~/.nvm/nvm.sh && nvm use && npm i
-            source ~/.nvm/nvm.sh && nvm use && npm test
+      #       # self install nvm + Node
+      #       # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+      #       # export NVM_DIR="$HOME/.nvm"
+      #       # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      #       # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+      #       # nvm install v12.22.1
 
-  # config_files:
-  #   #needs: checkout
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: change config files
-  #       run: |
-  #           pwd
-  #           ls
-  #           # cd config
-  #           # cp database.yml.gitlab database.yml
-  #           # cp -f storage.yml.example storage.yml
-  #           # touch datacollectors.yml
-  #           # cp -f profile_default.yml.example profile_default.yml
-  #           # touch klasses.json
+      #       echo "CONFIGS"
+      #       echo "Node: $(node -v)"
+      #       echo "npm: $(npm -v)"
+      #       echo "nvm: $(nvm -v)"
+      #       source ~/.nvm/nvm.sh && nvm use && npm i
+      #       source ~/.nvm/nvm.sh && nvm use && npm test
 
   # gems_and_modules:
   #   needs: checkout
