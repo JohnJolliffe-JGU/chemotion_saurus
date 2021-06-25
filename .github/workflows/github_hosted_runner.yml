@@ -42,14 +42,24 @@ jobs:
 
     steps:
       - name: Docker
-        run: |
-            docker pull complat/complat-ubuntu-runner:0.10.20
-            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
+        
+      - uses: shrink/actions-docker-extract@v1
+        with:
+          image: my-example-image
+          path: /home/gitlab-runner/.
+      - name: Upload Dist
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ steps.extract.outputs.destination }}
+          name: gitlab-runner
+            # run: |
+            # docker pull complat/complat-ubuntu-runner:0.10.20
             # docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
-            echo "PWD: $(pwd)"
-            # cd gitlab-runner
+            # # docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
             # echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
+            # # cd gitlab-runner
+            # # echo "PWD: $(pwd)"
+            # echo "LS: $(ls)"
 
       - name: check
         run: |            
