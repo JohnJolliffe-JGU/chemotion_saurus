@@ -12,7 +12,7 @@ jobs:
       - name: Docker
         run: |
             docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
-            tar cvfj node_modules.tar.bz2 
+            tar cvfj node_modules.tar.bz2 gitlab-runner/node_modules
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
         
