@@ -60,9 +60,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Set up node
+        uses: actions/setup-node@v1
       
       - name: Install node modules
-        uses: actions/setup-node@v1
         # if: steps.cache.outputs.cache-hit != 'true'
         run: |
           echo "PWD: $(pwd)"
