@@ -35,8 +35,10 @@ jobs:
       - name: Upload Docker artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: node_modules
-          path: gitlab-runner/node_modules
+          name: test
+          path:  gitlab-runner/Gemfile
+          # name: node_modules
+          # path: gitlab-runner/node_modules
 
       # - name: Check file existence
       #   id: check_files
