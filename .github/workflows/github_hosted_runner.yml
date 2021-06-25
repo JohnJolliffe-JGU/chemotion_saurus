@@ -40,6 +40,18 @@ jobs:
           # path:  gitlab-runner/Gemfile
           name: node_modules
           path: node_modules.tar.bz2
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: node_modules
+          path: node_modules.tar.bz2
+
+      - name: extract
+        run: |
+          tar -xvf node_modules.tar.bz2
+          echo "PWD: $(pwd)"
+          echo "LS: $(ls)"
 
       # - name: Check file existence
       #   id: check_files
