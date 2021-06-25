@@ -28,7 +28,7 @@ jobs:
 
       - name: check
         run: |            
-            cd gitlab-runner
+            #cd gitlab-runner
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
       
