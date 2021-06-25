@@ -44,10 +44,11 @@ jobs:
       - name: Docker
         run: |
             docker pull complat/complat-ubuntu-runner:0.10.20
-            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
+            docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner ./${{github.workspace}}
+            # docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
             echo "PWD: $(pwd)"
-            cd gitlab-runner
-            echo "PWD: $(pwd)"
+            # cd gitlab-runner
+            # echo "PWD: $(pwd)"
             echo "LS: $(ls)"
 
       # - name: Check file existence
@@ -78,18 +79,18 @@ jobs:
             echo "PWD: $(pwd)"
             echo "LS: $(ls)"
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6.6
+      # - name: Set up Ruby
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     ruby-version: 2.6.6
 
-      - name: Cache Ruby Gems
-        uses: actions/cache@v2
-        with:
-          path: gitlab-runner/shared/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+      # - name: Cache Ruby Gems
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: gitlab-runner/shared/bundle
+      #     key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gems-
     
       # - name: Bundle Install
       #   run: |
