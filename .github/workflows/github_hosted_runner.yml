@@ -51,6 +51,10 @@ jobs:
             # echo "AFTER"
             # echo "PWD: $(pwd)"
             # echo "LS: $(ls)"
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.22.1
       
       - name: unit test JS
         env:
@@ -61,17 +65,13 @@ jobs:
           RAILS_ENV: test
           # WITH_COVERAGE: true
           # DISABLE_SPRING: 1
-        uses: actions/setup-node@v1
-      #   # rmv?
-        with:
-          node-version: 12.22.1
         run: |
             echo "LS: $(ls)"
             npm install -g npm@7.11.1
             echo "CONFIGS"
             echo "Node: $(node -v)"
             echo "npm: $(npm -v)"
-            echo "nvm: $(nvm -v)"
+            #echo "nvm: $(nvm -v)"
             source ~/.nvm/nvm.sh && nvm use && npm i
             source ~/.nvm/nvm.sh && nvm use && npm test
 
