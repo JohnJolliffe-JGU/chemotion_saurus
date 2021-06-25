@@ -61,6 +61,7 @@ jobs:
       - run: |
             pwd
             #ls
+            npm install -g npm@7.11.1
             echo "CONFIGS"
             node -v
             npm -v
