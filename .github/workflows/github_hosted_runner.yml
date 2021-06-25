@@ -32,11 +32,11 @@ jobs:
             echo "LS: $(ls)"
       
       # ERROR
-      # - name: Upload Docker artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: gitlab-runner
-      #     path: .
+      - name: Upload Docker artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: node_modules
+          path: gitlab-runner/node_modules
 
       # - name: Check file existence
       #   id: check_files
