@@ -63,11 +63,14 @@ jobs:
             #ls
             npm install -g npm@7.11.1
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
             echo "CONFIGS"
             echo "Node: $(node -v)"
             echo "npm: $(npm -v)"
             echo "nvm: $(nvm -v)"
-            npm i && npm test
+            #npm i && npm test
 
   # config_files:
   #   #needs: checkout
