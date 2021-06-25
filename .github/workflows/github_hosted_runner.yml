@@ -70,17 +70,17 @@ jobs:
           echo "PWD: $(pwd)"
           #echo "LS: $(ls)"
 
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+          # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          # export NVM_DIR="$HOME/.nvm"
+          # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+          # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
           # unistall preinstalled
           # nvm use system
           # npm uninstall -g a_module
 
+          #nvm install v12.22.1
           npm install -g npm@7.11.1
-          nvm install v12.22.1
 
           echo "NPM: $(npm -v)"
           echo "NVM: $(nvm -v)"
