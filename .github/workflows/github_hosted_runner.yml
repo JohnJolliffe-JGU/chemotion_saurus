@@ -26,7 +26,7 @@ jobs:
   checkout:
     #needs: docker
     runs-on: ubuntu-latest
-    # container: "complat/complat-ubuntu-runner:0.12.20"
+    container: "complat/complat-ubuntu-runner:0.12.20"
 
     services:
       postgres:
@@ -46,21 +46,20 @@ jobs:
       #   uses: andstor/file-existence-action@v1
       #   with:
       #     files: 
-      - name: checkout
-      # todo always checkout?
-        #if: steps.check_files.outputs.files_exists == 'false'
-        uses: actions/checkout@v2
-        with:
-          repository: ComPlat/chemotion_ELN
-          #path:
-      - name: change config files
-        run: |
-            cd config
-            cp database.yml.gitlab database.yml
-            cp -f storage.yml.example storage.yml
-            touch datacollectors.yml
-            cp -f profile_default.yml.example profile_default.yml
-            touch klasses.json
+      # - name: checkout
+      #   #if: steps.check_files.outputs.files_exists == 'false'
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: ComPlat/chemotion_ELN
+      #     #path:
+      # - name: change config files
+      #   run: |
+      #       cd config
+      #       cp database.yml.gitlab database.yml
+      #       cp -f storage.yml.example storage.yml
+      #       touch datacollectors.yml
+      #       cp -f profile_default.yml.example profile_default.yml
+      #       touch klasses.json
 
       - name: Docker
         run: |
