@@ -29,16 +29,34 @@ jobs:
           repository: ComPlat/chemotion_ELN
           path: .
 
-      - name: change config files
+      - name: log ssh
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-            echo "PWD: $(pwd)"
-            echo "LS: $(ls)"
-            cd config
-            cp database.yml.gitlab database.yml
-            cp -f storage.yml.example storage.yml
-            touch datacollectors.yml
-            cp -f profile_default.yml.example profile_default.yml
-            touch klasses.json
+          #!/usr/bin/env bash
+          set -euo pipefail
+          eval $(ssh-agent -s);
+          mkdir ~/.ssh/
+          chmod 700 ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa
+          touch ~/.ssh/known_hosts
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
+
+      # TODO
+      # - name: change config files
+      #   run: |
+      #       echo "PWD: $(pwd)"
+      #       echo "LS: $(ls)"
+      #       cd config
+      #       cp database.yml.gitlab database.yml
+      #       cp -f storage.yml.example storage.yml
+      #       touch datacollectors.yml
+      #       cp -f profile_default.yml.example profile_default.yml
+      #       touch klasses.json
 
       # - name: Docker copy
       #   run: |
@@ -88,6 +106,7 @@ jobs:
           #echo "NVM: $(nvm -v)"
 
           npm i
+          echo "SIZE NODE MODULES: $(du -bsh node_modules)"
           npm test
 
           # source ~/.nvm/nvm.sh && nvm use && npm i
