@@ -76,7 +76,7 @@ jobs:
       - name: Set up Ubuntu
         run: |
           sudo apt-get update
-          sudo apt-get install libboost_serialization.so.1.71.0
+          sudo apt-get install libboost-all-dev
           cd /usr/lib/x86_64-linux-gnu/
           ls
 
