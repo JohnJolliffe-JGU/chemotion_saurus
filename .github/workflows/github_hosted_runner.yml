@@ -76,6 +76,8 @@ jobs:
       - name: Set up Ubuntu
         run: |
           sudo apt-get update
+          cd /usr/lib/x86_64-linux-gnu/
+          ls
 
       - name: Cache gems
         uses: actions/cache@v2
