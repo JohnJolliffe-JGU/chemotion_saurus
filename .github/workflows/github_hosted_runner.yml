@@ -8,8 +8,8 @@ on:
 jobs:
  TESTS:
     #runs-on: self-hosted # not working --> postgres service
-    #runs-on: ubuntu-latest
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    #runs-on: ubuntu-18.04
 
     # keep
     services:
@@ -81,13 +81,35 @@ jobs:
           # cd /usr/lib/x86_64-linux-gnu/
           # ls
 
+          # from install_production.sh
+          sudo apt-get -y update
+          sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
+            autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
+            g++ swig cmake libeigen3-dev \
+            gconf-service libgconf-2-4 \
+            libxslt-dev libxml2-dev \
+            libyaml-dev sqlite3 libgmp-dev libreadline-dev libssl-dev \
+            postgresql postgresql-client postgresql-contrib libpq-dev \
+            imagemagick libmagic-dev libmagickcore-dev libmagickwand-dev \
+            libsass-dev \
+            libnspr4 libnss3 libpango1.0-0 libxss1  \
+            tzdata python-dev libsqlite3-dev libboost-all-dev p7zip-full \
+            ufw ranger htop \
+            inkscape pandoc \
+            xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable \
+            fonts-crosextra-caladea fonts-crosextra-carlito \
+            fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
+            fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
+            fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
+            --fix-missing
+
       - name: Cache gems
         uses: actions/cache@v2
         with:
           path: node_modules
           key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
-            ${{ runner.os }}-gems-
+            ${{ runner.os }}-gems-v2
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
