@@ -9,17 +9,18 @@ jobs:
  TESTS:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:12
-        ports: ["5432:5432"]
-        env:
-          POSTGRES_PASSWORD: 123456
-        options: >-
-          --health-cmd pg_isready 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 5
+    # TODO
+    # services:
+    #   postgres:
+    #     image: postgres:12
+    #     ports: ["5432:5432"]
+    #     env:
+    #       POSTGRES_PASSWORD: 123456
+    #     options: >-
+    #       --health-cmd pg_isready 
+    #       --health-interval 10s 
+    #       --health-timeout 5s 
+    #       --health-retries 5
 
     # 1. checkout, before working dir is removed
     steps:
@@ -29,22 +30,22 @@ jobs:
           repository: ComPlat/chemotion_ELN
           path: .
 
-      - name: log ssh
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          #!/usr/bin/env bash
-          set -euo pipefail
-          eval $(ssh-agent -s);
-          mkdir ~/.ssh/
-          chmod 700 ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-add ~/.ssh/id_rsa
-          touch ~/.ssh/known_hosts
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-          ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
+      # - name: log ssh
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      #   run: |
+      #     #!/usr/bin/env bash
+      #     set -euo pipefail
+      #     eval $(ssh-agent -s);
+      #     mkdir ~/.ssh/
+      #     chmod 700 ~/.ssh
+      #     echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh-add ~/.ssh/id_rsa
+      #     touch ~/.ssh/known_hosts
+      #     ssh-keyscan github.com >> ~/.ssh/known_hosts
+      #     chmod 600 ~/.ssh/known_hosts
+      #     ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
 
       # TODO
       # - name: change config files
@@ -105,8 +106,15 @@ jobs:
           echo "NPM: $(npm -v)"
           #echo "NVM: $(nvm -v)"
 
+          # download preinstalled node_mdoules
+          wget https://bwsyncandshare.kit.edu/s/S5pmzsC2SNZEEZ7/download
+          tar -xvf download
+          echo "SIZE NODE MODULES 0: $(du -bsh node_modules)"
+          echo "COUNT NODE MODULES 0: $(find node_modules -type f | wc -l)"
+
           npm i
-          echo "SIZE NODE MODULES: $(du -bsh node_modules)"
+          echo "SIZE NODE MODULES 1: $(du -bsh node_modules)"
+          echo "COUNT NODE MODULES 1: $(find node_modules -type f | wc -l)"
           npm test
 
           # source ~/.nvm/nvm.sh && nvm use && npm i
