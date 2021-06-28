@@ -77,8 +77,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libboost-all-dev
-          cd /usr/lib/x86_64-linux-gnu/
-          ls
+          # cd /usr/lib/x86_64-linux-gnu/
+          # ls
 
       - name: Cache gems
         uses: actions/cache@v2
@@ -123,6 +123,9 @@ jobs:
           # bin/rails db:setup
           # rm RAILS_ENV=test?
           bundle info rdkit_chem
+          bundle info openbabel
+          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
+          ls
           RAILS_ENV=test bundle exec rake db:test:prepare --trace
           # bundle exec rspec spec/api/user_api_spec.rb --trace
           # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
