@@ -124,8 +124,8 @@ jobs:
           # rm RAILS_ENV=test?
           bundle info rdkit_chem
           bundle info openbabel
-          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
-          ls
+          # cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
+          # ls
           RAILS_ENV=test bundle exec rake db:test:prepare --trace
           # bundle exec rspec spec/api/user_api_spec.rb --trace
           # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
