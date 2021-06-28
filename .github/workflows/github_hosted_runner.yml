@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     # TODO
-    # services:
-    #   postgres:
-    #     image: postgres:12
-    #     ports: ["5432:5432"]
-    #     env:
-    #       POSTGRES_PASSWORD: 123456
-    #     options: >-
-    #       --health-cmd pg_isready 
-    #       --health-interval 10s 
-    #       --health-timeout 5s 
-    #       --health-retries 5
+    services:
+      postgres:
+        image: postgres:12
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: 123456
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
 
     # 1. checkout, before working dir is removed
     steps:
@@ -48,16 +48,16 @@ jobs:
       #     ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
 
       # TODO
-      # - name: change config files
-      #   run: |
-      #       echo "PWD: $(pwd)"
-      #       echo "LS: $(ls)"
-      #       cd config
-      #       cp database.yml.gitlab database.yml
-      #       cp -f storage.yml.example storage.yml
-      #       touch datacollectors.yml
-      #       cp -f profile_default.yml.example profile_default.yml
-      #       touch klasses.json
+      - name: change config files
+        run: |
+            #echo "PWD: $(pwd)"
+            #echo "LS: $(ls)"
+            cd config
+            cp database.yml.gitlab database.yml
+            cp -f storage.yml.example storage.yml
+            touch datacollectors.yml
+            cp -f profile_default.yml.example profile_default.yml
+            touch klasses.json
 
       # - name: Docker copy
       #   run: |
@@ -72,53 +72,96 @@ jobs:
       # docker --volume?
       # remove all preinstalled stuff?
 
-      - name: Cache node modules
+      - name: Cache gems
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-gems-
 
-      - name: Set up node
-        uses: actions/setup-node@v1
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          node-version: 12.22.1
-      
-      - name: Install node modules
-        # if: steps.cache.outputs.cache-hit != 'true'
+          ruby-version: 2.6.6
+    
+      - name: Bundle Install
         run: |
-          echo "PWD: $(pwd)"
-          #echo "LS: $(ls)"
-
-          # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-          # export NVM_DIR="$HOME/.nvm"
-          # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-          # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-          # unistall preinstalled
-          # nvm use system
-          # npm uninstall -g a_module
-
-          #nvm install v12.22.1
-          npm install -g npm@7.11.1
-
-          echo "NPM: $(npm -v)"
-          #echo "NVM: $(nvm -v)"
-
-          # download preinstalled node_mdoules
-          wget https://bwsyncandshare.kit.edu/s/S5pmzsC2SNZEEZ7/download
+          echo "CONFIGS"
+          echo "BUNDLE: $(bundle -v)"
+          echo "RAILS(rails -v)"
+          echo "RUBY: $(ruby -v)"
+          wget https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
           tar -xvf download
-          echo "SIZE NODE MODULES 0: $(du -bsh node_modules)"
-          echo "COUNT NODE MODULES 0: $(find node_modules -type f | wc -l)"
+          bundle config path vendor/bundle
+          gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
+          echo "COUNT GEMS 0: $(find vendor/bundle -type f | wc -l)"
 
-          npm i
-          echo "SIZE NODE MODULES 1: $(du -bsh node_modules)"
-          echo "COUNT NODE MODULES 1: $(find node_modules -type f | wc -l)"
-          npm test
+      - name: unit test ruby
+        env:
+          PG_DATABASE: chemotion_test
+          PG_HOST: localhost
+          PG_USER: chemotion_test
+          PG_PASSWORD: 123456
+          RAILS_ENV: test
+          # WITH_COVERAGE: true
+          # DISABLE_SPRING: 1
+        run: |
+          # bin/rails db:setup
+          # rm RAILS_ENV=test?
+          RAILS_ENV=test bundle exec rake db:test:prepare --trace && bundle exec rspec spec/api/user_api_spec.rb --trace
+          # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
-          # source ~/.nvm/nvm.sh && nvm use && npm i
-          # source ~/.nvm/nvm.sh && nvm use && npm test
+
+      #  NODE
+      # - name: Cache node modules
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: node_modules
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
+
+      # - name: Set up node
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: 12.22.1
+      
+      # - name: Install node modules
+      #   # if: steps.cache.outputs.cache-hit != 'true'
+      #   run: |
+      #     echo "PWD: $(pwd)"
+      #     #echo "LS: $(ls)"
+
+      #     # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+      #     # export NVM_DIR="$HOME/.nvm"
+      #     # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      #     # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+      #     # unistall preinstalled
+      #     # nvm use system
+      #     # npm uninstall -g a_module
+
+      #     #nvm install v12.22.1
+      #     npm install -g npm@7.11.1
+
+      #     echo "NPM: $(npm -v)"
+      #     #echo "NVM: $(nvm -v)"
+
+      #     # download preinstalled node_mdoules
+      #     wget --no-verbose https://bwsyncandshare.kit.edu/s/S5pmzsC2SNZEEZ7/download
+      #     tar -xf download
+      #     echo "SIZE NODE MODULES 0: $(du -bsh node_modules)"
+      #     echo "COUNT NODE MODULES 0: $(find node_modules -type f | wc -l)"
+
+      #     npm i
+      #     echo "SIZE NODE MODULES 1: $(du -bsh node_modules)"
+      #     echo "COUNT NODE MODULES 1: $(find node_modules -type f | wc -l)"
+      #     npm test
+
+      #     # source ~/.nvm/nvm.sh && nvm use && npm i
+      #     # source ~/.nvm/nvm.sh && nvm use && npm test
           
       
       # - name: test postgres
@@ -156,36 +199,7 @@ jobs:
       #     name: gitlab-runner
       #     path: gitlab-runner
 
-      # - name: Set up Ruby
-      #   uses: ruby/setup-ruby@v1
-      #   with:
-      #     ruby-version: 2.6.6
-    
-      # - name: Bundle Install
-      #   run: |
-      #     cd gitlab-runner
-      #     echo "CONFIGS"
-      #     echo "BUNDLE: $(bundle -v)"
-      #     echo "RAILS(rails -v)"
-      #     echo "RUBY: $(ruby -v)"
-      #     bundle config path shared/bundle
-      #     gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path shared/bundle
-      #     echo "SIZE BUNDLE: $(du -bsh shared/bundle)"
-      # - name: unit test ruby
-      #   env:
-      #     PG_DATABASE: chemotion_test
-      #     PG_HOST: localhost
-      #     PG_USER: chemotion_test
-      #     PG_PASSWORD: 123456
-      #     RAILS_ENV: test
-      #     # WITH_COVERAGE: true
-      #     # DISABLE_SPRING: 1
-      #   run: |
-      #     cd gitlab-runner
-      #     # bin/rails db:setup
-      #     # rm RAILS_ENV=test?
-      #     RAILS_ENV=test bundle exec rake db:test:prepare --trace && bundle exec rspec spec/api/user_api_spec.rb --trace
-      #     # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+
 
 
       # - uses: actions/cache@v2
