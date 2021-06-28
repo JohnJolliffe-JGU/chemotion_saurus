@@ -9,6 +9,7 @@ jobs:
  TESTS:
     #runs-on: self-hosted # not working --> postgres service
     runs-on: ubuntu-latest
+    # runs-on: ubuntu-18.04
 
     # keep
     services:
@@ -84,7 +85,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
+          key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
             ${{ runner.os }}-gems-
 
@@ -123,7 +124,7 @@ jobs:
           bundle info rdkit_chem
           bundle info openbabel
           #gem install openbabel
-          bundle info openbabel
+          #bundle info openbabel
           ls -la vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
           # ls
           #echo "PWD: $(pwd)"
