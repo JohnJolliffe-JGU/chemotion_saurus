@@ -7,10 +7,10 @@ on:
 
 jobs:
  TESTS:
-    runs-on: self-hosted
-    # runs-on: ubuntu-latest
+    #runs-on: self-hosted # not working --> postgres service
+    runs-on: ubuntu-latest
 
-    # TODO
+    # keep
     services:
       postgres:
         image: postgres:12
@@ -100,7 +100,7 @@ jobs:
           bundle config path vendor/bundle
           gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
           echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
-          echo "COUNT GEMS: $(find vendor/bundle -type f | wc -l)"
+          #echo "COUNT GEMS: $(find vendor/bundle -type f | wc -l)"
 
       - name: unit test ruby
         env:
@@ -114,7 +114,8 @@ jobs:
         run: |
           # bin/rails db:setup
           # rm RAILS_ENV=test?
-          RAILS_ENV=test bundle exec rake db:test:prepare --trace && bundle exec rspec spec/api/user_api_spec.rb --trace
+          RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          # bundle exec rspec spec/api/user_api_spec.rb --trace
           # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
 
