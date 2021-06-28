@@ -122,7 +122,7 @@ jobs:
         run: |
           bundle info rdkit_chem
           bundle info openbabel
-          gem install openbabel
+          #gem install openbabel
           bundle info openbabel
           ls -la vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
           # ls
