@@ -89,10 +89,10 @@ jobs:
         run: |
           echo "CONFIGS"
           echo "BUNDLE: $(bundle -v)"
-          echo "RAILS(rails -v)"
+          echo "RAILS: $(rails -v)"
           echo "RUBY: $(ruby -v)"
-          wget https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          tar -xvf download
+          wget --no-verbose https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+          tar -xf download
           bundle config path vendor/bundle
           gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
           echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
