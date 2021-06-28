@@ -81,6 +81,7 @@ jobs:
           # cd /usr/lib/x86_64-linux-gnu/
           # ls
 
+          # TODO rmv?
           # from install_production.sh
           sudo apt-get -y update
           sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
@@ -106,7 +107,7 @@ jobs:
       - name: Cache gems
         uses: actions/cache@v2
         with:
-          path: node_modules
+          path: vendor/bundle
           key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
             ${{ runner.os }}-gems-v2
@@ -150,6 +151,7 @@ jobs:
           ls -la vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
           # ls
           #echo "PWD: $(pwd)"
+          source ~/.rvm/scripts/rvm
           RAILS_ENV=test bundle exec rake db:test:prepare --trace
           # bundle exec rspec spec/api/user_api_spec.rb --trace
           # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
