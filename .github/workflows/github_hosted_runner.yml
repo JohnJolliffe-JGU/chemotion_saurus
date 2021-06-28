@@ -7,7 +7,8 @@ on:
 
 jobs:
  TESTS:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    # runs-on: ubuntu-latest
 
     # TODO
     services:
@@ -22,7 +23,7 @@ jobs:
           --health-timeout 5s 
           --health-retries 5
 
-    # 1. checkout, before working dir is removed
+    # first checkout, before working dir is removed
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -91,12 +92,15 @@ jobs:
           echo "BUNDLE: $(bundle -v)"
           echo "RAILS: $(rails -v)"
           echo "RUBY: $(ruby -v)"
+          # download vendor
           wget --no-verbose https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
           tar -xf download
+          echo "LS: $(ls)"
+          # TODO permissions vendor/bundle
           bundle config path vendor/bundle
           gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
           echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
-          echo "COUNT GEMS 0: $(find vendor/bundle -type f | wc -l)"
+          echo "COUNT GEMS: $(find vendor/bundle -type f | wc -l)"
 
       - name: unit test ruby
         env:
