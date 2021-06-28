@@ -76,12 +76,11 @@ jobs:
 
       - name: Set up Ubuntu
         run: |
+          echo "UBUNTU: $(cat /etc/os-release)"
           sudo apt-get update
           sudo apt-get install libboost-all-dev
           # cd /usr/lib/x86_64-linux-gnu/
           # ls
-
-          echo "UBUNTU: $(cat /etc/os-release)"
 
           # TODO rmv?
           # from install_production.sh
@@ -150,7 +149,7 @@ jobs:
           # WITH_COVERAGE: true
           # DISABLE_SPRING: 1
         run: |
-          bundle info rdkit_chem
+          echo "UBUNTU: $(cat /etc/os-release)"
           bundle info openbabel
           #gem install openbabel
           #bundle info openbabel
