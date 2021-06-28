@@ -73,6 +73,10 @@ jobs:
       # docker --volume?
       # remove all preinstalled stuff?
 
+      - name: Set up Ubuntu
+        run: |
+          sudo apt-get update
+
       - name: Cache gems
         uses: actions/cache@v2
         with:
