@@ -161,18 +161,9 @@ jobs:
           # WITH_COVERAGE: true
           # DISABLE_SPRING: 1
         run: |
-          #echo "UBUNTU: $(cat /etc/os-release)"
-          bundle info openbabel
-          #gem install openbabel
-          #cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
-          #ldd -v openbabel.so
-          # ls
-          #echo "PWD: $(pwd)"
-          source ~/.rvm/scripts/rvm
-          RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           # bundle exec rspec spec/api/user_api_spec.rb --trace
           # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
-
 
       #  NODE
       # - name: Cache node modules
