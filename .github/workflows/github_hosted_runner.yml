@@ -116,15 +116,15 @@ jobs:
       #     && echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
       #     && echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
-      - name: Cache gems
-        uses: actions/cache@v2
-        with:
-          #path: /home/runner/.rvm/gems/ruby-2.6.6
-          path: vendor/bundle
-          #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
-          key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }} # cache for vendor/bundle
-          restore-keys: |
-            ${{ runner.os }}-gems-v2
+      # - name: Cache gems
+      #   uses: actions/cache@v2
+      #   with:
+      #     #path: /home/runner/.rvm/gems/ruby-2.6.6
+      #     path: vendor/bundle
+      #     #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
+      #     key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }} # cache for vendor/bundle
+      #     restore-keys: |
+      #       ${{ runner.os }}-gems-v2
 
       # - name: Set up Ruby
       #   uses: ruby/setup-ruby@v1
@@ -157,8 +157,9 @@ jobs:
           wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
           tar -xf gems
           
+          # insstall poject gems
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
-          
+
           # gem install openbabel
           # gem info openbabel
           # echo "CONFIGS"
