@@ -158,7 +158,7 @@ jobs:
           echo "RUBY: $(ruby -v)"
           cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           echo "LS openbabel lib"
-          ls
+          ls -la
           echo "LDD"
           ldd -v libopenbabel.so.5
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
