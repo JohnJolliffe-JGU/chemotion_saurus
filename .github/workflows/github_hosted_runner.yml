@@ -82,8 +82,6 @@ jobs:
           # cd /usr/lib/x86_64-linux-gnu/
           # ls
 
-          # openbabel
-          #sudo apt-get install -y libruby
 
           # TODO rmv?
           # from install_production.sh
@@ -107,6 +105,10 @@ jobs:
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
             --fix-missing
+
+
+          # openbabel
+          #sudo apt-get install -y libruby
 
           # pandoc
           curl -o /tmp/pandoc-2.10.1-1-amd64.deb -L https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb
@@ -149,6 +151,7 @@ jobs:
           # TODO permissions vendor/bundle ?
           # bundle config path vendor/bundle
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          gem install libruby
           echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
           #echo "COUNT GEMS: $(find vendor/bundle -type f | wc -l)"
           echo "CONFIGS"
@@ -156,11 +159,11 @@ jobs:
           echo "BUNDLE: $(bundle -v)"
           echo "RAILS: $(rails -v)"
           echo "RUBY: $(ruby -v)"
-          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          echo "LS openbabel lib"
-          ls -la
-          echo "LDD"
-          ldd -v libruby.so.2.6
+          # cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          # echo "LS openbabel lib"
+          # ls -la
+          # echo "LDD"
+          # ldd -v libruby.so.2.6
           #ldd -v openbabel.so
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
