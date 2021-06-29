@@ -61,11 +61,6 @@ jobs:
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
 
-      # - name: Docker copy
-      #   run: |
-      #       docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner/node_modules .
-      #       #docker cp $(docker run -it -d complat/complat-ubuntu-runner:0.10.20):/home/gitlab-runner .
-
       # - uses: actions/setup-node@v1
       #   with:
       #     node-version: 12.22.1
@@ -74,35 +69,35 @@ jobs:
       # docker --volume?
       # remove all preinstalled stuff?
 
-      # - name: Set up Ubuntu
-      #   run: |
-      #     echo "UBUNTU: $(cat /etc/os-release)"
-      #     #sudo apt-get update
-      #     #sudo apt-get install libboost-all-dev
-      #     # cd /usr/lib/x86_64-linux-gnu/
-      #     # ls
+      - name: Set up Ubuntu
+        run: |
+          echo "UBUNTU: $(cat /etc/os-release)"
+          #sudo apt-get update
+          #sudo apt-get install libboost-all-dev
+          # cd /usr/lib/x86_64-linux-gnu/
+          # ls
 
-      #     # from install_production.sh
-      #     sudo apt-get -y update
-      #     sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
-      #       autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
-      #       g++ swig cmake libeigen3-dev \
-      #       gconf-service libgconf-2-4 \
-      #       libxslt-dev libxml2-dev \
-      #       libyaml-dev sqlite3 libgmp-dev libreadline-dev libssl-dev \
-      #       postgresql postgresql-client postgresql-contrib libpq-dev \
-      #       imagemagick libmagic-dev libmagickcore-dev libmagickwand-dev \
-      #       libsass-dev \
-      #       libnspr4 libnss3 libpango1.0-0 libxss1  \
-      #       tzdata python-dev libsqlite3-dev libboost-all-dev p7zip-full \
-      #       ufw ranger htop \
-      #       inkscape pandoc \
-      #       xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable \
-      #       fonts-crosextra-caladea fonts-crosextra-carlito \
-      #       fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
-      #       fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
-      #       fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
-      #       --fix-missing
+          # from install_production.sh
+          sudo apt-get -y update
+          sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
+            autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
+            g++ swig cmake libeigen3-dev \
+            gconf-service libgconf-2-4 \
+            libxslt-dev libxml2-dev \
+            libyaml-dev sqlite3 libgmp-dev libreadline-dev libssl-dev \
+            postgresql postgresql-client postgresql-contrib libpq-dev \
+            imagemagick libmagic-dev libmagickcore-dev libmagickwand-dev \
+            libsass-dev \
+            libnspr4 libnss3 libpango1.0-0 libxss1  \
+            tzdata python-dev libsqlite3-dev libboost-all-dev p7zip-full \
+            ufw ranger htop \
+            inkscape pandoc \
+            xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable \
+            fonts-crosextra-caladea fonts-crosextra-carlito \
+            fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
+            fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
+            fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
+            --fix-missing
 
 
       #     # openbabel
@@ -144,21 +139,23 @@ jobs:
           PG_PASSWORD: 123456
           RAILS_ENV: test
         run: |
-          # download vendor
-          # wget --no-verbose https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          # tar -xf download
           #echo "LS: $(ls)"
           echo "PWD: $(pwd)"
 
-          # source ~/.rvm/scripts/rvm && rvm install 2.6.6
-          # # download global gems:
-          # cd ~/.rvm/gems/ruby-2.6.6
-          # wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
-          # tar -xf gems
+          # download global gems
+          cd ~/.rvm/gems/ruby-2.6.6
+          wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
+          tar -xf gems
 
           # cd gems
           # ls -la
-          #&& gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+
+          cd /home/runner/work/chemotion_saurus/chemotion_saurus
+          # download vendor with project gems
+          wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+          tar -xf vendor
+
+          source ~/.rvm/scripts/rvm && rvm install 2.6.6 && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
           # gem install openbabel
           # gem info openbabel
           # echo "CONFIGS"
@@ -184,7 +181,7 @@ jobs:
           # # echo "LDD"
           # # ldd -v libruby.so.2.6
           # 
-          # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
       # - name: unit test ruby
