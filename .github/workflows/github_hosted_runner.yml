@@ -83,7 +83,7 @@ jobs:
           # ls
 
           # openbabel
-          sudo apt-get install -y libruby
+          #sudo apt-get install -y libruby
 
           # TODO rmv?
           # from install_production.sh
@@ -112,6 +112,11 @@ jobs:
           curl -o /tmp/pandoc-2.10.1-1-amd64.deb -L https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb
           sudo dpkg -i /tmp/pandoc-2.10.1-1-amd64.deb
 
+          # rvm
+          curl -sSL https://get.rvm.io | bash -s stable \
+          && echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
+          && echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
+
       - name: Cache gems
         uses: actions/cache@v2
         with:
@@ -122,8 +127,8 @@ jobs:
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6.6
+        # with:
+        #   ruby-version: 2.6.6
     
       - name: Bundle Install
         run: |
@@ -138,7 +143,7 @@ jobs:
           echo "LS: $(ls)"
           # TODO permissions vendor/bundle
           bundle config path vendor/bundle
-          gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          source ~/.rvm/scripts/rvm && rvm install 2.6.6 && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
           echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
           #echo "COUNT GEMS: $(find vendor/bundle -type f | wc -l)"
 
