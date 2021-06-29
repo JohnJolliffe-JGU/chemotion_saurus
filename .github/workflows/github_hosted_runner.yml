@@ -126,8 +126,10 @@ jobs:
       - name: Cache gems
         uses: actions/cache@v2
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }}
+          path: /home/runner/.rvm/gems/ruby-2.6.6
+          # path: vendor/bundle
+          key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }}
+          # key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
             ${{ runner.os }}-gems-v2
 
@@ -150,17 +152,23 @@ jobs:
           #echo "LS: $(ls)"
           # TODO permissions vendor/bundle ?
           # bundle config path vendor/bundle
-          source ~/.rvm/scripts/rvm && rvm install 2.6.6 
-          #&& gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
-          gem install openbabel
-          gem info openbabel
-          echo "CONFIGS"
-          rvm list
-          echo "HOME"
-          cd ~/.rvm/gems/ruby-2.6.6/gems/openbabel-2.4.90.0/openbabel/lib
+          source ~/.rvm/scripts/rvm && rvm install 2.6.6
+          # download global gems:
+          cd ~/.rvm/gems/ruby-2.6.6
+          wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
+          tar -xf
+          cd gems
           ls -la
-          echo "LDD"
-          ldd -v openbabel.so
+          #&& gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          # gem install openbabel
+          # gem info openbabel
+          # echo "CONFIGS"
+          # rvm list
+          # echo "HOME"
+          # cd ~/.rvm/gems/ruby-2.6.6/gems/openbabel-2.4.90.0/openbabel/lib
+          # ls -la
+          # echo "LDD"
+          # ldd -v openbabel.so
           # gems/ruby-2.6.6/bundler/gems
           # gem install libruby
           # gem info libruby
