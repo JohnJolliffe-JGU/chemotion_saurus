@@ -154,7 +154,7 @@ jobs:
           echo "CONFIGS"
           rvm list
           echo "HOME"
-          cd ~/.rvm/
+          cd ~/.rvm/gems
           ls -la
           # gems/ruby-2.6.6/bundler/gems
           # gem install libruby
