@@ -98,19 +98,7 @@ jobs:
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
             --fix-missing
-
-
-      #     # openbabel
-      #     #sudo apt-get install -y libruby
-
-      #     # pandoc
-      #     curl -o /tmp/pandoc-2.10.1-1-amd64.deb -L https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb
-      #     sudo dpkg -i /tmp/pandoc-2.10.1-1-amd64.deb
-
-          # rvm
-          #TODO
-          #if gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-          #else 
+            
             gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
             curl -sSL https://get.rvm.io | bash -s stable \
             && echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
