@@ -146,7 +146,7 @@ jobs:
           # ls -la
 
           cd /home/runner/work/chemotion_saurus/chemotion_saurus
-          rm vendor
+          rm -r vendor
 
           # TODO just download bundle
           # download vendor with project gems
