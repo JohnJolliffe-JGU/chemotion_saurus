@@ -8,8 +8,8 @@ on:
 jobs:
  TESTS:
     #runs-on: self-hosted # not working --> postgres service
-    #runs-on: ubuntu-latest
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    #runs-on: ubuntu-18.04
 
     # keep
     services:
@@ -134,7 +134,13 @@ jobs:
         # with:
         #   ruby-version: 2.6.6
     
-      - name: Bundle Install
+      - name: Bundle Install & unit test ruby
+        env:
+          PG_DATABASE: chemotion_test
+          PG_HOST: localhost
+          PG_USER: chemotion_test
+          PG_PASSWORD: 123456
+          RAILS_ENV: test
         run: |
           # download vendor
           wget --no-verbose https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
@@ -150,18 +156,22 @@ jobs:
           echo "BUNDLE: $(bundle -v)"
           echo "RAILS: $(rails -v)"
           echo "RUBY: $(ruby -v)"
-
-      - name: unit test ruby
-        env:
-          PG_DATABASE: chemotion_test
-          PG_HOST: localhost
-          PG_USER: chemotion_test
-          PG_PASSWORD: 123456
-          RAILS_ENV: test
-          # WITH_COVERAGE: true
-          # DISABLE_SPRING: 1
-        run: |
+          ldd -v libopenbabel.so.5
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          
+
+      # - name: unit test ruby
+      #   env:
+      #     PG_DATABASE: chemotion_test
+      #     PG_HOST: localhost
+      #     PG_USER: chemotion_test
+      #     PG_PASSWORD: 123456
+      #     RAILS_ENV: test
+      #     # WITH_COVERAGE: true
+      #     # DISABLE_SPRING: 1
+      #   run: |
+      #     source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
+      #     ldd -v libopenbabel.so.5
           # bundle exec rspec spec/api/user_api_spec.rb --trace
           # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
@@ -249,13 +259,3 @@ jobs:
       #   with:
       #     name: gitlab-runner
       #     path: gitlab-runner
-
-
-
-
-      # - uses: actions/cache@v2
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.os }}-gems-${{ hashFiles('**/package.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gems-
