@@ -152,6 +152,7 @@ jobs:
           # bundle config path vendor/bundle
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
           gem install libruby
+          gem info libruby
           echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
           #echo "COUNT GEMS: $(find vendor/bundle -type f | wc -l)"
           echo "CONFIGS"
@@ -159,12 +160,12 @@ jobs:
           echo "BUNDLE: $(bundle -v)"
           echo "RAILS: $(rails -v)"
           echo "RUBY: $(ruby -v)"
-          # cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           # echo "LS openbabel lib"
           # ls -la
           # echo "LDD"
           # ldd -v libruby.so.2.6
-          #ldd -v openbabel.so
+          ldd -v openbabel.so
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
