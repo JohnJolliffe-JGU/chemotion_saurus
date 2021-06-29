@@ -145,8 +145,8 @@ jobs:
           RAILS_ENV: test
         run: |
           # download vendor
-          wget --no-verbose https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          tar -xf download
+          # wget --no-verbose https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+          # tar -xf download
           #echo "LS: $(ls)"
           # TODO permissions vendor/bundle ?
           # bundle config path vendor/bundle
