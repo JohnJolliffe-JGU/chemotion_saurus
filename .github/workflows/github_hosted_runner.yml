@@ -82,6 +82,9 @@ jobs:
           # cd /usr/lib/x86_64-linux-gnu/
           # ls
 
+          # openbabel
+          sudo apt-get install -y libruby
+
           # TODO rmv?
           # from install_production.sh
           sudo apt-get -y update
@@ -154,7 +157,7 @@ jobs:
           #gem install openbabel
           #bundle info openbabel
           cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
-          ldd openbabel.so
+          ldd -v openbabel.so
           # ls
           #echo "PWD: $(pwd)"
           #source ~/.rvm/scripts/rvm
