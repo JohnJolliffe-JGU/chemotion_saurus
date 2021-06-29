@@ -8,8 +8,8 @@ on:
 jobs:
  TESTS:
     #runs-on: self-hosted # not working --> postgres service
-    runs-on: ubuntu-latest
-    #runs-on: ubuntu-18.04
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     # keep
     services:
