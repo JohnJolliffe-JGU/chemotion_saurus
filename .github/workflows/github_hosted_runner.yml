@@ -147,8 +147,8 @@ jobs:
 
           cd /home/runner/work/chemotion_saurus/chemotion_saurus
           # download vendor with project gems
-          wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          tar -xf vendor
+          wget --no-verbose -O vendor.tar.bz2  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+          tar -xf vendor.tar.bz2
 
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           
