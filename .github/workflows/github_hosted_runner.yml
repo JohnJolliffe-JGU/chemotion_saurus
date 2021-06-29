@@ -71,7 +71,7 @@ jobs:
 
       - name: Set up Ubuntu
         run: |
-          echo "UBUNTU: $(cat /etc/os-release)"
+          #echo "UBUNTU: $(cat /etc/os-release)"
           #sudo apt-get update
           #sudo apt-get install libboost-all-dev
           # cd /usr/lib/x86_64-linux-gnu/
@@ -107,14 +107,14 @@ jobs:
       #     curl -o /tmp/pandoc-2.10.1-1-amd64.deb -L https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb
       #     sudo dpkg -i /tmp/pandoc-2.10.1-1-amd64.deb
 
-      #     # rvm
-      #     #TODO
-      #     #if gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-      #     #else 
-      #     gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-      #     curl -sSL https://get.rvm.io | bash -s stable \
-      #     && echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
-      #     && echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
+          # rvm
+          #TODO
+          #if gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+          #else 
+          gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+          curl -sSL https://get.rvm.io | bash -s stable \
+          && echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
+          && echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
       # - name: Cache gems
       #   uses: actions/cache@v2
