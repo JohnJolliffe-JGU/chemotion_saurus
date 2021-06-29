@@ -74,54 +74,52 @@ jobs:
       # docker --volume?
       # remove all preinstalled stuff?
 
-      - name: Set up Ubuntu
-        run: |
-          echo "UBUNTU: $(cat /etc/os-release)"
-          #sudo apt-get update
-          #sudo apt-get install libboost-all-dev
-          # cd /usr/lib/x86_64-linux-gnu/
-          # ls
+      # - name: Set up Ubuntu
+      #   run: |
+      #     echo "UBUNTU: $(cat /etc/os-release)"
+      #     #sudo apt-get update
+      #     #sudo apt-get install libboost-all-dev
+      #     # cd /usr/lib/x86_64-linux-gnu/
+      #     # ls
+
+      #     # from install_production.sh
+      #     sudo apt-get -y update
+      #     sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
+      #       autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
+      #       g++ swig cmake libeigen3-dev \
+      #       gconf-service libgconf-2-4 \
+      #       libxslt-dev libxml2-dev \
+      #       libyaml-dev sqlite3 libgmp-dev libreadline-dev libssl-dev \
+      #       postgresql postgresql-client postgresql-contrib libpq-dev \
+      #       imagemagick libmagic-dev libmagickcore-dev libmagickwand-dev \
+      #       libsass-dev \
+      #       libnspr4 libnss3 libpango1.0-0 libxss1  \
+      #       tzdata python-dev libsqlite3-dev libboost-all-dev p7zip-full \
+      #       ufw ranger htop \
+      #       inkscape pandoc \
+      #       xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable \
+      #       fonts-crosextra-caladea fonts-crosextra-carlito \
+      #       fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
+      #       fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
+      #       fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
+      #       --fix-missing
 
 
-          # TODO rmv?
-          # from install_production.sh
-          sudo apt-get -y update
-          sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
-            autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
-            g++ swig cmake libeigen3-dev \
-            gconf-service libgconf-2-4 \
-            libxslt-dev libxml2-dev \
-            libyaml-dev sqlite3 libgmp-dev libreadline-dev libssl-dev \
-            postgresql postgresql-client postgresql-contrib libpq-dev \
-            imagemagick libmagic-dev libmagickcore-dev libmagickwand-dev \
-            libsass-dev \
-            libnspr4 libnss3 libpango1.0-0 libxss1  \
-            tzdata python-dev libsqlite3-dev libboost-all-dev p7zip-full \
-            ufw ranger htop \
-            inkscape pandoc \
-            xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable \
-            fonts-crosextra-caladea fonts-crosextra-carlito \
-            fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
-            fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
-            fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
-            --fix-missing
+      #     # openbabel
+      #     #sudo apt-get install -y libruby
 
+      #     # pandoc
+      #     curl -o /tmp/pandoc-2.10.1-1-amd64.deb -L https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb
+      #     sudo dpkg -i /tmp/pandoc-2.10.1-1-amd64.deb
 
-          # openbabel
-          #sudo apt-get install -y libruby
-
-          # pandoc
-          curl -o /tmp/pandoc-2.10.1-1-amd64.deb -L https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-1-amd64.deb
-          sudo dpkg -i /tmp/pandoc-2.10.1-1-amd64.deb
-
-          # rvm
-          #TODO
-          #if gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-          #else 
-          gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-          curl -sSL https://get.rvm.io | bash -s stable \
-          && echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
-          && echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
+      #     # rvm
+      #     #TODO
+      #     #if gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+      #     #else 
+      #     gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+      #     curl -sSL https://get.rvm.io | bash -s stable \
+      #     && echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
+      #     && echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
       - name: Cache gems
         uses: actions/cache@v2
@@ -150,15 +148,16 @@ jobs:
           # wget --no-verbose https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
           # tar -xf download
           #echo "LS: $(ls)"
-          # TODO permissions vendor/bundle ?
-          # bundle config path vendor/bundle
-          source ~/.rvm/scripts/rvm && rvm install 2.6.6
-          # download global gems:
-          cd ~/.rvm/gems/ruby-2.6.6
-          wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
-          tar -xf gems
-          cd gems
-          ls -la
+          echo "PWD: $(pwd)"
+
+          # source ~/.rvm/scripts/rvm && rvm install 2.6.6
+          # # download global gems:
+          # cd ~/.rvm/gems/ruby-2.6.6
+          # wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
+          # tar -xf gems
+
+          # cd gems
+          # ls -la
           #&& gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
           # gem install openbabel
           # gem info openbabel
