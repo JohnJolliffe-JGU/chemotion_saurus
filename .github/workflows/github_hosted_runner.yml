@@ -156,7 +156,7 @@ jobs:
           # download global gems:
           cd ~/.rvm/gems/ruby-2.6.6
           wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
-          tar -xf
+          tar -xf gems
           cd gems
           ls -la
           #&& gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
