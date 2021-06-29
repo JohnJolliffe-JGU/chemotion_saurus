@@ -136,9 +136,10 @@ jobs:
           cd ~/.rvm/gems/ruby-2.6.6
           wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
           tar -xf gems
-          cd gems
-          echo "GLOBAL GEMS"
-          ls
+          cd gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          echo "L"
+          ldd -v openbabel.so
+          #ls
 
           # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
           # cd $GITHUB_WORKSPACE
