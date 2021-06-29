@@ -160,7 +160,7 @@ jobs:
           echo "LS openbabel lib"
           ls -la
           echo "LDD"
-          ldd -v libopenbabel.so.5
+          ldd -v openbabel.so
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
