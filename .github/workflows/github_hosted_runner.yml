@@ -156,7 +156,7 @@ jobs:
           echo "BUNDLE: $(bundle -v)"
           echo "RAILS: $(rails -v)"
           echo "RUBY: $(ruby -v)"
-          ldd -v libopenbabel.so.5
+          #ldd -v libopenbabel.so.5
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
