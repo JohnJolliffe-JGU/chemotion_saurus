@@ -77,8 +77,8 @@ jobs:
       - name: Set up Ubuntu
         run: |
           echo "UBUNTU: $(cat /etc/os-release)"
-          sudo apt-get update
-          sudo apt-get install libboost-all-dev
+          #sudo apt-get update
+          #sudo apt-get install libboost-all-dev
           # cd /usr/lib/x86_64-linux-gnu/
           # ls
 
@@ -152,12 +152,11 @@ jobs:
           # WITH_COVERAGE: true
           # DISABLE_SPRING: 1
         run: |
-          echo "UBUNTU: $(cat /etc/os-release)"
+          #echo "UBUNTU: $(cat /etc/os-release)"
           bundle info openbabel
           #gem install openbabel
-          #bundle info openbabel
-          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
-          ldd -v openbabel.so
+          #cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/
+          #ldd -v openbabel.so
           # ls
           #echo "PWD: $(pwd)"
           #source ~/.rvm/scripts/rvm
