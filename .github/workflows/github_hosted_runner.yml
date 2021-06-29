@@ -157,8 +157,10 @@ jobs:
           echo "CONFIGS"
           rvm list
           echo "HOME"
-          cd ~/.rvm/gems/ruby-2.6.6/gems/openbabel-2.4.90.0
+          cd ~/.rvm/gems/ruby-2.6.6/gems/openbabel-2.4.90.0/openbabel/lib
           ls -la
+          echo "LDD"
+          ldd -v openbabel.so
           # gems/ruby-2.6.6/bundler/gems
           # gem install libruby
           # gem info libruby
@@ -174,7 +176,7 @@ jobs:
           # # ls -la
           # # echo "LDD"
           # # ldd -v libruby.so.2.6
-          # ldd -v openbabel.so
+          # 
           # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
