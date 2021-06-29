@@ -148,18 +148,21 @@ jobs:
           cd ~/.rvm/gems/ruby-2.6.6
           wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
           tar -xf gems
+          cd gems
+          echo "GLOBAL GEMS"
+          ls
 
-          # cd /home/runner/work/chemotion_saurus/chemotion_saurus
-          cd $GITHUB_WORKSPACE
-          rm -r vendor
+          # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
+          # cd $GITHUB_WORKSPACE
+          # rm -r vendor
 
-          # TODO just download bundle
-          # download vendor with project gems
-          wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          tar -xf vendor
+          # # TODO just download bundle
+          # # download vendor with project gems
+          # wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+          # tar -xf vendor
 
-          # insstall poject gems
-          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          # # insstall poject gems
+          # source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
           # gem install openbabel
           # gem info openbabel
@@ -186,7 +189,7 @@ jobs:
           # # echo "LDD"
           # # ldd -v libruby.so.2.6
           # 
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
       # - name: unit test ruby
