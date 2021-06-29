@@ -151,14 +151,16 @@ jobs:
           # TODO permissions vendor/bundle ?
           # bundle config path vendor/bundle
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          echo "CONFIGS"
+          rvm list
           echo "HOME"
-          cd ~/.rvm
+          cd ~/.rvm/gems/ruby-2.6.6/bundler/gems
           ls -la
           # gem install libruby
           # gem info libruby
           # echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
           # #echo "COUNT GEMS: $(find vendor/bundle -type f | wc -l)"
-          # echo "CONFIGS"
+          # 
           # echo "PWD: $(pwd)"
           # echo "BUNDLE: $(bundle -v)"
           # echo "RAILS: $(rails -v)"
