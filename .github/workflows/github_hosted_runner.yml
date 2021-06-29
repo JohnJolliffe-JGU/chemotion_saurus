@@ -139,8 +139,8 @@ jobs:
           PG_PASSWORD: 123456
           RAILS_ENV: test
         run: |
-          #echo "LS: $(ls)"
           echo "PWD: $(pwd)"
+          echo "LS: $(ls)"
 
           # cd gems
           # ls -la
