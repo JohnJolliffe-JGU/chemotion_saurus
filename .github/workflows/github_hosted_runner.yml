@@ -119,10 +119,10 @@ jobs:
       - name: Cache gems
         uses: actions/cache@v2
         with:
-          path: /home/runner/.rvm/gems/ruby-2.6.6
-          # path: vendor/bundle
-          key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }}
-          # key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }}
+          #path: /home/runner/.rvm/gems/ruby-2.6.6
+          path: vendor/bundle
+          #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
+          key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }} # cache for vendor/bundle
           restore-keys: |
             ${{ runner.os }}-gems-v2
 
