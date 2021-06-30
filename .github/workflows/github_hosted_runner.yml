@@ -15,8 +15,8 @@ jobs:
       postgres:
         image: postgres:12
         ports: ["5432:5432"]
-        env:
-          POSTGRES_PASSWORD: 123456
+        # env:
+        #   POSTGRES_PASSWORD: 123456
         options: >-
           --health-cmd pg_isready 
           --health-interval 10s 
@@ -26,8 +26,13 @@ jobs:
     # first checkout, before working dir is removed
     steps:
       - name: check postgres
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
         run: |
-            postgres psql 
+            sudo -u postgres psql
       
       # - name: checkout
       #   uses: actions/checkout@v2
