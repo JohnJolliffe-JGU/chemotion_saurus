@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     #runs-on: ubuntu-18.04
 
-    # keep
     services:
       postgres:
         image: postgres:12
@@ -122,7 +121,8 @@ jobs:
       - name: Bundle Install & unit test ruby
         env:
           PG_DATABASE: chemotion_test
-          PG_HOST: localhost
+          PG_HOST: postgres
+          # PG_HOST: localhost
           PG_USER: chemotion_test
           PG_PASSWORD: 123456
           RAILS_ENV: test
