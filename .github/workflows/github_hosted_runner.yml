@@ -155,19 +155,18 @@ jobs:
           echo "CHECK"
           echo $LD_LIBRARY_PATH
 
-          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          echo "LDD"
-          ldd openbabel.so
-
           #/usr/share/rvm/rubies/ruby-2.6.6/lib/libruby.so.2.6
-          echo "RVM HOME"
-          cd ~/.rvm/
+          # echo "RVM HOME"
+          # cd ~/.rvm/
           rvm list
-          ls
           
           # # install poject gems
           cd $GITHUB_WORKSPACE
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+
+          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          echo "LDD"
+          ldd openbabel.so
 
           # gem install openbabel
           # gem info openbabel
@@ -194,6 +193,7 @@ jobs:
           # # echo "LDD"
           # # ldd -v libruby.so.2.6
            
+          cd $GITHUB_WORKSPACE
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
