@@ -23,24 +23,23 @@ jobs:
           --health-timeout 5s 
           --health-retries 5
 
-    # first checkout, before working dir is removed
-    steps:
-      - name: check postgres
-        env:
-          # The hostname used to communicate with the PostgreSQL service container
-          # localhost because actions are directly running on a GitHub machine
-          POSTGRES_HOST: localhost
-          PG_PASSWORD: 123456
-          POSTGRES_PORT: 5432
-        run: |
-            sudo -u postgres psql
+    # steps:
+    #   - name: check postgres
+    #     env:
+    #       # The hostname used to communicate with the PostgreSQL service container
+    #       # localhost because actions are directly running on a GitHub machine
+    #       POSTGRES_HOST: localhost
+    #       PG_PASSWORD: 123456
+    #       POSTGRES_PORT: 5432
+    #     run: |
+    #         sudo -u postgres psql
       
+      # first checkout, before working dir is removed
       - name: checkout
         uses: actions/checkout@v2
         with:
           repository: ComPlat/chemotion_ELN
           path: .
-
 
       # TODO
       - name: change config files
