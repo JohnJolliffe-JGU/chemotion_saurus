@@ -14,7 +14,9 @@ jobs:
     services:
       postgres:
         image: postgres:12
-        ports: ["5432:5432"]
+        ports:
+          - 5432:5432
+        # ports: ["5432:5432"]
         env:
           POSTGRES_PASSWORD: 123456
         options: >-
@@ -99,7 +101,7 @@ jobs:
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
         
-          pg_ctlcluster 12 main start
+           sudo -u pg_ctlcluster 12 main start
       
       - name: log
         run: |
@@ -122,6 +124,7 @@ jobs:
           PG_USER: chemotion_test
           PG_PASSWORD: 123456
           RAILS_ENV: test
+          POSTGRES_PORT: 5432
         run: |
           echo "PWD: $(pwd)"
           #echo "LS: $(ls)"
