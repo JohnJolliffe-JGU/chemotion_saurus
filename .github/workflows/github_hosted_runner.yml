@@ -25,11 +25,15 @@ jobs:
 
     # first checkout, before working dir is removed
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          repository: ComPlat/chemotion_ELN
-          path: .
+      - name: check postgres
+        run: |
+            postgres psql 
+      
+      # - name: checkout
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: ComPlat/chemotion_ELN
+      #     path: .
 
       # - name: log ssh
       #   env:
@@ -49,16 +53,16 @@ jobs:
       #     ssh -o StrictHostKeyChecking=no docusaurus@eln.chemotion.net
 
       # TODO
-      - name: change config files
-        run: |
-            #echo "PWD: $(pwd)"
-            #echo "LS: $(ls)"
-            cd config
-            cp database.yml.gitlab database.yml
-            cp -f storage.yml.example storage.yml
-            touch datacollectors.yml
-            cp -f profile_default.yml.example profile_default.yml
-            touch klasses.json
+      # - name: change config files
+      #   run: |
+      #       #echo "PWD: $(pwd)"
+      #       #echo "LS: $(ls)"
+      #       cd config
+      #       cp database.yml.gitlab database.yml
+      #       cp -f storage.yml.example storage.yml
+      #       touch datacollectors.yml
+      #       cp -f profile_default.yml.example profile_default.yml
+      #       touch klasses.json
 
       # - uses: actions/setup-node@v1
       #   with:
@@ -68,40 +72,40 @@ jobs:
       # docker --volume?
       # remove all preinstalled stuff?
 
-      - name: Set up Ubuntu
-        run: |
-          #echo "UBUNTU: $(cat /etc/os-release)"
-          #sudo apt-get update
-          #sudo apt-get install libboost-all-dev
-          # cd /usr/lib/x86_64-linux-gnu/
-          # ls
+      # - name: Set up Ubuntu
+      #   run: |
+      #     #echo "UBUNTU: $(cat /etc/os-release)"
+      #     #sudo apt-get update
+      #     #sudo apt-get install libboost-all-dev
+      #     # cd /usr/lib/x86_64-linux-gnu/
+      #     # ls
 
-          # from install_production.sh
-          sudo apt-get -y update
-          sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
-            autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
-            g++ swig cmake libeigen3-dev \
-            gconf-service libgconf-2-4 \
-            libxslt-dev libxml2-dev \
-            libyaml-dev sqlite3 libgmp-dev libreadline-dev libssl-dev \
-            postgresql postgresql-client postgresql-contrib libpq-dev \
-            imagemagick libmagic-dev libmagickcore-dev libmagickwand-dev \
-            libsass-dev \
-            libnspr4 libnss3 libpango1.0-0 libxss1  \
-            tzdata python-dev libsqlite3-dev libboost-all-dev p7zip-full \
-            ufw ranger htop \
-            inkscape pandoc \
-            xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable \
-            fonts-crosextra-caladea fonts-crosextra-carlito \
-            fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
-            fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
-            fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
-            --fix-missing
+      #     # from install_production.sh
+      #     sudo apt-get -y update
+      #     sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
+      #       autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
+      #       g++ swig cmake libeigen3-dev \
+      #       gconf-service libgconf-2-4 \
+      #       libxslt-dev libxml2-dev \
+      #       libyaml-dev sqlite3 libgmp-dev libreadline-dev libssl-dev \
+      #       postgresql postgresql-client postgresql-contrib libpq-dev \
+      #       imagemagick libmagic-dev libmagickcore-dev libmagickwand-dev \
+      #       libsass-dev \
+      #       libnspr4 libnss3 libpango1.0-0 libxss1  \
+      #       tzdata python-dev libsqlite3-dev libboost-all-dev p7zip-full \
+      #       ufw ranger htop \
+      #       inkscape pandoc \
+      #       xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable \
+      #       fonts-crosextra-caladea fonts-crosextra-carlito \
+      #       fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
+      #       fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
+      #       fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
+      #       --fix-missing
             
-            gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-            curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
-            echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
-            echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
+      #       gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+      #       curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
+      #       echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
+      #       echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
       # - name: Cache gems
       #   uses: actions/cache@v2
@@ -118,83 +122,65 @@ jobs:
         # with:
         #   ruby-version: 2.6.6
     
-      - name: Bundle Install & unit test ruby
-        env:
-          PG_DATABASE: chemotion_test
-          #PG_HOST: postgres
-          # PG_HOST: localhost
-          PG_USER: chemotion_test
-          PG_PASSWORD: 123456
-          RAILS_ENV: test
-        run: |
-          echo "PWD: $(pwd)"
-          #echo "LS: $(ls)"
+      # - name: Bundle Install & unit test ruby
+      #   env:
+      #     PG_DATABASE: chemotion_test
+      #     #PG_HOST: postgres
+      #     # PG_HOST: localhost
+      #     PG_USER: chemotion_test
+      #     PG_PASSWORD: 123456
+      #     RAILS_ENV: test
+      #   run: |
+      #     echo "PWD: $(pwd)"
+      #     #echo "LS: $(ls)"
 
-          source ~/.rvm/scripts/rvm && rvm install 2.6.6 
+      #     source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           
-          # download global gems
-          # cd ~/.rvm/gems/ruby-2.6.6
-          # wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
-          # tar -xf gems
-          # cd gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          # echo "L"
-          # ldd -v openbabel.so
+      #     # download global gems
+      #     # cd ~/.rvm/gems/ruby-2.6.6
+      #     # wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
+      #     # tar -xf gems
+      #     # cd gems/openbabel-gem-3e25548fd95c/openbabel/lib
+      #     # echo "L"
+      #     # ldd -v openbabel.so
 
-          # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
-          cd $GITHUB_WORKSPACE
-          rm -r vendor
+      #     # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
+      #     cd $GITHUB_WORKSPACE
+      #     rm -r vendor
 
-          # # TODO just download bundle
-          # # download vendor with project gems
-          wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          tar -xf vendor
+      #     # # TODO just download bundle
+      #     # # download vendor with project gems
+      #     wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+      #     tar -xf vendor
 
-          # for errors with openbabel.so:
-          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/:$LD_LIBRARY_PATH
+      #     # for errors with openbabel.so:
+      #     export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/:$LD_LIBRARY_PATH
 
-          echo "CHECK"
-          echo $LD_LIBRARY_PATH
-
-          #/usr/share/rvm/rubies/ruby-2.6.6/lib/libruby.so.2.6
-          # echo "RVM HOME"
-          # cd ~/.rvm/
-          rvm list
+      #     #/usr/share/rvm/rubies/ruby-2.6.6/lib/libruby.so.2.6
+      #     # echo "RVM HOME"
+      #     # cd ~/.rvm/
           
-          # # install poject gems
-          cd $GITHUB_WORKSPACE
-          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+      #     # # install poject gems
+      #     cd $GITHUB_WORKSPACE
+      #     source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
-          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          echo "LDD"
-          ldd openbabel.so
+      #     # cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+      #     # echo "LDD"
+      #     # ldd openbabel.so
 
-          # gem install openbabel
-          # gem info openbabel
-          # echo "CONFIGS"
-          # rvm list
-          # echo "HOME"
-          # cd ~/.rvm/gems/ruby-2.6.6/gems/openbabel-2.4.90.0/openbabel/lib
-          # ls -la
-          # echo "LDD"
-          # ldd -v openbabel.so
-          # gems/ruby-2.6.6/bundler/gems
-          # gem install libruby
-          # gem info libruby
-          # echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
-          # #echo "COUNT GEMS: $(find vendor/bundle -type f | wc -l)"
-          # 
-          # echo "PWD: $(pwd)"
-          # echo "BUNDLE: $(bundle -v)"
-          # echo "RAILS: $(rails -v)"
-          # echo "RUBY: $(ruby -v)"
-          # cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          # # echo "LS openbabel lib"
-          # # ls -la
-          # # echo "LDD"
-          # # ldd -v libruby.so.2.6
+      #     # gem install openbabel
+      #     # gem info openbabel
+      #     # echo "CONFIGS"
+      #     # rvm list
+      #     # echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
+      #     # 
+      #     # echo "PWD: $(pwd)"
+      #     # echo "BUNDLE: $(bundle -v)"
+      #     # echo "RAILS: $(rails -v)"
+      #     # echo "RUBY: $(ruby -v)"
            
-          cd $GITHUB_WORKSPACE
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
+      #     cd $GITHUB_WORKSPACE
+      #     source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
       # - name: unit test ruby
