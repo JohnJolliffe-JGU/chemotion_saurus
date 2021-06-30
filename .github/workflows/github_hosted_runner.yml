@@ -101,7 +101,7 @@ jobs:
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
         
-           sudo -u pg_ctlcluster 12 main start
+           sudo -u postgres pg_ctlcluster 12 main start
       
       - name: log
         run: |
