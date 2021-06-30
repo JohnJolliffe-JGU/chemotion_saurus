@@ -100,11 +100,9 @@ jobs:
             --fix-missing
             
             gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-            # TODO
-            #curl -sSL https://get.rvm.io | bash -s stable \
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
-            && echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
-            && echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
+            echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
+            echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
       # - name: Cache gems
       #   uses: actions/cache@v2
