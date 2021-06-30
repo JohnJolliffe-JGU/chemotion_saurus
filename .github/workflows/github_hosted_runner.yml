@@ -139,7 +139,6 @@ jobs:
           # cd gems/openbabel-gem-3e25548fd95c/openbabel/lib
           # echo "L"
           # ldd -v openbabel.so
-          #ls
 
           # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
           cd $GITHUB_WORKSPACE
@@ -150,14 +149,23 @@ jobs:
           wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
           tar -xf vendor
 
+          # for errors with openbabel.so:
           export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/:$LD_LIBRARY_PATH
-          
+
+          echot "CHECK"
+          echo $LD_LIBRARY_PATH
+
           cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           echo "LDD"
           ldd openbabel.so
+
+          #/usr/share/rvm/rubies/ruby-2.6.6/lib/libruby.so.2.6
+          echo "RVM HOME"
+          cd ~/.rvm/
+          ls
           
           # # install poject gems
-          # source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
 
           # gem install openbabel
           # gem info openbabel
@@ -183,8 +191,8 @@ jobs:
           # # ls -la
           # # echo "LDD"
           # # ldd -v libruby.so.2.6
-          # 
-          # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
+           
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
       # - name: unit test ruby
