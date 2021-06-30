@@ -99,7 +99,7 @@ jobs:
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
         
-        pg_ctlcluster 12 main start
+          pg_ctlcluster 12 main start
       
       - name: log
         run: |
