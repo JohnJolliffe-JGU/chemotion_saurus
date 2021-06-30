@@ -112,7 +112,6 @@ jobs:
       - name: Bundle Install & unit test ruby
         env:
           PG_DATABASE: chemotion_test
-          #PG_HOST: postgres
           PG_HOST: localhost
           PG_USER: chemotion_test
           PG_PASSWORD: 123456
@@ -167,6 +166,7 @@ jobs:
           # echo "RUBY: $(ruby -v)"
            
           cd $GITHUB_WORKSPACE
+          sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
           
 
