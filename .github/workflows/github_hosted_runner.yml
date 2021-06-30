@@ -121,7 +121,7 @@ jobs:
       - name: Bundle Install & unit test ruby
         env:
           PG_DATABASE: chemotion_test
-          PG_HOST: postgres
+          #PG_HOST: postgres
           # PG_HOST: localhost
           PG_USER: chemotion_test
           PG_PASSWORD: 123456
