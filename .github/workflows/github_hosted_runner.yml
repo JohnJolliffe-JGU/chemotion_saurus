@@ -63,7 +63,6 @@ jobs:
             wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
             # postgres user: ERROR
             #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/zQgEiZYXenTxKXY/download
-            echo "CONFIG FILES: $(ls)"
 
       # - uses: actions/setup-node@v1
       #   with:
@@ -174,7 +173,8 @@ jobs:
  
           psql -d postgresql://postgres:postgres@localhost/postgres -c " CREATE DATABASE chemotion_test OWNER chemotion_test;"
 
-          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+          # TODO
+          # psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE #EXTENSION IF NOT EXISTS "uuid-ossp";'
 
           psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
 
