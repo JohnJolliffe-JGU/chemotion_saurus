@@ -87,7 +87,6 @@ jobs:
             gconf-service libgconf-2-4 \
             libxslt-dev libxml2-dev \
             libyaml-dev sqlite3 libgmp-dev libreadline-dev libssl-dev \
-            # postgresql postgresql-client postgresql-contrib libpq-dev \
             imagemagick libmagic-dev libmagickcore-dev libmagickwand-dev \
             libsass-dev \
             libnspr4 libnss3 libpango1.0-0 libxss1  \
