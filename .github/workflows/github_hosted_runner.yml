@@ -144,7 +144,7 @@ jobs:
 
           # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
           cd $GITHUB_WORKSPACE
-          #rm -r vendor
+          rm -r vendor
 
           # # TODO just download bundle
           # # download vendor with project gems
