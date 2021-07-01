@@ -144,12 +144,12 @@ jobs:
 
           # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
           cd $GITHUB_WORKSPACE
-          rm -r vendor
+          #rm -r vendor
 
           # # TODO just download bundle
           # # download vendor with project gems
-          wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          tar -xf vendor
+          # wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+          # tar -xf vendor
 
           # for errors with openbabel.so:
           export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/:$LD_LIBRARY_PATH
@@ -160,22 +160,7 @@ jobs:
           
           # # install poject gems
           cd $GITHUB_WORKSPACE
-          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
-
-          # cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          # echo "LDD"
-          # ldd openbabel.so
-
-          # gem install openbabel
-          # gem info openbabel
-          # echo "CONFIGS"
-          # rvm list
-          # echo "SIZE BUNDLE: $(du -bsh vendor/bundle)"
-          # 
-          # echo "PWD: $(pwd)"
-          # echo "BUNDLE: $(bundle -v)"
-          # echo "RAILS: $(rails -v)"
-          # echo "RUBY: $(ruby -v)"
+          #source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
            
           cd $GITHUB_WORKSPACE
           sudo apt-get -y install postgresql postgresql-client postgresql-contrib libpq-dev
@@ -184,7 +169,8 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main status
           sudo netstat -nlp | grep 5432
           docker ps -a
-          psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
+          psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
+          #psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
           #sudo -u postgres psql
           \du
           \l
