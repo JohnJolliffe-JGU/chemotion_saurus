@@ -16,19 +16,19 @@ jobs:
     runs-on: ubuntu-latest
     #runs-on: ubuntu-18.04
 
-    # services:
-    #   postgres:
-    #     image: postgres:12-alpine
-    #     ports:
-    #       - 5432:5432
-    #     # ports: ["5432:5432"]
-    #     env:
-    #       POSTGRES_PASSWORD: postgres
-    #     options: >-
-    #       --health-cmd pg_isready 
-    #       --health-interval 10s 
-    #       --health-timeout 5s 
-    #       --health-retries 5
+    services:
+      postgres:
+        image: postgres:12-alpine
+        ports:
+          - 5432:5432
+        # ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
 
     # steps:
     #   - name: check postgres
