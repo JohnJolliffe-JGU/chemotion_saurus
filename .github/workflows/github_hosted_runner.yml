@@ -165,12 +165,14 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main status
           sudo netstat -nlp | grep 5432
           #docker ps -a
+          echo "PSQL"
           psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
           #psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
 
           #psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
           #sudo -u postgres psql
           #sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
+          echo "RAKE"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
 
       # - name: unit test ruby
