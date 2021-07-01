@@ -107,9 +107,9 @@ jobs:
         
           #  sudo -u postgres pg_ctlcluster 12 main start
       
-      - name: log
-        run: |
-          cat /var/log/postgresql/postgresql-12-main.log
+      # - name: log
+      #   run: |
+      #     cat /var/log/postgresql/postgresql-12-main.log
 
       - name: Cache gems
         uses: actions/cache@v2
