@@ -105,8 +105,6 @@ jobs:
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
-        
-          #  sudo -u postgres pg_ctlcluster 12 main start
       
       # - name: log
       #   run: |
@@ -186,7 +184,7 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main status
           sudo netstat -nlp | grep 5432
           docker ps -a
-          psql -h localhost -d postgres_db -U postgres_user -c 'SELECT 1;'
+          psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
           #sudo -u postgres psql
           \du
           \l
