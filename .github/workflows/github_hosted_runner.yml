@@ -166,9 +166,10 @@ jobs:
           sudo netstat -nlp | grep 5432
           #docker ps -a
           echo "PSQL"
+          psql -d postgresql://postgres@localhost/postgres -c "\du"
           #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
-          psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
-          psql -c "\du"
+          # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
+          # psql -c "\du"
 
           #psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
           #sudo -u postgres psql
