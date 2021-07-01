@@ -23,7 +23,7 @@ jobs:
           - 5432:5432
         # ports: ["5432:5432"]
         env:
-          POSTGRES_PASSWORD: 123456
+          POSTGRES_PASSWORD: postgres
         options: >-
           --health-cmd pg_isready 
           --health-interval 10s 
@@ -83,7 +83,7 @@ jobs:
           # ls
 
           # from install_production.sh
-          sudo apt-get -y update
+          sudo apt-get -y update -qq > /dev/null
           sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
             autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
             g++ swig cmake libeigen3-dev \
@@ -102,7 +102,7 @@ jobs:
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
             net-tools \
-            --fix-missing
+            --fix-missing -qq > /dev/null
             
             gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
