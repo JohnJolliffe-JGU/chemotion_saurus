@@ -23,7 +23,7 @@ jobs:
           - 5432:5432
         # ports: ["5432:5432"]
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: 123456
         options: >-
           --health-cmd pg_isready 
           --health-interval 10s 
@@ -61,9 +61,9 @@ jobs:
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
             # chemotion_test user:
-            #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
-            # postgres user:
-            wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/zQgEiZYXenTxKXY/download
+            wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
+            # postgres user: ERROR
+            #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/zQgEiZYXenTxKXY/download
             echo "CONFIG FILES: $(ls)"
 
       # - uses: actions/setup-node@v1
@@ -125,10 +125,10 @@ jobs:
     
       - name: Bundle Install & unit test ruby
         env:
-          PG_DATABASE: postgres
+          PG_DATABASE: chemotion_test
           PG_HOST: localhost
-          PG_USER: postgres
-          PG_PASSWORD: postgres
+          PG_USER: chemotion_test
+          PG_PASSWORD: 123456
           RAILS_ENV: test
           POSTGRES_PORT: 5432
         run: |
@@ -170,6 +170,15 @@ jobs:
           #docker ps -a
           echo "PSQL"
           psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
+
+          psql -c " CREATE ROLE chemotion_test LOGIN CREATEDB NOSUPERUSER"
+ 
+          psql -c " CREATE DATABASE chemotion_test OWNER chemotion_test;"
+
+          psql -d chemotion_test  -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+
+          psql -c "\du"
+
           #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
           # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
           # psql -c "\du"
