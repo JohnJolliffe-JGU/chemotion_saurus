@@ -16,19 +16,19 @@ jobs:
     runs-on: ubuntu-latest
     #runs-on: ubuntu-18.04
 
-    services:
-      postgres:
-        image: postgres:12
-        ports:
-          - 5432:5432
-        # ports: ["5432:5432"]
-        env:
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 5
+    # services:
+    #   postgres:
+    #     image: postgres:12
+    #     ports:
+    #       - 5432:5432
+    #     # ports: ["5432:5432"]
+    #     env:
+    #       POSTGRES_PASSWORD: postgres
+    #     options: >-
+    #       --health-cmd pg_isready 
+    #       --health-interval 10s 
+    #       --health-timeout 5s 
+    #       --health-retries 5
 
     # steps:
     #   - name: check postgres
@@ -98,6 +98,7 @@ jobs:
             fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
+            postgresql postgresql-client postgresql-contrib libpq-dev \
             net-tools \
             --fix-missing
             
@@ -124,7 +125,7 @@ jobs:
     
       - name: Bundle Install & unit test ruby
         env:
-          PG_DATABASE: chemotion_test
+          PG_DATABASE: postgres
           PG_HOST: localhost
           PG_USER: postgres
           PG_PASSWORD: postgres
@@ -181,7 +182,7 @@ jobs:
            
           cd $GITHUB_WORKSPACE
           echo "POSTGRES"
-          #netstat -tulnp
+          netstat -nlp | grep 5432
           # sudo -u postgres pg_ctlcluster 12 main status
           sudo -u postgres psql
           \du
