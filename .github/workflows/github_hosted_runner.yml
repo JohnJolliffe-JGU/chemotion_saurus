@@ -172,8 +172,6 @@ jobs:
           psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
           #psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
           #sudo -u postgres psql
-          \du
-          \l
           #sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
 
