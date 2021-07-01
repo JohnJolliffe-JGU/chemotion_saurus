@@ -182,12 +182,12 @@ jobs:
            
           cd $GITHUB_WORKSPACE
           echo "POSTGRES"
-          netstat -nlp | grep 5432
+          sudo netstat -nlp | grep 5432
           # sudo -u postgres pg_ctlcluster 12 main status
           sudo -u postgres psql
           \du
           \l
-          sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
+          #sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
 
       # - name: unit test ruby
