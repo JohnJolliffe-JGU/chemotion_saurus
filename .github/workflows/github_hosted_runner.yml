@@ -21,7 +21,6 @@ jobs:
         image: postgres
         ports:
           - 5432:5432
-        # ports: ["5432:5432"]
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
@@ -166,18 +165,18 @@ jobs:
           echo "POSTGRES"
           sudo -u postgres pg_ctlcluster 12 main start
           sudo -u postgres pg_ctlcluster 12 main status
-          sudo netstat -nlp | grep 5432
+          #sudo netstat -nlp | grep 5432
           #docker ps -a
           echo "PSQL"
           psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
 
-          psql -c " CREATE ROLE chemotion_test LOGIN CREATEDB NOSUPERUSER"
+          psql -d postgresql://postgres:postgres@localhost/postgres -c " CREATE ROLE chemotion_test LOGIN CREATEDB NOSUPERUSER"
  
-          psql -c " CREATE DATABASE chemotion_test OWNER chemotion_test;"
+          psql -d postgresql://postgres:postgres@localhost/postgres -c " CREATE DATABASE chemotion_test OWNER chemotion_test;"
 
-          psql -d chemotion_test  -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+          psql -d chemotion_test -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 
-          psql -c "\du"
+          psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
 
           #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
           # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
