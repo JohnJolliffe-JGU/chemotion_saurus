@@ -23,7 +23,7 @@ jobs:
           - 5432:5432
         # ports: ["5432:5432"]
         env:
-          POSTGRES_PASSWORD: 123456
+          POSTGRES_PASSWORD: postgres
         options: >-
           --health-cmd pg_isready 
           --health-interval 10s 
@@ -126,8 +126,8 @@ jobs:
         env:
           PG_DATABASE: chemotion_test
           PG_HOST: localhost
-          PG_USER: chemotion_test
-          PG_PASSWORD: 123456
+          PG_USER: postgres
+          PG_PASSWORD: postgres
           RAILS_ENV: test
           POSTGRES_PORT: 5432
         run: |
