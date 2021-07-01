@@ -23,7 +23,7 @@ jobs:
           - 5432:5432
         # ports: ["5432:5432"]
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: 123456
         options: >-
           --health-cmd pg_isready 
           --health-interval 10s 
@@ -122,10 +122,10 @@ jobs:
     
       - name: Bundle Install & unit test ruby
         env:
-          PG_DATABASE: postgres
+          PG_DATABASE: chemotion_test
           PG_HOST: localhost
-          PG_USER: postgres
-          PG_PASSWORD: postgres
+          PG_USER: chemotion_test
+          PG_PASSWORD: 123456
           RAILS_ENV: test
           POSTGRES_PORT: 5432
         run: |
@@ -148,19 +148,15 @@ jobs:
 
           # # TODO just download bundle
           # # download vendor with project gems
-          # wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          # tar -xf vendor
+          wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+          tar -xf vendor
 
           # for errors with openbabel.so:
           export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/:$LD_LIBRARY_PATH
-
-          #/usr/share/rvm/rubies/ruby-2.6.6/lib/libruby.so.2.6
-          # echo "RVM HOME"
-          # cd ~/.rvm/
           
           # # install poject gems
           cd $GITHUB_WORKSPACE
-          #source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
            
           cd $GITHUB_WORKSPACE
           sudo apt-get -y install postgresql postgresql-client postgresql-contrib libpq-dev
@@ -168,8 +164,10 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main start
           sudo -u postgres pg_ctlcluster 12 main status
           sudo netstat -nlp | grep 5432
-          docker ps -a
-          psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
+          #docker ps -a
+          psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
+          #psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
+
           #psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
           #sudo -u postgres psql
           #sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
