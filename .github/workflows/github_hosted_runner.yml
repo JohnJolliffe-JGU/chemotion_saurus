@@ -175,7 +175,7 @@ jobs:
           psql -d postgresql://postgres:postgres@localhost/postgres -c "ALTER USER chemotion_test PASSWORD '123456';"
 
           # TODO
-          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE #EXTENSION IF NOT EXISTS "uuid-ossp";'
+          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 
           psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
 
