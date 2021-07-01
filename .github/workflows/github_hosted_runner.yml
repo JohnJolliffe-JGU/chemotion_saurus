@@ -98,6 +98,7 @@ jobs:
             fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
+            net-tools \
             --fix-missing
             
             gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
@@ -179,7 +180,8 @@ jobs:
           # echo "RUBY: $(ruby -v)"
            
           cd $GITHUB_WORKSPACE
-          # echo "POSTGRES"
+          echo "PORTS"
+          netstat -tulnp
           # sudo -u postgres pg_ctlcluster 12 main status
           #sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
