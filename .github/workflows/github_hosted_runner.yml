@@ -182,12 +182,12 @@ jobs:
           cd $GITHUB_WORKSPACE
           sudo apt-get -y install postgresql postgresql-client postgresql-contrib libpq-dev
           echo "POSTGRES"
-          sudo netstat -nlp | grep 5432
           sudo -u postgres pg_ctlcluster 12 main start
           sudo -u postgres pg_ctlcluster 12 main status
+          sudo netstat -nlp | grep 5432
           docker ps -a
-          psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'
-          sudo -u postgres psql
+          psql -h localhost -d postgres_db -U postgres_user -c 'SELECT 1;'
+          #sudo -u postgres psql
           \du
           \l
           #sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
