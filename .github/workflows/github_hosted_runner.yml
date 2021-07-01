@@ -23,7 +23,7 @@ jobs:
           - 5432:5432
         # ports: ["5432:5432"]
         env:
-          POSTGRES_PASSWORD: 123456
+          POSTGRES_PASSWORD: postgres
         options: >-
           --health-cmd pg_isready 
           --health-interval 10s 
@@ -122,10 +122,10 @@ jobs:
     
       - name: Bundle Install & unit test ruby
         env:
-          PG_DATABASE: chemotion_test
+          PG_DATABASE: postgres
           PG_HOST: localhost
-          PG_USER: chemotion_test
-          PG_PASSWORD: 123456
+          PG_USER: postgres
+          PG_PASSWORD: postgres
           RAILS_ENV: test
           POSTGRES_PORT: 5432
         run: |
@@ -166,8 +166,8 @@ jobs:
           sudo netstat -nlp | grep 5432
           #docker ps -a
           echo "PSQL"
-          psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
-          #psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
+          #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
+          psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
 
           #psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
           #sudo -u postgres psql
