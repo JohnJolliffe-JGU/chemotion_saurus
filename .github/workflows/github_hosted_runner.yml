@@ -18,7 +18,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:12-alpine
+        image: postgres
         ports:
           - 5432:5432
         # ports: ["5432:5432"]
@@ -98,7 +98,6 @@ jobs:
             fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
-            postgresql postgresql-client postgresql-contrib libpq-dev \
             net-tools \
             --fix-missing
             
@@ -181,11 +180,13 @@ jobs:
           # echo "RUBY: $(ruby -v)"
            
           cd $GITHUB_WORKSPACE
+          sudo apt-get -y install postgresql postgresql-client postgresql-contrib libpq-dev
           echo "POSTGRES"
           sudo netstat -nlp | grep 5432
           sudo -u postgres pg_ctlcluster 12 main start
           sudo -u postgres pg_ctlcluster 12 main status
           docker ps -a
+          psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'
           sudo -u postgres psql
           \du
           \l
