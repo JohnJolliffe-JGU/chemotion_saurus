@@ -60,7 +60,10 @@ jobs:
             touch datacollectors.yml
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
-            wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
+            # chemotion_test user:
+            #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
+            # postgres user:
+            wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/zQgEiZYXenTxKXY/download
             echo "CONFIG FILES: $(ls)"
 
       # - uses: actions/setup-node@v1
@@ -156,7 +159,7 @@ jobs:
           
           # # install poject gems
           cd $GITHUB_WORKSPACE
-          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle
+          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle --quiet
            
           cd $GITHUB_WORKSPACE
           sudo apt-get -y install postgresql postgresql-client postgresql-contrib libpq-dev
@@ -175,7 +178,7 @@ jobs:
           #sudo -u postgres psql
           #sudo -u postgres psql -c "ALTER USER chemotion_test PASSWORD '123456';"
           echo "RAKE"
-          # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare --trace
 
       # - name: unit test ruby
       #   env:
