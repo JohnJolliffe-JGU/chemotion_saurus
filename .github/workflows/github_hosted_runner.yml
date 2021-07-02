@@ -158,19 +158,26 @@ jobs:
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle --quiet
           gem install libruby
 
-          echo "LIBRUBY"
-          cd ~/.rvm/rubies/ruby-2.6.6/lib
-          ls
+          echo "OPENBABEL"
+          bundle info openbabel
+
+          # echo "LIBRUBY"
+          # cd ~/.rvm/rubies/ruby-2.6.6/lib
+          # ls
 
           # set environment variables for openbabel:
           # for errors with openbabel.so:
           export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/:$LD_LIBRARY_PATH
           export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
 
+          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          echo "LDD"
+          ldd openbabel.so
+
           cd $GITHUB_WORKSPACE
           echo "POSTGRES"
           sudo -u postgres pg_ctlcluster 12 main start
-          sudo -u postgres pg_ctlcluster 12 main status
+          #sudo -u postgres pg_ctlcluster 12 main status
           #sudo netstat -nlp | grep 5432
           #docker ps -a
           echo "PSQL"
@@ -180,14 +187,12 @@ jobs:
           psql -d postgresql://postgres:postgres@localhost/postgres -c "ALTER USER chemotion_test PASSWORD '123456';"
           psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 
-          psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
+          #psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
 
           #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
           # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
           # psql -c "\du"
 
-          #psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
-          #sudo -u postgres psql
           echo "RAKE"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb
           #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
