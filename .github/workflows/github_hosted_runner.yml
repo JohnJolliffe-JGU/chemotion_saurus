@@ -60,7 +60,7 @@ jobs:
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
             # chemotion_test no pw:
-            wget --no-verbose -O database.yml  https://bwsyncandshare.kit.edu/s/K7wZcFiekbaW569
+            wget --no-verbose -O database.yml  https://bwsyncandshare.kit.edu/s/K7wZcFiekbaW569/download
             # chemotion_test user:
             #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
             # postgres user: ERROR
