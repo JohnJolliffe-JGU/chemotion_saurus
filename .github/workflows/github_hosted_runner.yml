@@ -99,6 +99,7 @@ jobs:
             fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
+            postgresql postgresql-client postgresql-contrib libpq-dev
             net-tools \
             --fix-missing -qq > /dev/null
             
@@ -158,9 +159,9 @@ jobs:
           # # install poject gems
           cd $GITHUB_WORKSPACE
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle --quiet
+          gem install libruby
            
           cd $GITHUB_WORKSPACE
-          sudo apt-get -y install postgresql postgresql-client postgresql-contrib libpq-dev
           echo "POSTGRES"
           sudo -u postgres pg_ctlcluster 12 main start
           sudo -u postgres pg_ctlcluster 12 main status
@@ -186,8 +187,8 @@ jobs:
           #psql -h localhost -d postgres_db -U postgres_user -c --no-password 'SELECT 1;'
           #sudo -u postgres psql
           echo "RAKE"
-          #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/api/user_api_spec.rb
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb
+          #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
       # - name: unit test ruby
       #   env:
