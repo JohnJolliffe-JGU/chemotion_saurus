@@ -128,14 +128,15 @@ jobs:
           PG_HOST: localhost
           PG_USER: chemotion_test
           POSTGRES_PASSWORD: 123456
+          PG_PASSWORD: 123456
           RAILS_ENV: test
           POSTGRES_PORT: 5432
         run: |
           echo "ENV"
           echo $POSTGRES_PASSWORD
           printenv
-          #echo "PWD: $(pwd)"
-          #echo "LS: $(ls)"
+          echo "PG HBA: $(cat /etc/postgresql/12/main/pg_hba.conf)"
+          echo "PG IDENT: $(cat /etc/postgresql/12/main/pg_ident.conf)"
 
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           
@@ -159,8 +160,8 @@ jobs:
           # # install poject gems
           cd $GITHUB_WORKSPACE
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle --quiet
-          gem install libruby
-          gem install rails -v 4 --no-document
+          gem install libruby --no-document --quiet
+          gem install rails -v 4 --no-document --quiet
           echo "RAILS V"
           rails -v
 
