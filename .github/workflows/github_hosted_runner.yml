@@ -152,9 +152,6 @@ jobs:
           # # download vendor with project gems
           wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
           tar -xf vendor
-
-          # for errors with openbabel.so:
-          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/:$LD_LIBRARY_PATH
           
           # # install poject gems
           cd $GITHUB_WORKSPACE
@@ -162,9 +159,14 @@ jobs:
           gem install libruby
 
           echo "LIBRUBY"
-          cd ~/.rvm/rubies/ruby-2.6.6
+          cd ~/.rvm/rubies/ruby-2.6.6/lib
           ls
-           
+
+          # set environment variables for openbabel:
+          # for errors with openbabel.so:
+          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib/:$LD_LIBRARY_PATH
+          export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+
           cd $GITHUB_WORKSPACE
           echo "POSTGRES"
           sudo -u postgres pg_ctlcluster 12 main start
