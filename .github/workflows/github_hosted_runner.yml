@@ -59,8 +59,10 @@ jobs:
             touch datacollectors.yml
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
+            # chemotion_test no pw:
+            wget --no-verbose -O database.yml  https://bwsyncandshare.kit.edu/s/K7wZcFiekbaW569
             # chemotion_test user:
-            wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
+            #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
             # postgres user: ERROR
             #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/zQgEiZYXenTxKXY/download
 
@@ -219,7 +221,7 @@ jobs:
 
           #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
           # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
-          # psql -c "\du"
+          psql -d postgresql://chemotion_test@localhost/chemotion_test -c "\du"
 
           echo "RAKE"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test rspec spec/models/collections_sample_spec.rb
