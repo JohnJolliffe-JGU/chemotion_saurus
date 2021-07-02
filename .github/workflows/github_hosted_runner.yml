@@ -107,6 +107,8 @@ jobs:
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
+
+          
       
       # - name: log
       #   run: |
@@ -136,13 +138,14 @@ jobs:
           #printenv
           #echo "PG HBA: $(sudo cat /etc/postgresql/12/main/pg_hba.conf)"
           #echo "PG IDENT: $(sudo cat /etc/postgresql/12/main/pg_ident.conf)
-         
-          # cd /etc/postgresql/12/main/
-          # sudo rm pg_hba.conf
-          # # download pg_hba.conf
-          # wget --no-verbose https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
-          # ls
+          cd /etc/postgresql/12/main/
+          sudo rm pg_hba.conf
+          # download pg_hba.conf
+          wget --no-verbose https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
+          ls
+          sudo -u postgres pg_ctlcluster 12 main start
 
+          cd $GITHUB_WORKSPACE
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           
           # download global gems
@@ -188,7 +191,6 @@ jobs:
           ldd openbabel.so
 
           echo "POSTGRES"
-          sudo -u postgres pg_ctlcluster 12 main start
           sudo -u postgres pg_ctlcluster 12 main status
 
           cd $GITHUB_WORKSPACE
