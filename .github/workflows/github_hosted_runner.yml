@@ -195,6 +195,9 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main status
 
           cd $GITHUB_WORKSPACE
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
+
           echo "RAILS CONSOLE"
           echo "CHEMOTION"
           rails runner Chemotion::OpenBabelService
@@ -206,9 +209,11 @@ jobs:
 
           echo "PSQL"
           # nosuperuser?
-          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
+          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER"
+          # psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
           psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
-          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+          psql -d postgresql://chemotion_test@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+          # psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE #EXTENSION IF NOT EXISTS "uuid-ossp";'
 
           #psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
 
@@ -217,8 +222,6 @@ jobs:
           # psql -c "\du"
 
           echo "RAKE"
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
           source ~/.rvm/scripts/rvm && RAILS_ENV=test rspec spec/models/collections_sample_spec.rb
           echo "TEST LOG: $(cat log/test.log)"
           #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
