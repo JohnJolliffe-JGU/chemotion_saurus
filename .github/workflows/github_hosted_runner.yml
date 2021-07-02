@@ -82,7 +82,7 @@ jobs:
 
           # from install_production.sh
           sudo apt-get -y update -qq > /dev/null
-          sudo apt-get -y install ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
+          sudo apt-get -y install -qq ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
             autoconf automake bison libffi-dev libgdbm-dev libncurses5-dev openssh-server \
             g++ swig cmake libeigen3-dev \
             gconf-service libgconf-2-4 \
@@ -99,9 +99,9 @@ jobs:
             fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-liberation2 fonts-liberation \
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
-            postgresql postgresql-client postgresql-contrib libpq-dev
+            postgresql postgresql-client postgresql-contrib libpq-dev \
             net-tools \
-            --fix-missing -qq > /dev/null
+            --fix-missing
             
             gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
@@ -170,12 +170,8 @@ jobs:
           echo "PSQL"
 
           psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB NOSUPERUSER"
- 
           psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
-
           psql -d postgresql://postgres:postgres@localhost/postgres -c "ALTER USER chemotion_test PASSWORD '123456';"
-
-          # TODO
           psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c ' CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 
           psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
