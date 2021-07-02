@@ -140,8 +140,9 @@ jobs:
           #echo "PG IDENT: $(sudo cat /etc/postgresql/12/main/pg_ident.conf)
           cd /etc/postgresql/12/main/
           sudo rm pg_hba.conf
+          ls
           # download pg_hba.conf
-          wget --no-verbose -O pg_hba.conf https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
+          sudo wget --no-verbose -O pg_hba.conf https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
           ls
           sudo -u postgres pg_ctlcluster 12 main start
 
