@@ -132,12 +132,16 @@ jobs:
           RAILS_ENV: test
           POSTGRES_PORT: 5432
         run: |
-          echo "ENV"
-          echo $POSTGRES_PASSWORD
-          printenv
-          echo "PG HBA: $(sudo cat /etc/postgresql/12/main/pg_hba.conf)"
-          echo "PG IDENT: $(sudo cat /etc/postgresql/12/main/pg_ident.conf)
+          #echo "ENV"
+          #printenv
+          #echo "PG HBA: $(sudo cat /etc/postgresql/12/main/pg_hba.conf)"
+          #echo "PG IDENT: $(sudo cat /etc/postgresql/12/main/pg_ident.conf)
          
+          # cd /etc/postgresql/12/main/
+          # sudo rm pg_hba.conf
+          # # download pg_hba.conf
+          # wget --no-verbose https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
+          # ls
 
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           
@@ -183,6 +187,10 @@ jobs:
           echo "LDD"
           ldd openbabel.so
 
+          echo "POSTGRES"
+          sudo -u postgres pg_ctlcluster 12 main start
+          sudo -u postgres pg_ctlcluster 12 main status
+
           cd $GITHUB_WORKSPACE
           echo "RAILS CONSOLE"
           echo "CHEMOTION"
@@ -190,9 +198,6 @@ jobs:
           echo "OPENBABEL"
           rails runner OpenBabel::OBFingerprint
           
-          #echo "POSTGRES"
-          sudo -u postgres pg_ctlcluster 12 main start
-          #sudo -u postgres pg_ctlcluster 12 main status
           #sudo netstat -nlp | grep 5432
           #docker ps -a
 
