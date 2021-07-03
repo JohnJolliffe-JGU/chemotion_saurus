@@ -203,6 +203,9 @@ jobs:
           cd $GITHUB_WORKSPACE
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
           #gem install libruby --no-document --quiet
+          gem install rails -v 4 --no-document --quiet
+          # echo "RAILS V"
+          # rails -v
 
           echo "GEMS"
           bundle info openbabel
@@ -243,15 +246,6 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main status
 
           cd $GITHUB_WORKSPACE
-
-          gem install rails -v 4 --no-document --quiet
-          # echo "RAILS V"
-          # rails -v
-          echo "RAILS CONSOLE"
-          echo "CHEMOTION"
-          rails runner Chemotion::OpenBabelService
-          echo "OPENBABEL"
-          rails runner OpenBabel::OBFingerprint
           
           #sudo netstat -nlp | grep 5432
           #docker ps -a
@@ -274,6 +268,13 @@ jobs:
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare 
           # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
           # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
+
+          echo "RAILS CONSOLE"
+          echo "CHEMOTION"
+          rails runner Chemotion::OpenBabelService
+          echo "OPENBABEL"
+          rails runner OpenBabel::OBFingerprint
+
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rspec spec/models/collections_sample_spec.rb
           #echo "TEST LOG: $(cat log/test.log)"
           
