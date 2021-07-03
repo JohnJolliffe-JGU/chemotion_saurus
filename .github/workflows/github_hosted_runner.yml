@@ -197,8 +197,8 @@ jobs:
           source ~/rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet
           #gem install libruby --no-document --quiet
           #gem install rails -v 4 --no-document --quiet
-          echo "RAILS V"
-          rails -v
+          # echo "RAILS V"
+          # rails -v
 
           echo "GEMS"
           bundle info openbabel
