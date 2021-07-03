@@ -67,16 +67,15 @@ jobs:
       
       - name: Download
         run: |
-            cd ~
-            wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
-            tar -xf rvm
-            echo "RVM DIR"
-            ls -la
+            cd  $GITHUB_WORKSPACE
+            #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
+            wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
+            tar -xf bundle
 
             cd $GITHUB_WORKSPACE
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
-            echo "NODE MODULES"
+            echo "DOWNLOADS"
             pwd
             ls
 
@@ -119,9 +118,10 @@ jobs:
             --fix-missing
             
             gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-            curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --path ~/rvm
-            echo "source ~/rvm/scripts/rvm" >> ~/.bashrc \
-            # echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
+            curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
+            #curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 
+            #echo "source ~/rvm/scripts/rvm" >> ~/.bashrc \
+            echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
       
       - name: log
@@ -146,6 +146,14 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Cache bundle
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/bundle
+          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-bundle-
     
       - name: Bundle Install & unit test ruby
         env:
@@ -173,7 +181,7 @@ jobs:
           # npm install -g npm@7.11.1
           # echo "NPM: $(npm -v)"
           # npm i
-          source ~/rvm/scripts/rvm && rvm install 2.6.6 
+          source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           
           # download global gems
           # cd ~/rvm/gems/ruby-2.6.6
@@ -194,7 +202,7 @@ jobs:
           
           # # install poject gems
           cd $GITHUB_WORKSPACE
-          source ~/rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet
+          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
           #gem install libruby --no-document --quiet
           #gem install rails -v 4 --no-document --quiet
           # echo "RAILS V"
@@ -210,11 +218,11 @@ jobs:
 
           # set environment variables for openbabel
           # for errors with openbabel.so:
-          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
           
           export BABEL_LIBDIR=/home/runner/rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
 
-          cd vendor/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           echo "LDD"
           ldd openbabel.so
 
@@ -222,8 +230,8 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main status
 
           cd $GITHUB_WORKSPACE
-          source ~/rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
-          source ~/rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
 
           # echo "RAILS CONSOLE"
           # echo "CHEMOTION"
@@ -248,8 +256,8 @@ jobs:
           # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
           psql -d postgresql://chemotion_test@localhost/chemotion_test -c "\du"
 
-          echo "RAKE"
-          source ~/rvm/scripts/rvm && RAILS_ENV=test rspec spec/models/collections_sample_spec.rb
+          echo "RSPEC"
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test rspec spec/models/collections_sample_spec.rb
           #echo "TEST LOG: $(cat log/test.log)"
           #source ~/rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
