@@ -70,10 +70,14 @@ jobs:
             cd ~
             wget --no-verbose -O .rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
             tar -xf .rvm
+            echo "RVM DIR"
+            ls
 
             cd $GITHUB_WORKSPACE
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
+            echo "NODE MODULES"
+            ls
 
       # - uses: actions/setup-node@v1
       #   with:
