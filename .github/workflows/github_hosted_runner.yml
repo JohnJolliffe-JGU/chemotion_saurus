@@ -229,8 +229,6 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main status
 
           cd $GITHUB_WORKSPACE
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
 
           # echo "RAILS CONSOLE"
           # echo "CHEMOTION"
@@ -256,9 +254,13 @@ jobs:
           psql -d postgresql://chemotion_test@localhost/chemotion_test -c "\du"
 
           echo "RSPEC"
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare 
+          # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
+          # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
           source ~/.rvm/scripts/rvm && RAILS_ENV=test rspec spec/models/collections_sample_spec.rb
           #echo "TEST LOG: $(cat log/test.log)"
-          #source ~/rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+          
+          #bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
       # - name: unit test ruby
       #   env:
