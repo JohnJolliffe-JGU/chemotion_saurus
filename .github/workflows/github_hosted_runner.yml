@@ -48,22 +48,22 @@ jobs:
             touch datacollectors.yml
             cp -f profile_default.yml.example profile_default.yml
             touch klasses.json
-            # chemotion_test no pw:
-            wget --no-verbose -O database.yml  https://bwsyncandshare.kit.edu/s/K7wZcFiekbaW569/download
             # chemotion_test user:
-            #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
+            wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
+            # chemotion_test no pw:
+            #wget --no-verbose -O database.yml  https://bwsyncandshare.kit.edu/s/K7wZcFiekbaW569/download
             # postgres user: ERROR
             #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/zQgEiZYXenTxKXY/download
 
-      - name: Cache rvm
-        uses: actions/cache@v2
-        with:
-          #path: /home/runner/.rvm/gems/ruby-2.6.6
-          path: ~/rvm
-          #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
-          key: ${{ runner.os }}-rvm-${{ hashFiles('**/rvm/VERSION') }} # cache for vendor/bundle
-          restore-keys: |
-            ${{ runner.os }}-rvm
+      # - name: Cache rvm
+      #   uses: actions/cache@v2
+      #   with:
+      #     #path: /home/runner/.rvm/gems/ruby-2.6.6
+      #     path: ~/rvm
+      #     #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
+      #     key: ${{ runner.os }}-rvm-${{ hashFiles('**/rvm/VERSION') }} # cache for vendor/bundle
+      #     restore-keys: |
+      #       ${{ runner.os }}-rvm
       
       - name: Download
         run: |
@@ -72,7 +72,6 @@ jobs:
             wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
             tar -xf bundle
 
-            cd $GITHUB_WORKSPACE
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
             echo "DOWNLOADS"
