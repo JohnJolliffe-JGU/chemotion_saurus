@@ -203,9 +203,6 @@ jobs:
           cd $GITHUB_WORKSPACE
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
           #gem install libruby --no-document --quiet
-          #gem install rails -v 4 --no-document --quiet
-          # echo "RAILS V"
-          # rails -v
 
           echo "GEMS"
           bundle info openbabel
@@ -247,11 +244,14 @@ jobs:
 
           cd $GITHUB_WORKSPACE
 
-          # echo "RAILS CONSOLE"
-          # echo "CHEMOTION"
-          # rails runner Chemotion::OpenBabelService
-          # echo "OPENBABEL"
-          # rails runner OpenBabel::OBFingerprint
+          gem install rails -v 4 --no-document --quiet
+          # echo "RAILS V"
+          # rails -v
+          echo "RAILS CONSOLE"
+          echo "CHEMOTION"
+          rails runner Chemotion::OpenBabelService
+          echo "OPENBABEL"
+          rails runner OpenBabel::OBFingerprint
           
           #sudo netstat -nlp | grep 5432
           #docker ps -a
