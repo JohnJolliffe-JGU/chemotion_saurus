@@ -28,17 +28,6 @@ jobs:
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 5
-
-    # steps:
-    #   - name: check postgres
-    #     env:
-    #       # The hostname used to communicate with the PostgreSQL service container
-    #       # localhost because actions are directly running on a GitHub machine
-    #       POSTGRES_HOST: localhost
-    #       PG_PASSWORD: 123456
-    #       POSTGRES_PORT: 5432
-    #     run: |
-    #         sudo -u postgres psql
       
       # first checkout, before working dir is removed
     steps:
@@ -65,6 +54,16 @@ jobs:
             #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
             # postgres user: ERROR
             #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/zQgEiZYXenTxKXY/download
+      
+      - name: Download
+        run: |
+            cd ~
+            wget --no-verbose -O .rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
+            tar -xf .rvm
+
+            cd $GITHUB_WORKSPACE
+            wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/downlaod
+            tar -xf node_modules
 
       # - uses: actions/setup-node@v1
       #   with:
@@ -77,7 +76,6 @@ jobs:
       - name: Set up Ubuntu
         run: |
           #echo "UBUNTU: $(cat /etc/os-release)"
-          #sudo apt-get update
           #sudo apt-get install libboost-all-dev
           # cd /usr/lib/x86_64-linux-gnu/
           # ls
@@ -109,22 +107,21 @@ jobs:
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
-
-          
       
-      # - name: log
-      #   run: |
-      #     cat /var/log/postgresql/postgresql-12-main.log
+      - name: log
+        run: |
+          cat /etc/postgresql/12/main/postgresql.conf
+          #cat /var/log/postgresql/postgresql-12-main.log
 
       - name: Cache gems
         uses: actions/cache@v2
         with:
           #path: /home/runner/.rvm/gems/ruby-2.6.6
-          path: vendor/bundle
+          path: bundle
           #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
-          key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile') }} # cache for vendor/bundle
+          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }} # cache for vendor/bundle
           restore-keys: |
-            ${{ runner.os }}-gems-v2
+            ${{ runner.os }}-bundle
     
       - name: Bundle Install & unit test ruby
         env:
@@ -140,15 +137,18 @@ jobs:
           #printenv
           #echo "PG HBA: $(sudo cat /etc/postgresql/12/main/pg_hba.conf)"
           #echo "PG IDENT: $(sudo cat /etc/postgresql/12/main/pg_ident.conf)
-          cd /etc/postgresql/12/main/
-          sudo rm pg_hba.conf
-          ls
-          # download pg_hba.conf
-          sudo wget --no-verbose -O pg_hba.conf https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
-          ls
+          # cd /etc/postgresql/12/main/
+          # sudo rm pg_hba.conf
+          # ls
+          # # download pg_hba.conf
+          # sudo wget --no-verbose -O pg_hba.conf https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
+          # ls
           sudo -u postgres pg_ctlcluster 12 main start
 
           cd $GITHUB_WORKSPACE
+          npm install -g npm@7.11.1
+          echo "NPM: $(npm -v)"
+          npm i
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           
           # download global gems
@@ -160,24 +160,25 @@ jobs:
           # ldd -v openbabel.so
 
           # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
-          cd $GITHUB_WORKSPACE
-          rm -r vendor
+          # cd $GITHUB_WORKSPACE
+          # rm -r vendor
 
           # # TODO just download bundle
           # # download vendor with project gems
-          wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          tar -xf vendor
+          # wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+          # tar -xf vendor
           
           # # install poject gems
           cd $GITHUB_WORKSPACE
-          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index --path vendor/bundle --quiet
-          gem install libruby --no-document --quiet
-          gem install rails -v 4 --no-document --quiet
+          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet
+          #gem install libruby --no-document --quiet
+          #gem install rails -v 4 --no-document --quiet
           echo "RAILS V"
           rails -v
 
-          echo "OPENBABEL"
+          echo "GEMS"
           bundle info openbabel
+          bundle info json
 
           # echo "LIBRUBY"
           # cd ~/.rvm/rubies/ruby-2.6.6/lib
@@ -200,11 +201,11 @@ jobs:
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
 
-          echo "RAILS CONSOLE"
-          echo "CHEMOTION"
-          rails runner Chemotion::OpenBabelService
-          echo "OPENBABEL"
-          rails runner OpenBabel::OBFingerprint
+          # echo "RAILS CONSOLE"
+          # echo "CHEMOTION"
+          # rails runner Chemotion::OpenBabelService
+          # echo "OPENBABEL"
+          # rails runner OpenBabel::OBFingerprint
           
           #sudo netstat -nlp | grep 5432
           #docker ps -a
@@ -225,7 +226,7 @@ jobs:
 
           echo "RAKE"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test rspec spec/models/collections_sample_spec.rb
-          echo "TEST LOG: $(cat log/test.log)"
+          #echo "TEST LOG: $(cat log/test.log)"
           #source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
       # - name: unit test ruby
