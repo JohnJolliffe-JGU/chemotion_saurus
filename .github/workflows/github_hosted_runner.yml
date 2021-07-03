@@ -233,10 +233,10 @@ jobs:
 
           # recreate symbolic links
           cd ../../../nmr_sim-e2f91776aafd
-          sudo rm -r node_modules
-          sudo rm package.json
-          sudo ln -s node_modules ${{ github.workspace }}/node_modules
-          sudo ln -s package.json ${{ github.workspace }}/package.json
+          # sudo rm -r node_modules
+          # sudo rm package.json
+          sudo ln -sfn node_modules ${{ github.workspace }}/node_modules
+          sudo ln -sfn package.json ${{ github.workspace }}/package.json
           echo "NMR_SIM"
           ls -la
 
