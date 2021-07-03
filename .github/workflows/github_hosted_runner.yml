@@ -218,8 +218,10 @@ jobs:
           # set environment variables for openbabel
           # for errors with openbabel.so:
           export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+          echo "LD_LIBRARY_PATH"
+          echo $LD_LIBRARY_PATH
           
-          export BABEL_LIBDIR=/home/runner/rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+          export BABEL_LIBDIR=/home/runner/rvm/rubies/ruby-2.6.6/lib/$BABEL_LIBDIR
           echo "BABEL_LIBDIR"
           echo $BABEL_LIBDIR
           echo "obabel..."
@@ -231,8 +233,8 @@ jobs:
 
           # recreate symbolic links
           cd ../../../nmr_sim-e2f91776aafd
-          sudo rm -r /home/ira/chemotion_ELN/node_modules
-          sudo rm /home/ira/chemotion_ELN/package.json
+          sudo rm -r node_modules
+          sudo rm package.json
           sudo ln -s node_modules ${{ github.workspace }}/node_modules
           sudo ln -s package.json ${{ github.workspace }}/package.json
           echo "NMR_SIM"
