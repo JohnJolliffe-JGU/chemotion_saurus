@@ -225,7 +225,7 @@ jobs:
           echo "LDD"
           ldd openbabel.so
 
-          cd ../nmr_sim-e2f91776aafd
+          cd ../../../nmr_sim-e2f91776aafd
           echo "NMR_SIM"
           ls -la
 
