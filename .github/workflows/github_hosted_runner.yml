@@ -225,9 +225,9 @@ jobs:
           echo "LDD"
           ldd openbabel.so
 
-          # cd bundle/ruby/2.6.0/bundler/gems/nmr_sim-e2f91776aafd
-          # echo "NMR_SIM"
-          # ls -la
+          cd ../nmr_sim-e2f91776aafd
+          echo "NMR_SIM"
+          ls -la
 
           echo "POSTGRES"
           sudo -u postgres pg_ctlcluster 12 main status
