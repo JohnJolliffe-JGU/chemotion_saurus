@@ -77,6 +77,7 @@ jobs:
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
             echo "NODE MODULES"
+            pwd
             ls
 
       # - uses: actions/setup-node@v1
@@ -169,9 +170,9 @@ jobs:
           sudo -u postgres pg_ctlcluster 12 main start
 
           cd $GITHUB_WORKSPACE
-          npm install -g npm@7.11.1
-          echo "NPM: $(npm -v)"
-          npm i
+          # npm install -g npm@7.11.1
+          # echo "NPM: $(npm -v)"
+          # npm i
           source ~/rvm/scripts/rvm && rvm install 2.6.6 
           
           # download global gems
