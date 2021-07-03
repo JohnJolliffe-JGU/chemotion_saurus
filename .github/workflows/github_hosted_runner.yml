@@ -221,7 +221,7 @@ jobs:
           echo "LD_LIBRARY_PATH"
           echo $LD_LIBRARY_PATH
           
-          export BABEL_LIBDIR=/home/runner/rvm/rubies/ruby-2.6.6/lib/$BABEL_LIBDIR
+          export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
           echo "BABEL_LIBDIR"
           echo $BABEL_LIBDIR
           echo "obabel..."
@@ -235,8 +235,8 @@ jobs:
           cd ../../../nmr_sim-e2f91776aafd
           # sudo rm -r node_modules
           # sudo rm package.json
-          sudo ln -sfn node_modules ${{ github.workspace }}/node_modules
-          sudo ln -sfn package.json ${{ github.workspace }}/package.json
+          sudo ln -sfn node_modules /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules
+          sudo ln -sfn package.json /home/runner/work/chemotion_saurus/chemotion_saurus/package.json
           echo "NMR_SIM"
           ls -la
 
