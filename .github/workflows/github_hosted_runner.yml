@@ -235,8 +235,8 @@ jobs:
           cd ../../../nmr_sim-e2f91776aafd
           sudo rm -r node_modules
           sudo rm package.json
-          sudo cp -r /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules .
-          sudo cp /home/runner/work/chemotion_saurus/chemotion_saurus/package.json .
+          # sudo cp -r /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules .
+          # sudo cp /home/runner/work/chemotion_saurus/chemotion_saurus/package.json .
           sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules node_modules
           sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/package.json package.json
           echo "NMR_SIM"
