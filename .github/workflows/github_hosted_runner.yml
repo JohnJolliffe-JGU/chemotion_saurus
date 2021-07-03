@@ -241,17 +241,17 @@ jobs:
 
           echo "PSQL"
           # nosuperuser?
-          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER"
-          # psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
+          #psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER"
+          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
           psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
-          psql -d postgresql://chemotion_test@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
           # psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE #EXTENSION IF NOT EXISTS "uuid-ossp";'
 
           #psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
 
           #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
           # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
-          psql -d postgresql://chemotion_test@localhost/chemotion_test -c "\du"
+          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c "\du"
 
           echo "RSPEC"
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare 
