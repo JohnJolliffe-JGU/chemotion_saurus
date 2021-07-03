@@ -54,6 +54,16 @@ jobs:
             #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/ensebGtT4Fg8DKm/download
             # postgres user: ERROR
             #wget --no-verbose -O database.yml https://bwsyncandshare.kit.edu/s/zQgEiZYXenTxKXY/download
+
+      - name: Cache rvm
+        uses: actions/cache@v2
+        with:
+          #path: /home/runner/.rvm/gems/ruby-2.6.6
+          path: ~/.rvm
+          #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
+          key: ${{ runner.os }}-rvm-${{ hashFiles('**/.rvm/VERSION') }} # cache for vendor/bundle
+          restore-keys: |
+            ${{ runner.os }}-rvm
       
       - name: Download
         run: |
@@ -62,7 +72,7 @@ jobs:
             tar -xf .rvm
 
             cd $GITHUB_WORKSPACE
-            wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/downlaod
+            wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
 
       # - uses: actions/setup-node@v1
@@ -113,15 +123,23 @@ jobs:
           cat /etc/postgresql/12/main/postgresql.conf
           #cat /var/log/postgresql/postgresql-12-main.log
 
-      - name: Cache gems
+      # - name: Cache gems
+      #   uses: actions/cache@v2
+      #   with:
+      #     #path: /home/runner/.rvm/gems/ruby-2.6.6
+      #     path: bundle
+      #     #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
+      #     key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }} # cache for vendor/bundle
+      #     restore-keys: |
+      #       ${{ runner.os }}-bundle
+
+      - name: Cache node modules
         uses: actions/cache@v2
         with:
-          #path: /home/runner/.rvm/gems/ruby-2.6.6
-          path: bundle
-          #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
-          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }} # cache for vendor/bundle
+          path: ${{ github.workspace }}/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-bundle
+            ${{ runner.os }}-node-
     
       - name: Bundle Install & unit test ruby
         env:
@@ -243,15 +261,6 @@ jobs:
       #     ldd -v libopenbabel.so.5
           # bundle exec rspec spec/api/user_api_spec.rb --trace
           # bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
-
-      #  NODE
-      # - name: Cache node modules
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
 
       # - name: Set up node
       #   uses: actions/setup-node@v1
