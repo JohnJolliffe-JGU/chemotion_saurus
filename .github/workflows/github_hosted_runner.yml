@@ -210,12 +210,12 @@ jobs:
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
           [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-          #install Node
+          #install Node, sudo not working
           #source ~/.nvm/nvm.sh && nvm use && 
-          sudo nvm install v12.22.1
+          nvm install v12.22.1
 
           #source ~/.nvm/nvm.sh && nvm use && 
-          npm install -g npm@7.11.1
+          sudo npm install -g npm@7.11.1
 
           echo "NPM:" 
           echo npm -v
