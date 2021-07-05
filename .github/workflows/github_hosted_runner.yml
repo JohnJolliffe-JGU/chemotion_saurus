@@ -211,17 +211,21 @@ jobs:
           [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
           #install Node
-          sudo source ~/.nvm/nvm.sh && nvm use && nvm install v12.22.1
+          #source ~/.nvm/nvm.sh && nvm use && 
+          sudo nvm install v12.22.1
 
-          source ~/.nvm/nvm.sh && nvm use && npm install -g npm@7.11.1
+          #source ~/.nvm/nvm.sh && nvm use && 
+          npm install -g npm@7.11.1
 
           echo "NPM: $(npm -v)"
           echo "NVM: $(nvm -v)"
           echo "Node: $(node -v)"
 
-          source ~/.nvm/nvm.sh && nvm use && npm i
+          #source ~/.nvm/nvm.sh && nvm use && 
+          npm i
           #RAILS_ENV=test bundle exec rake db:test:prepare
-          source ~/.nvm/nvm.sh && nvm use && npm test
+          #source ~/.nvm/nvm.sh && nvm use && 
+          npm test
     
       # - name: Bundle Install & unit test ruby
       #   env:
