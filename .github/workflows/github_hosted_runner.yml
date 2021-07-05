@@ -125,18 +125,28 @@ jobs:
       
       - name: log
         run: |
-          cat /etc/postgresql/12/main/postgresql.conf
+          #cat /etc/postgresql/12/main/postgresql.conf
           #cat /var/log/postgresql/postgresql-12-main.log
 
-      # - name: Cache gems
-      #   uses: actions/cache@v2
-      #   with:
-      #     #path: /home/runner/.rvm/gems/ruby-2.6.6
-      #     path: bundle
-      #     #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
-      #     key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }} # cache for vendor/bundle
-      #     restore-keys: |
-      #       ${{ runner.os }}-bundle
+      - name: postgres
+        env:
+          PG_DATABASE: chemotion_test
+          PG_HOST: localhost
+          PG_USER: chemotion_test
+          POSTGRES_PASSWORD: 123456
+          PG_PASSWORD: 123456
+          RAILS_ENV: test
+          POSTGRES_PORT: 5432
+        run: |
+          cd $GITHUB_WORKSPACE
+          sudo -u postgres pg_ctlcluster 12 main start
+          # nosuperuser?
+          #psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER"
+          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
+          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
+          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c "\du"
+
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -153,132 +163,144 @@ jobs:
           key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
             ${{ runner.os }}-bundle-
-    
-      - name: Bundle Install & unit test ruby
-        env:
-          PG_DATABASE: chemotion_test
-          PG_HOST: localhost
-          PG_USER: chemotion_test
-          POSTGRES_PASSWORD: 123456
-          PG_PASSWORD: 123456
-          RAILS_ENV: test
-          POSTGRES_PORT: 5432
+
+      # - name: bundle
+      #   # env:
+      #   #   PG_DATABASE: chemotion_test
+      #   #   PG_HOST: localhost
+      #   #   PG_USER: chemotion_test
+      #   #   POSTGRES_PASSWORD: 123456
+      #   #   PG_PASSWORD: 123456
+      #   #   RAILS_ENV: test
+      #   #   POSTGRES_PORT: 5432
+      #   run: |
+      #     cd $GITHUB_WORKSPACE
+      #     source ~/.rvm/scripts/rvm && rvm install 2.6.6 
+      #     source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
+      #     gem install rails -v 4 --no-document --quiet
+
+      #     # set environment variables for openbabel
+      #     # for errors with openbabel.so:
+      #     export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+      #     export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+
+      #     # TODO
+      #     # recreate symbolic links
+      #     # cd bundle/../../nmr_sim-e2f91776aafd
+      #     # sudo rm -r node_modules
+      #     # sudo rm package.json
+      #     # sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules node_modules
+      #     # sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/package.json package.json
+      #     #echo "NMR_SIM"
+      #     #ls -la
+
+      #     echo "GEMS"
+      #     bundle info openbabel
+      #     bundle info json
+
+
+      - name: node
         run: |
-          #echo "ENV"
-          #printenv
-          #echo "PG HBA: $(sudo cat /etc/postgresql/12/main/pg_hba.conf)"
-          #echo "PG IDENT: $(sudo cat /etc/postgresql/12/main/pg_ident.conf)
-          # cd /etc/postgresql/12/main/
-          # sudo rm pg_hba.conf
-          # ls
-          # # download pg_hba.conf
-          # sudo wget --no-verbose -O pg_hba.conf https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
-          # ls
-          sudo -u postgres pg_ctlcluster 12 main start
-
           cd $GITHUB_WORKSPACE
-          # npm install -g npm@7.11.1
-          # echo "NPM: $(npm -v)"
-          # npm i
-          source ~/.rvm/scripts/rvm && rvm install 2.6.6 
+          npm install -g npm@7.11.1
+          echo "NPM: $(npm -v)"
+          npm i
+          #RAILS_ENV=test bundle exec rake db:test:prepare
+          npm test
+    
+      # - name: Bundle Install & unit test ruby
+      #   env:
+      #     PG_DATABASE: chemotion_test
+      #     PG_HOST: localhost
+      #     PG_USER: chemotion_test
+      #     POSTGRES_PASSWORD: 123456
+      #     PG_PASSWORD: 123456
+      #     RAILS_ENV: test
+      #     POSTGRES_PORT: 5432
+      #   run: |
+      #     #echo "ENV"
+      #     #printenv
+      #     #echo "PG HBA: $(sudo cat /etc/postgresql/12/main/pg_hba.conf)"
+      #     #echo "PG IDENT: $(sudo cat /etc/postgresql/12/main/pg_ident.conf)
+      #     # cd /etc/postgresql/12/main/
+      #     # sudo rm pg_hba.conf
+      #     # ls
+      #     # # download pg_hba.conf
+      #     # sudo wget --no-verbose -O pg_hba.conf https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
+      #     # ls
           
-          # download global gems
-          # cd ~/rvm/gems/ruby-2.6.6
-          # wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
-          # tar -xf gems
-          # cd gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          # echo "L"
-          # ldd -v openbabel.so
-
-          # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
-          # cd $GITHUB_WORKSPACE
-          # rm -r vendor
-
-          # # TODO just download bundle
-          # # download vendor with project gems
-          # wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
-          # tar -xf vendor
           
-          # # install poject gems
-          cd $GITHUB_WORKSPACE
-          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
-          #gem install libruby --no-document --quiet
-          gem install rails -v 4 --no-document --quiet
-          # echo "RAILS V"
-          # rails -v
+      #     # download global gems
+      #     # cd ~/rvm/gems/ruby-2.6.6
+      #     # wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
+      #     # tar -xf gems
+      #     # cd gems/openbabel-gem-3e25548fd95c/openbabel/lib
+      #     # echo "L"
+      #     # ldd -v openbabel.so
 
-          echo "GEMS"
-          bundle info openbabel
-          bundle info json
+      #     # # cd /home/runner/work/chemotion_saurus/chemotion_saurus
+      #     # cd $GITHUB_WORKSPACE
+      #     # rm -r vendor
 
-          # echo "LIBRUBY"
-          # cd ~/.rvm/rubies/ruby-2.6.6/lib
-          # ls
-
-          # set environment variables for openbabel
-          # for errors with openbabel.so:
-          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
-          echo "LD_LIBRARY_PATH"
-          echo $LD_LIBRARY_PATH
+      #     # # just download bundle
+      #     # # download vendor with project gems
+      #     # wget --no-verbose -O vendor  https://bwsyncandshare.kit.edu/s/BXLL2HnwCx47qxC/download
+      #     # tar -xf vendor
           
-          export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
-          echo "BABEL_LIBDIR"
-          echo $BABEL_LIBDIR
-          echo "obabel..."
-          echo obabel -L formats
-
-          cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          echo "LDD"
-          ldd openbabel.so
-
-          # recreate symbolic links
-          cd ../../../nmr_sim-e2f91776aafd
-          sudo rm -r node_modules
-          sudo rm package.json
-          # sudo cp -r /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules .
-          # sudo cp /home/runner/work/chemotion_saurus/chemotion_saurus/package.json .
-          sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules node_modules
-          sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/package.json package.json
-          echo "NMR_SIM"
-          ls -la
-
-          echo "POSTGRES"
-          sudo -u postgres pg_ctlcluster 12 main status
-
-          cd $GITHUB_WORKSPACE
+      #     # # install poject gems
+      #     cd $GITHUB_WORKSPACE
           
-          #sudo netstat -nlp | grep 5432
-          #docker ps -a
-
-          echo "PSQL"
-          # nosuperuser?
-          #psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER"
-          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
-          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
-          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
-          # psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE #EXTENSION IF NOT EXISTS "uuid-ossp";'
-
-          #psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
-
-          #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
-          # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
-          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c "\du"
-
-          echo "RSPEC"
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare 
-          # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
-          # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
-
-          echo "RAILS CONSOLE"
-          echo "CHEMOTION"
-          rails runner Chemotion::OpenBabelService
-          echo "OPENBABEL"
-          rails runner OpenBabel::OBFingerprint
-
-          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rspec spec/models/collections_sample_spec.rb
-          #echo "TEST LOG: $(cat log/test.log)"
+      #     #gem install libruby --no-document --quiet
           
-          #bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+      #     # echo "RAILS V"
+      #     # rails -v
+
+
+      #     # echo "LIBRUBY"
+      #     # cd ~/.rvm/rubies/ruby-2.6.6/lib
+      #     # ls
+
+
+      #     echo "BABEL_LIBDIR"
+      #     echo $BABEL_LIBDIR
+      #     echo "obabel..."
+      #     echo obabel -L formats
+
+      #     cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+      #     echo "LDD"
+      #     ldd openbabel.so
+
+      #     echo "POSTGRES"
+      #     sudo -u postgres pg_ctlcluster 12 main status
+
+          
+          
+      #     #sudo netstat -nlp | grep 5432
+      #     #docker ps -a
+
+
+
+      #     #psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
+
+      #     #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
+      #     # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
+          
+
+      #     echo "RSPEC"
+      #     source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare 
+      #     # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:create RAILS_ENV=test
+      #     # source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:migrate RAILS_ENV=test
+
+      #     echo "RAILS CONSOLE"
+      #     echo "CHEMOTION"
+      #     rails runner Chemotion::OpenBabelService
+      #     echo "OPENBABEL"
+      #     rails runner OpenBabel::OBFingerprint
+
+      #     source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rspec spec/models/collections_sample_spec.rb
+      #     #echo "TEST LOG: $(cat log/test.log)"
+          
+      #     #bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
       # - name: unit test ruby
       #   env:
@@ -335,25 +357,6 @@ jobs:
       #     # source ~/.nvm/nvm.sh && nvm use && npm i
       #     # source ~/.nvm/nvm.sh && nvm use && npm test
           
-      
-      # - name: test postgres
-      #   env:
-      #     PG_DATABASE: chemotion_test
-      #     PG_HOST: localhost
-      #     PG_USER: chemotion_test
-      #     PG_PASSWORD: 123456
-      #     RAILS_ENV: test
-      #     # WITH_COVERAGE: true
-      #     # DISABLE_SPRING: 1
-      #   run: |
-      #       sudo -u postgres psql
-      
-      # - name: check
-      #   run: |            
-      #       cd docker
-      #       echo "PWD: $(pwd)"
-      #       echo "LS: $(ls)"
-
       # - name: Check file existence
       #   id: check_files
       #   uses: andstor/file-existence-action@v1
