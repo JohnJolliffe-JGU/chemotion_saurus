@@ -202,8 +202,8 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
 
-          sudo nvm use system
-          sudo npm uninstall -g a_module
+          # sudo nvm use system
+          # sudo npm uninstall -g a_module
 
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
           export NVM_DIR="$HOME/.nvm"
