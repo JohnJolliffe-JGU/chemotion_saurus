@@ -119,8 +119,8 @@ jobs:
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
       
-      - name: log
-        run: |
+      # - name: log
+      #   run: |
           #cat /etc/postgresql/12/main/postgresql.conf
           #cat /var/log/postgresql/postgresql-12-main.log
 
@@ -211,13 +211,14 @@ jobs:
           [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
           #install Node
-          source ~/.nvm/nvm.sh && nvm use && nvm install v12.22.1
+          sudo source ~/.nvm/nvm.sh && nvm use && nvm install v12.22.1
 
-          npm install -g npm@7.11.1
+          source ~/.nvm/nvm.sh && nvm use && npm install -g npm@7.11.1
 
           echo "NPM: $(npm -v)"
           echo "NVM: $(nvm -v)"
           echo "Node: $(node -v)"
+
           source ~/.nvm/nvm.sh && nvm use && npm i
           #RAILS_ENV=test bundle exec rake db:test:prepare
           source ~/.nvm/nvm.sh && nvm use && npm test
