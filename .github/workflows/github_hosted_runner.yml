@@ -217,9 +217,15 @@ jobs:
           #source ~/.nvm/nvm.sh && nvm use && 
           npm install -g npm@7.11.1
 
-          echo "NPM: $(npm -v)"
-          echo "NVM: $(nvm -v)"
-          echo "Node: $(node -v)"
+          echo "NPM:" 
+          echo npm -v
+          echo which npm
+          echo "NVM:"
+          echo nvm -v
+          echo which nvm
+          echo "Node:"
+          echo node -v
+          echo which node
 
           #source ~/.nvm/nvm.sh && nvm use && 
           npm i
