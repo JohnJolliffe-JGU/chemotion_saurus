@@ -202,11 +202,11 @@ jobs:
       - name: node
         run: |
           cd $GITHUB_WORKSPACE
-          npm install -g npm@7.11.1
+          sudo npm install -g npm@7.11.1
           echo "NPM: $(npm -v)"
-          npm i
+          sudo npm i
           #RAILS_ENV=test bundle exec rake db:test:prepare
-          npm test
+          sudo npm test
     
       # - name: Bundle Install & unit test ruby
       #   env:
