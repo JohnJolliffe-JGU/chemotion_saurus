@@ -201,22 +201,26 @@ jobs:
       - name: node
         run: |
           cd $GITHUB_WORKSPACE
-          
+
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
           [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+          sudo nvm use system
+          sudo npm uninstall -g a_module
+
           #install Node
           nvm install v12.22.1
+          
+          npm install -g npm@7.11.1
 
-          sudo npm install -g npm@7.11.1
           echo "NPM: $(npm -v)"
           echo "NVM: $(nvm -v)"
           echo "Node: $(node -v)"
-          sudo npm i
+          source ~/.nvm/nvm.sh && nvm use && npm i
           #RAILS_ENV=test bundle exec rake db:test:prepare
-          sudo npm test
+          source ~/.nvm/nvm.sh && nvm use && npm test
     
       # - name: Bundle Install & unit test ruby
       #   env:
@@ -238,8 +242,7 @@ jobs:
       #     # # download pg_hba.conf
       #     # sudo wget --no-verbose -O pg_hba.conf https://bwsyncandshare.kit.edu/s/HbKmQ26iwE7pg6B/download
       #     # ls
-          
-          
+
       #     # download global gems
       #     # cd ~/rvm/gems/ruby-2.6.6
       #     # wget --no-verbose -O gems https://bwsyncandshare.kit.edu/s/XfEdk9wXM22ZRgK/download 
@@ -287,10 +290,6 @@ jobs:
           
       #     #sudo netstat -nlp | grep 5432
       #     #docker ps -a
-
-
-
-      #     #psql -d postgresql://postgres:postgres@localhost/postgres -c "\du"
 
       #     #psql "host=localhost port=5432 dbname=chemotion_test user=chemotion_test password=123456"
       #     # psql "host=localhost port=5432 dbname=postgres user=postgres password=postgres"
