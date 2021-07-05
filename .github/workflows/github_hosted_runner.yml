@@ -67,6 +67,7 @@ jobs:
       
       - name: Download
         run: |
+            # TODO
             # cd  $GITHUB_WORKSPACE
             # #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
             # wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
@@ -151,14 +152,15 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
-      - name: Cache bundle
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/bundle
-          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
-          restore-keys: |
-            ${{ runner.os }}-bundle-
+      
+      # TODO
+      # - name: Cache bundle
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ${{ github.workspace }}/bundle
+      #     key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-bundle-
 
       # - name: bundle
       #   # env:
@@ -218,20 +220,20 @@ jobs:
           sudo npm install -g npm@7.11.1
 
           echo "NPM:" 
-          echo npm -v
-          echo which npm
+          npm -v
+          which npm
           echo "NVM:"
-          echo nvm -v
-          echo which nvm
+          nvm -v
+          which nvm
           echo "Node:"
-          echo node -v
-          echo which node
+          node -v
+          which node
 
-          #source ~/.nvm/nvm.sh && nvm use && 
-          npm i
+          #source ~/.nvm/nvm.sh && 
+          nvm use && npm i
           #RAILS_ENV=test bundle exec rake db:test:prepare
-          #source ~/.nvm/nvm.sh && nvm use && 
-          npm test
+          #source ~/.nvm/nvm.sh && 
+          nvm use && npm test
     
       # - name: Bundle Install & unit test ruby
       #   env:
