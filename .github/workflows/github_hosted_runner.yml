@@ -67,20 +67,16 @@ jobs:
       
       - name: Download
         run: |
-            cd  $GITHUB_WORKSPACE
-            #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
-            wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
-            tar -xf bundle
+            # cd  $GITHUB_WORKSPACE
+            # #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
+            # wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
+            # tar -xf bundle
 
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
             echo "DOWNLOADS"
             pwd
             ls
-
-      # - uses: actions/setup-node@v1
-      #   with:
-      #     node-version: 12.22.1
       
       # TODO check diff work folders: https://github.community/t/copying-test-file-from-docker-container-to-github-repository/17977/2
       # docker --volume?
@@ -198,12 +194,26 @@ jobs:
       #     bundle info openbabel
       #     bundle info json
 
+      # - uses: actions/setup-node@v1
+      #   with:
+      #     node-version: 12.22.1
 
       - name: node
         run: |
           cd $GITHUB_WORKSPACE
+          
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+          #install Node
+          nvm install v12.22.1
+
           sudo npm install -g npm@7.11.1
           echo "NPM: $(npm -v)"
+          echo "NVM: $(nvm -v)"
+          echo "Node: $(node -v)"
           sudo npm i
           #RAILS_ENV=test bundle exec rake db:test:prepare
           sudo npm test
@@ -328,16 +338,13 @@ jobs:
       #     echo "PWD: $(pwd)"
       #     #echo "LS: $(ls)"
 
-      #     # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-      #     # export NVM_DIR="$HOME/.nvm"
-      #     # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-      #     # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 
       #     # unistall preinstalled
       #     # nvm use system
       #     # npm uninstall -g a_module
 
-      #     #nvm install v12.22.1
+      #     #
       #     npm install -g npm@7.11.1
 
       #     echo "NPM: $(npm -v)"
