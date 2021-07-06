@@ -206,8 +206,6 @@ jobs:
 
           # sudo nvm use system
           # sudo npm uninstall -g a_module
-          # uninstall npm 6
-          sudo rm -rf /usr/local/bin/npm
 
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
           export NVM_DIR="$HOME/.nvm"
@@ -218,9 +216,16 @@ jobs:
           #source ~/.nvm/nvm.sh && nvm use && 
           nvm install v12.22.1
 
+          echo "NPM 6:" 
+          npm -v
+          which npm
+
+          # uninstall npm 6
+          sudo rm -rf /usr/local/bin/npm
+
           echo "NVM:"
           nvm -v
-          which nvm
+          #which nvm #error
           cd ~/.nvm/
           ls
 
