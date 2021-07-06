@@ -206,6 +206,7 @@ jobs:
 
           # sudo nvm use system
           # sudo npm uninstall -g a_module
+          # uninstall npm 6
           sudo rm -rf /usr/local/bin/npm
 
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
@@ -218,8 +219,9 @@ jobs:
           nvm install v12.22.1
 
           #source ~/.nvm/nvm.sh && nvm use && 
-          sudo npm install -g npm@7.11.1
-          # TODO uninstall npm 6
+          source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
+
+          #sudo npm install -g npm@7.11.1
 
           echo "NPM:" 
           npm -v
