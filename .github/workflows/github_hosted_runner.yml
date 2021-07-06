@@ -218,6 +218,12 @@ jobs:
           #source ~/.nvm/nvm.sh && nvm use && 
           nvm install v12.22.1
 
+          echo "NVM:"
+          nvm -v
+          which nvm
+          cd ~/.nvm/
+          ls
+
           #source ~/.nvm/nvm.sh && nvm use && 
           source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
 
@@ -232,6 +238,7 @@ jobs:
           echo "Node:"
           node -v
 
+          cd $GITHUB_WORKSPACE
           #source ~/.nvm/nvm.sh && 
           nvm use && npm i
           #RAILS_ENV=test bundle exec rake db:test:prepare
