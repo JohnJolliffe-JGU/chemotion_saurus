@@ -225,7 +225,6 @@ jobs:
 
           echo "NVM:"
           nvm -v
-          #which nvm #error
           cd ~/.nvm/
           ls
 
@@ -239,7 +238,7 @@ jobs:
           which npm
           echo "NVM:"
           nvm -v
-          which nvm
+          #which nvm #error
           echo "Node:"
           node -v
 
