@@ -234,7 +234,7 @@ jobs:
           cd $GITHUB_WORKSPACE
           source ~/.nvm/nvm.sh && nvm use && npm i
           echo "NODE MODULES"
-          source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && 
+          source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare 
           source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && npm test
 
           #source ~/.nvm/nvm.sh && 
