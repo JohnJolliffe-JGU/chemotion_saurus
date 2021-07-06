@@ -67,11 +67,10 @@ jobs:
       
       - name: Download
         run: |
-            # TODO
-            # cd  $GITHUB_WORKSPACE
-            # #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
-            # wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
-            # tar -xf bundle
+            cd  $GITHUB_WORKSPACE
+            #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
+            wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
+            tar -xf bundle
 
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
@@ -152,60 +151,56 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      
-      # TODO
-      # - name: Cache bundle
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ${{ github.workspace }}/bundle
-      #     key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-bundle-
 
-      # - name: bundle
-      #   # env:
-      #   #   PG_DATABASE: chemotion_test
-      #   #   PG_HOST: localhost
-      #   #   PG_USER: chemotion_test
-      #   #   POSTGRES_PASSWORD: 123456
-      #   #   PG_PASSWORD: 123456
-      #   #   RAILS_ENV: test
-      #   #   POSTGRES_PORT: 5432
-      #   run: |
-      #     cd $GITHUB_WORKSPACE
-      #     source ~/.rvm/scripts/rvm && rvm install 2.6.6 
-      #     source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
-      #     gem install rails -v 4 --no-document --quiet
+      - name: Cache bundle
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/bundle
+          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-bundle-
 
-      #     # set environment variables for openbabel
-      #     # for errors with openbabel.so:
-      #     export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
-      #     export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+      - name: bundle
+        # env:
+        #   PG_DATABASE: chemotion_test
+        #   PG_HOST: localhost
+        #   PG_USER: chemotion_test
+        #   POSTGRES_PASSWORD: 123456
+        #   PG_PASSWORD: 123456
+        #   RAILS_ENV: test
+        #   POSTGRES_PORT: 5432
+        run: |
+          cd $GITHUB_WORKSPACE
+          source ~/.rvm/scripts/rvm && rvm install 2.6.6 
+          source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
+          gem install rails -v 4 --no-document --quiet
 
-      #     # TODO
-      #     # recreate symbolic links
-      #     # cd bundle/../../nmr_sim-e2f91776aafd
-      #     # sudo rm -r node_modules
-      #     # sudo rm package.json
-      #     # sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules node_modules
-      #     # sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/package.json package.json
-      #     #echo "NMR_SIM"
-      #     #ls -la
+          # set environment variables for openbabel
+          # for errors with openbabel.so:
+          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+          export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
 
-      #     echo "GEMS"
-      #     bundle info openbabel
-      #     bundle info json
+          echo "CHECK BUNDLE"
+          cd bundle
+          ls
 
-      # - uses: actions/setup-node@v1
-      #   with:
-      #     node-version: 12.22.1
+          # TODO
+          # recreate symbolic links
+          # cd bundle/../../nmr_sim-e2f91776aafd
+          # sudo rm -r node_modules
+          # sudo rm package.json
+          # sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules node_modules
+          # sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/package.json package.json
+          #echo "NMR_SIM"
+          #ls -la
+
+          echo "GEMS"
+          bundle info openbabel
+          bundle info json
 
       - name: node
         run: |
           cd $GITHUB_WORKSPACE
-
-          # sudo nvm use system
-          # sudo npm uninstall -g a_module
 
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
           export NVM_DIR="$HOME/.nvm"
@@ -223,12 +218,6 @@ jobs:
           # uninstall npm 6
           sudo rm -rf /usr/local/bin/npm
 
-          echo "NVM:"
-          nvm -v
-          cd ~/.nvm/
-          ls
-
-          #source ~/.nvm/nvm.sh && nvm use && 
           source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
 
           #sudo npm install -g npm@7.11.1
@@ -243,11 +232,16 @@ jobs:
           node -v
 
           cd $GITHUB_WORKSPACE
+          source ~/.nvm/nvm.sh && nvm use && npm i
+          echo "NODE MODULES"
+          source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && 
+          source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && npm test
+
           #source ~/.nvm/nvm.sh && 
-          nvm use && npm i
-          #RAILS_ENV=test bundle exec rake db:test:prepare
-          #source ~/.nvm/nvm.sh && 
-          nvm use && npm test
+          # nvm use && npm i
+          # RAILS_ENV=test bundle exec rake db:test:prepare
+          # #source ~/.nvm/nvm.sh && 
+          # nvm use && npm test
     
       # - name: Bundle Install & unit test ruby
       #   env:
@@ -382,14 +376,9 @@ jobs:
       #     echo "SIZE NODE MODULES 0: $(du -bsh node_modules)"
       #     echo "COUNT NODE MODULES 0: $(find node_modules -type f | wc -l)"
 
-      #     npm i
       #     echo "SIZE NODE MODULES 1: $(du -bsh node_modules)"
       #     echo "COUNT NODE MODULES 1: $(find node_modules -type f | wc -l)"
-      #     npm test
 
-      #     # source ~/.nvm/nvm.sh && nvm use && npm i
-      #     # source ~/.nvm/nvm.sh && nvm use && npm test
-          
       # - name: Check file existence
       #   id: check_files
       #   uses: andstor/file-existence-action@v1
