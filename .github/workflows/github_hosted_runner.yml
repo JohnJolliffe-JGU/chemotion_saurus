@@ -6,7 +6,7 @@
 name: ELN GitHub Actions 1
 defaults:
   run:
-    shell: bash -lc pipefail {0}
+    shell: bash -lc {0}
 on:
   workflow_dispatch:
   push:
