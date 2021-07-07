@@ -120,27 +120,27 @@ jobs:
             sudo apt-get purge ruby rubygems
             gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
-            echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
+            #echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
-      - name: postgres
-        env:
-          PG_DATABASE: chemotion_test
-          PG_HOST: localhost
-          PG_USER: chemotion_test
-          POSTGRES_PASSWORD: 123456
-          PG_PASSWORD: 123456
-          RAILS_ENV: test
-          POSTGRES_PORT: 5432
-        run: |
-          cd $GITHUB_WORKSPACE
-          sudo -u postgres pg_ctlcluster 12 main start
-          # nosuperuser?
-          #psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER"
-          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
-          psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
-          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
-          psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c "\du"
+      # - name: postgres
+      #   env:
+      #     PG_DATABASE: chemotion_test
+      #     PG_HOST: localhost
+      #     PG_USER: chemotion_test
+      #     POSTGRES_PASSWORD: 123456
+      #     PG_PASSWORD: 123456
+      #     RAILS_ENV: test
+      #     POSTGRES_PORT: 5432
+      #   run: |
+      #     cd $GITHUB_WORKSPACE
+      #     sudo -u postgres pg_ctlcluster 12 main start
+      #     # nosuperuser?
+      #     #psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER"
+      #     psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
+      #     psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
+      #     psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+      #     psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c "\du"
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -197,10 +197,16 @@ jobs:
           # cd $GITHUB_WORKSPACE
           # echo "SYSTEM ENV"
           #printenv
-          echo "BASH"
+          echo "BASH RC"
           cat ~/.bashrc
           echo "BASHPROFILE"
           cat ~/.bash_profile
+          echo "RVM INFO"
+          rvm info
+          echo "RVM REQUIREMENTS"
+          rvm requirements 
+          echo "WHICH GEM"
+          which gem
           # ERROR
           echo "RUBY ENV"
           gem env
