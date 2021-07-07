@@ -9,6 +9,9 @@ on:
   workflow_dispatch:
   push:
     branches: [ ELN ]
+  env:
+    LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/
+    BABEL_LIBDIR: /home/runner/.rvm/rubies/ruby-2.6.6/lib/
 
 jobs:
  TESTS:
@@ -74,9 +77,6 @@ jobs:
 
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
-            echo "DOWNLOADS"
-            pwd
-            ls
       
       # TODO check diff work folders: https://github.community/t/copying-test-file-from-docker-container-to-github-repository/17977/2
       # docker --volume?
@@ -119,8 +119,10 @@ jobs:
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
       
-      # - name: log
-      #   run: |
+      - name: log
+        run: |
+          echo $LD_LIBRARY_PATH
+          echo $BABEL_LIBDIR
           #cat /etc/postgresql/12/main/postgresql.conf
           #cat /var/log/postgresql/postgresql-12-main.log
 
@@ -177,20 +179,16 @@ jobs:
 
           # set environment variables for openbabel
           # for errors with openbabel.so:
-          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
-          export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+          # TODO?
+          # export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+          # export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
 
-          echo "CHECK BUNDLE"
-          cd bundle
-          ls
-
-          # TODO
           # recreate symbolic links
-          # cd bundle/../../nmr_sim-e2f91776aafd
-          # sudo rm -r node_modules
-          # sudo rm package.json
-          # sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules node_modules
-          # sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/package.json package.json
+          cd bundle/ruby/2.6.0/bundler/gems/nmr_sim-e2f91776aafd
+          sudo rm -r node_modules
+          sudo rm package.json
+          sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/node_modules node_modules
+          sudo ln -s /home/runner/work/chemotion_saurus/chemotion_saurus/package.json package.json
           #echo "NMR_SIM"
           #ls -la
 
@@ -231,8 +229,8 @@ jobs:
           echo "Node:"
           node -v
 
-          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
-          export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+          # export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.#rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+          # export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
 
           cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           echo "L"
@@ -243,7 +241,7 @@ jobs:
           echo "NODE MODULES"
           source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare 
           source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && npm test
-          source ~/.rvm/scripts/rvm && bundle exec rspec spec/models/collections_sample_spec.rb
+          #source ~/.rvm/scripts/rvm && bundle exec rspec spec/models/collections_sample_spec.rb
           #source ~/.rvm/scripts/rvm && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
 
           #source ~/.nvm/nvm.sh && 
