@@ -6,7 +6,7 @@
 name: ELN GitHub Actions 1
 defaults:
   run:
-    shell: bash -lc {0}
+    shell: sudo bash -lc {0}
 on:
   workflow_dispatch:
   push:
@@ -92,6 +92,9 @@ jobs:
 
       - name: Set up Ubuntu
         run: |
+          echo "CHECK HOME FILES"
+          cd  ~
+          ls -la
           #echo "UBUNTU: $(cat /etc/os-release)"
           #sudo apt-get install libboost-all-dev
           # cd /usr/lib/x86_64-linux-gnu/
