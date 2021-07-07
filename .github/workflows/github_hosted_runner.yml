@@ -191,6 +191,7 @@ jobs:
           echo $LD_LIBRARY_PATH
           echo $BABEL_LIBDIR
           cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/
+          rgrep "get_fingerprint" *
           ls -la
           #cat /etc/postgresql/12/main/postgresql.conf
           #cat /var/log/postgresql/postgresql-12-main.log
