@@ -93,9 +93,8 @@ jobs:
       - name: Set up Ubuntu
         #shell: bash -lc {0}
         run: |
-          echo "CHECK HOME FILES"
-          cd  ~
-          ls -la
+          echo "BASH PROFILE"
+          cat ~/.bash_profile
           #echo "UBUNTU: $(cat /etc/os-release)"
           #sudo apt-get install libboost-all-dev
           # cd /usr/lib/x86_64-linux-gnu/
@@ -127,7 +126,7 @@ jobs:
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
             # ERROR
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
-            echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
+            #echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
       - name: postgres
         env:
