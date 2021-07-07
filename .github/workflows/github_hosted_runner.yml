@@ -91,7 +91,7 @@ jobs:
       # remove all preinstalled stuff?
 
       - name: Set up Ubuntu
-        shell: sudo bash -lc {0}
+        shell: bash -lc {0}
         run: |
           echo "CHECK HOME FILES"
           cd  ~
