@@ -18,6 +18,13 @@ jobs:
     env:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
       BABEL_LIBDIR: /home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+      # PG_DATABASE: chemotion_test
+      # PG_HOST: localhost
+      # PG_USER: chemotion_test
+      # POSTGRES_PASSWORD: 123456
+      # PG_PASSWORD: 123456
+      # RAILS_ENV: test
+      # POSTGRES_PORT: 5432
 
     services:
       postgres:
@@ -201,41 +208,43 @@ jobs:
           #cat /etc/postgresql/12/main/postgresql.conf
           #cat /var/log/postgresql/postgresql-12-main.log
 
-      # - name: node
-      #   run: |
-      #     cd $GITHUB_WORKSPACE
-      #     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-      #     export NVM_DIR="$HOME/.nvm"
-      #     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-      #     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-      #     #install Node, sudo not working
-      #     #source ~/.nvm/nvm.sh && nvm use && 
-      #     nvm install v12.22.1
-      #     echo "NPM 6:" 
-      #     npm -v
-      #     which npm
-      #     # uninstall npm 6
-      #     sudo rm -rf /usr/local/bin/npm
-      #     source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
-      #     #sudo npm install -g npm@7.11.1
-      #     echo "NPM:" 
-      #     npm -v
-      #     which npm
-      #     echo "NVM:"
-      #     nvm -v
-      #     #which nvm #error
-      #     echo "Node:"
-      #     node -v
+      - name: node
+        run: |
+          cd $GITHUB_WORKSPACE
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+          #install Node, sudo not working
+          #source ~/.nvm/nvm.sh && nvm use && 
+          nvm install v12.22.1
+          echo "NPM 6:" 
+          npm -v
+          which npm
+          # uninstall npm 6
+          sudo rm -rf /usr/local/bin/npm
+          source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
+          #sudo npm install -g npm@7.11.1
+          echo "NPM:" 
+          npm -v
+          which npm
+          echo "NVM:"
+          nvm -v
+          #which nvm #error
+          echo "Node:"
+          node -v
 
-      #     # export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/#rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
-      #     # export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+          # export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/#rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+          # export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
 
-      #     cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-      #     echo "L"
-      #     ldd openbabel.so
-      #     cd $GITHUB_WORKSPACE
-      #     source ~/.nvm/nvm.sh && nvm use && npm i
-      #     echo "UNIT TESTS"
+          cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          echo "L"
+          ldd openbabel.so
+          cd $GITHUB_WORKSPACE
+          source ~/.nvm/nvm.sh && nvm use && npm i
+          echo "ACC TESTS"
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/features
+          #echo "UNIT TESTS"
       #     source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare 
       #     #source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && npm test
       #     source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb --backtrace 
@@ -323,8 +332,6 @@ jobs:
       #     rails runner Chemotion::OpenBabelService
       #     echo "OPENBABEL"
       #     rails runner OpenBabel::OBFingerprint
-
-      #     source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rspec spec/models/collections_sample_spec.rb
       #     #echo "TEST LOG: $(cat log/test.log)"
           
       #     #bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
