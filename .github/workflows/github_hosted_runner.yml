@@ -117,11 +117,9 @@ jobs:
             postgresql postgresql-client postgresql-contrib libpq-dev \
             net-tools \
             --fix-missing
-            
+            sudo apt-get purge ruby rubygems
             gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
             curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
-            #curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 
-            #echo "source ~/rvm/scripts/rvm" >> ~/.bashrc \
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
@@ -171,8 +169,6 @@ jobs:
         #   POSTGRES_PORT: 5432
         run: |
           cd $GITHUB_WORKSPACE
-          # remove preinstalled ruby 2.7.0
-          sudo apt-get purge ruby rubygems
 
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
@@ -201,9 +197,12 @@ jobs:
           # cd $GITHUB_WORKSPACE
           # echo "SYSTEM ENV"
           #printenv
+          echo "BASHRC"
+          cat ~/.bashrc
+          cat ~/.bash_profile
           # ERROR
-          #echo "RUBY ENV"
-          #gem env
+          echo "RUBY ENV"
+          gem env
           # echo $LD_LIBRARY_PATH
           # echo $BABEL_LIBDIR
           # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/
