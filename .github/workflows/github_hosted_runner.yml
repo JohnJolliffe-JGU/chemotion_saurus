@@ -4,9 +4,9 @@
 ###
 
 name: ELN GitHub Actions 1
-defaults:
-  run:
-    shell: sudo bash -lc {0}
+# defaults:
+#   run:
+#     shell: sudo bash -lc {0}
 on:
   workflow_dispatch:
   push:
@@ -91,6 +91,7 @@ jobs:
       # remove all preinstalled stuff?
 
       - name: Set up Ubuntu
+        shell: sudo bash -lc {0}
         run: |
           echo "CHECK HOME FILES"
           cd  ~
