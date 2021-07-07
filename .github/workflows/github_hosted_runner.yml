@@ -189,6 +189,7 @@ jobs:
           echo "GEMS"
           bundle info openbabel
           bundle info json
+          
       - name: node
         run: |
           cd $GITHUB_WORKSPACE
@@ -214,21 +215,19 @@ jobs:
           #which nvm #error
           echo "Node:"
           node -v
-          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
-          export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+
+          # export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/#rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+          # export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+
           cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           echo "L"
-          ldd -v openbabel.so
+          ldd openbabel.so
           cd $GITHUB_WORKSPACE
           source ~/.nvm/nvm.sh && nvm use && npm i
-          echo "NODE MODULES"
+          echo "UNIT TESTS"
           source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare 
-          source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && npm test
-          #source ~/.nvm/nvm.sh && 
-          # nvm use && npm i
-          # RAILS_ENV=test bundle exec rake db:test:prepare
-          # #source ~/.nvm/nvm.sh && 
-          # nvm use && npm test
+          #source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && npm test
+          source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rspec spec/models/collections_sample_spec.rb --backtrace 
     
       # - name: Bundle Install & unit test ruby
       #   env:
