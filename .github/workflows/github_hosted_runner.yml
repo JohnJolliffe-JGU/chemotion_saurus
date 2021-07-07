@@ -197,8 +197,9 @@ jobs:
           # cd $GITHUB_WORKSPACE
           # echo "SYSTEM ENV"
           #printenv
-          echo "BASHRC"
+          echo "BASH"
           cat ~/.bashrc
+          echo "BASHPROFILE"
           cat ~/.bash_profile
           # ERROR
           echo "RUBY ENV"
