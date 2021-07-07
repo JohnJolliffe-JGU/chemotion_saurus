@@ -171,6 +171,9 @@ jobs:
         #   POSTGRES_PORT: 5432
         run: |
           cd $GITHUB_WORKSPACE
+          # remove preinstalled ruby 2.7.0
+          sudo apt-get purge ruby rubygems
+
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
           gem install rails -v 4.2.11.3 --no-document --quiet
@@ -195,8 +198,8 @@ jobs:
 
       - name: log
         run: |
-          cd $GITHUB_WORKSPACE
-          echo "SYSTEM ENV"
+          # cd $GITHUB_WORKSPACE
+          # echo "SYSTEM ENV"
           printenv
           echo "RUBY ENV"
           gem env
