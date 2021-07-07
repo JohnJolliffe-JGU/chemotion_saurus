@@ -189,7 +189,10 @@ jobs:
       - name: log
         run: |
           cd $GITHUB_WORKSPACE
+          echo "SYSTEM ENV"
           printenv
+          echo "RUBY ENV"
+          gem env
           # echo $LD_LIBRARY_PATH
           # echo $BABEL_LIBDIR
           # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/
