@@ -117,13 +117,6 @@ jobs:
             #echo "source ~/rvm/scripts/rvm" >> ~/.bashrc \
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
-      
-      - name: log
-        run: |
-          echo $LD_LIBRARY_PATH
-          echo $BABEL_LIBDIR
-          #cat /etc/postgresql/12/main/postgresql.conf
-          #cat /var/log/postgresql/postgresql-12-main.log
 
       - name: postgres
         env:
@@ -143,6 +136,7 @@ jobs:
           psql -d postgresql://postgres:postgres@localhost/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
           psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore";  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
           psql -d postgresql://chemotion_test:123456@localhost/chemotion_test -c "\du"
+
       - name: Cache node modules
         uses: actions/cache@v2
         with:
@@ -150,6 +144,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
       - name: Cache bundle
         uses: actions/cache@v2
         with:
@@ -157,6 +152,7 @@ jobs:
           key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
             ${{ runner.os }}-bundle-
+
       - name: bundle
         # env:
         #   PG_DATABASE: chemotion_test
@@ -189,7 +185,16 @@ jobs:
           echo "GEMS"
           bundle info openbabel
           bundle info json
-          
+
+      - name: log
+        run: |
+          echo $LD_LIBRARY_PATH
+          echo $BABEL_LIBDIR
+          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/
+          ls -la
+          #cat /etc/postgresql/12/main/postgresql.conf
+          #cat /var/log/postgresql/postgresql-12-main.log
+
       - name: node
         run: |
           cd $GITHUB_WORKSPACE
@@ -226,7 +231,7 @@ jobs:
           source ~/.nvm/nvm.sh && nvm use && npm i
           echo "UNIT TESTS"
           source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare 
-          #source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && npm test
+          source ~/.rvm/scripts/rvm && source ~/.nvm/nvm.sh && nvm use && npm test
           source ~/.rvm/scripts/rvm && RAILS_ENV=test bundle exec rspec spec/models/collections_sample_spec.rb --backtrace 
     
       # - name: Bundle Install & unit test ruby
