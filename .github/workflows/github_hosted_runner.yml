@@ -15,6 +15,9 @@ jobs:
     #runs-on: self-hosted # not working --> postgres service
     runs-on: ubuntu-latest
     #runs-on: ubuntu-18.04
+    env:
+      LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+      BABEL_LIBDIR: /home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
 
     services:
       postgres:
@@ -60,7 +63,6 @@ jobs:
       #     #path: /home/runner/.rvm/gems/ruby-2.6.6
       #     path: ~/rvm
       #     #key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }} # cache for ~/.rvm/gems/ruby-2.6.6
-      #     key: ${{ runner.os }}-rvm-${{ hashFiles('**/rvm/VERSION') }} # cache for vendor/bundle
       #     restore-keys: |
       #       ${{ runner.os }}-rvm
       
@@ -116,8 +118,10 @@ jobs:
             echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
             echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
       
-      # - name: log
-      #   run: |
+      - name: log
+        run: |
+          echo $LD_LIBRARY_PATH
+          echo $BABEL_LIBDIR
           #cat /etc/postgresql/12/main/postgresql.conf
           #cat /var/log/postgresql/postgresql-12-main.log
 
@@ -167,13 +171,12 @@ jobs:
           source ~/.rvm/scripts/rvm && rvm install 2.6.6 
           source ~/.rvm/scripts/rvm && gem install bundler -v 1.17.3 --no-document &&  bundle install -j 3 --retry 3 --full-index  --quiet --path bundle
           gem install rails -v 4.2.11.3 --no-document --quiet
+
           # set environment variables for openbabel
           # for errors with openbabel.so:
-          export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
-          export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
-          echo "CHECK BUNDLE"
-          cd bundle
-          ls
+          # export LD_LIBRARY_PATH=/home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/#rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+          # export BABEL_LIBDIR=/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+
           # TODO
           # recreate symbolic links
           # cd bundle/../../nmr_sim-e2f91776aafd
