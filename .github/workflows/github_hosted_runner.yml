@@ -189,8 +189,8 @@ jobs:
           #echo "NMR_SIM"
           #ls -la
           echo "GEMS"
-          bundle info openbabel
-          bundle info json
+          /bin/bash -l -c "source ~/.rvm/scripts/rvm && bundle info openbabel"
+          /bin/bash -l -c "source ~/.rvm/scripts/rvm && bundle info json"
 
       - name: log
         run: |
