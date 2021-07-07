@@ -199,17 +199,17 @@ jobs:
           #printenv
           echo "BASH RC"
           cat ~/.bashrc
+          # ERROR in
           echo "BASHPROFILE"
           cat ~/.bash_profile
-          # ERROR
           echo "RVM INFO"
-          rvm info
-          echo "RVM REQUIREMENTS"
-          rvm requirements 
-          echo "WHICH GEM"
-          which gem
-          echo "RUBY ENV"
-          gem env
+          /bin/bash -l -c "source ~/.rvm/scripts/rvm && rvm info"
+          # echo "RVM REQUIREMENTS"
+          # rvm requirements 
+          # echo "WHICH GEM"
+          # which gem
+          # echo "RUBY ENV"
+          # gem env
           # echo $LD_LIBRARY_PATH
           # echo $BABEL_LIBDIR
           # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/
