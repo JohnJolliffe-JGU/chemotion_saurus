@@ -65,10 +65,10 @@ jobs:
             #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
             wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
             tar -xf bundle
-            echo "GEMS"
-            cd bundle/ruby/2.6.0/bundler/gems/
-            rm -r openbabel-gem-3e25548fd95c
-            ls
+            # echo "GEMS"
+            # cd bundle/ruby/2.6.0/bundler/gems/
+            # rm -r openbabel-gem-3e25548fd95c
+            # ls
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
 
@@ -153,12 +153,12 @@ jobs:
           echo ".BUNDLE"
           cat .bundle/config
 
-          # TODO
           echo "RAKE DB"
           RAILS_ENV=test bundle exec rake db:test:prepare
           echo "RAILS RUNNER"
-          rails runner -e test lib/chemotion/open_babel_service.rb
-          rails runner -e test app/models/fingerprint.rb
+          rails r -e test lib/chemotion/open_babel_service.rb
+          rails r -e test app/models/fingerprint.rb
+          rails r -e test app/models/sample.rb
 
           echo "RUBY LOC"
           which ruby
