@@ -17,8 +17,8 @@ jobs:
     env:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
       # TODO
-      BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
-      GEM_PATH: ${{ github.workspace }}/bundle
+      BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib/
+      #GEM_PATH: ${{ github.workspace }}/bundle
       
     services:
       postgres:
@@ -62,6 +62,9 @@ jobs:
       - name: Download
         run: |
             cd  $GITHUB_WORKSPACE
+            rm Gemfile
+            # small test Gemfile 
+            wget --no-verbose -O Gemfile https://bwsyncandshare.kit.edu/s/ee9B5D8xTY9tG67
             #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
             wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
             tar -xf bundle
@@ -70,7 +73,6 @@ jobs:
             echo "DOWNLOADS"
             pwd
             ls
-
 
       - name: Set up Ubuntu
         #shell: bash -lc {0}
@@ -101,7 +103,6 @@ jobs:
             fonts-linuxlibertine fonts-noto-core fonts-noto-extra fonts-noto-ui-core \
             fonts-opensymbol fonts-sil-gentium fonts-sil-gentium-basic \
             postgresql postgresql-client postgresql-contrib libpq-dev \
-            net-tools \
             --fix-missing
             # sudo apt-get purge ruby rubygems
             # gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
@@ -129,33 +130,37 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Cache bundle
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/bundle
-          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
-          restore-keys: |
-            ${{ runner.os }}-bundle-
+      # - name: Cache bundle
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ${{ github.workspace }}/bundle
+      #     key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-bundle-
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6.6
+          bundler-cache: true
 
       - name: Install Bundle
         run: |
           cd $GITHUB_WORKSPACE
-          echo "GEM_PATH"
-          echo $GEM_PATH
+          # echo "GEM_PATH"
+          # echo $GEM_PATH
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
-          # TODO? --quiet
-          bundle install --jobs 4 --retry 3 --path bundle
+          # TODO? --quiet --path bundle
+          bundle install --jobs 4 --retry 3
 
       - name: log
         run: |
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           #export BABEL_LIBDIR=/opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           cd $GITHUB_WORKSPACE
+          echo "VENDOR"
+          cd vendor/cache
+          ls -la
           echo "RUBY LOC"
           which ruby
           ruby -v
@@ -166,11 +171,12 @@ jobs:
           echo "SYSTEM RUBY"
           cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           ls -la
-          echo "BABEL_LIBDIR"
-          echo $BABEL_LIBDIR
-          echo "LDD"
-          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          ldd openbabel.so
+          
+          # echo "BABEL_LIBDIR"
+          # echo $BABEL_LIBDIR
+          # echo "LDD"
+          # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          # ldd openbabel.so
 
       # - name: Node
       #   run: |
