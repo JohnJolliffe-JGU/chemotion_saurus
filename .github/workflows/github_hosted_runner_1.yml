@@ -121,13 +121,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Cache bundle
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/bundle
-          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
-          restore-keys: |
-            ${{ runner.os }}-bundle-
+      # - name: Cache bundle
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ${{ github.workspace }}/bundle
+      #     key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-bundle-
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -179,9 +179,9 @@ jobs:
 
           # echo "BABEL_LIBDIR"
           # echo $BABEL_LIBDIR
-          #echo "LDD"
-          #cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          #ldd openbabel.so
+          echo "LDD"
+          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          ldd openbabel.so
 
       # WORKING
       # - name: Node
@@ -215,5 +215,7 @@ jobs:
       - name: Test Ruby
         run: |
           cd $GITHUB_WORKSPACE
+          echo "OPENBABEL"
+          bundle info openbabel
           #RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
           RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb --backtrace
