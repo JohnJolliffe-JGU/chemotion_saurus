@@ -140,7 +140,7 @@ jobs:
       - name: Cache bundle
         uses: actions/cache@v2
         with:
-          path: ${{ github.workspace }}/vendor/cache/bundle
+          path: ${{ github.workspace }}/vendor/cache/ruby
           key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
             ${{ runner.os }}-bundle-
@@ -159,10 +159,10 @@ jobs:
           # echo $GEM_PATH
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           echo "BUNDLE"
-          cd vendor/cache/bundle
-          ls
+          # cd vendor/cache/bundle
+          # ls
           # TODO? --quiet --path bundle
-          bundle install --jobs 4 --retry 3 --path vendor/cache/bundle
+          bundle install --jobs 4 --retry 3 --path vendor/cache/ruby
 
       - name: log
         run: |
