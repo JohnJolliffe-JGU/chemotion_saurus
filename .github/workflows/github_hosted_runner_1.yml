@@ -168,9 +168,11 @@ jobs:
           # ls -la
           echo ".BUNDLE"
           cat .bundle/config
-          RAILS_ENV=test bundle exec rake db:test:prepare
-          echo "RAILS RUNNER"
-          rails runner lib/chemotion/open_babel_service.rb
+
+          # TODO
+          # RAILS_ENV=test bundle exec rake db:test:prepare
+          # echo "RAILS RUNNER"
+          # rails runner lib/chemotion/open_babel_service.rb
 
           echo "RUBY LOC"
           which ruby
@@ -220,4 +222,5 @@ jobs:
       - name: Test Ruby
         run: |
           cd $GITHUB_WORKSPACE
-          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb --backtrace
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec --exclude-pattern spec/{features}/**/*_spec.rb
+          #RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb --backtrace
