@@ -14,7 +14,7 @@ jobs:
  TESTS:
     runs-on: ubuntu-latest
     env:
-      LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
+      LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/opt/hostedtoolcache/Ruby/2.6.6/x64/lib/
       BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib/
       GEM_PATH: ${{ github.workspace }}/bundle/
       
