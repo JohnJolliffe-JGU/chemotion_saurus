@@ -152,6 +152,7 @@ jobs:
       - name: log
         run: |
           export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
+          export BABEL_LIBDIR=/opt/hostedtoolcache/Ruby/2.6.6/x64/lib/:$BABEL_LIBDIR
           cd $GITHUB_WORKSPACE
           echo "RUBY LOC"
           which ruby
@@ -163,7 +164,8 @@ jobs:
           echo "SYSTEM RUBY"
           cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           ls -la
-
+          echo "BABEL_LIBDIR"
+          echo $BABEL_LIBDIR
           echo "LDD"
           cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           ldd openbabel.so
