@@ -191,8 +191,8 @@ jobs:
       - name: Install Bundle
         run: |
           cd $GITHUB_WORKSPACE
-          # TODO?
-          bundle install --jobs 4 --retry 3 --quiet --path bundle
+          # TODO? --quiet
+          bundle install --jobs 4 --retry 3 --path bundle
 
       - name: Test Ruby
         run: |
