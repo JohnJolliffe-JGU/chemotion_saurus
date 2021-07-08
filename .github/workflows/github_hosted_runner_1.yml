@@ -174,7 +174,6 @@ jobs:
 
           source ~/.nvm/nvm.sh && nvm use && npm i
 
-
       - name: Cache bundle
         uses: actions/cache@v2
         with:
@@ -191,8 +190,8 @@ jobs:
       - name: Install Bundle
         run: |
           cd $GITHUB_WORKSPACE
-          bundle config path bundle
-          bundle install --jobs 4 --retry 3 --quiet
+          # TODO?
+          bundle install --jobs 4 --retry 3 --quiet --path bundle
 
       # - name: bundle
       #   # env:
