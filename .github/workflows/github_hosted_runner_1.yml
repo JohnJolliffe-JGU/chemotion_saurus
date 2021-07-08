@@ -166,6 +166,7 @@ jobs:
           # ls -la
           echo ".BUNDLE"
           cat .bundle/config
+          RAILS_ENV=test bundle exec rake db:test:prepare
           echo "RAILS RUNNER"
           rails runner lib/chemotion/open_babel_service.rb
 
@@ -186,33 +187,33 @@ jobs:
           # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           # ldd openbabel.so
 
-      - name: Node
-        run: |
-          cd $GITHUB_WORKSPACE
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+      # - name: Node
+      #   run: |
+      #     cd $GITHUB_WORKSPACE
+      #     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+      #     export NVM_DIR="$HOME/.nvm"
+      #     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      #     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-          #install Node, sudo not working
-          #source ~/.nvm/nvm.sh && nvm use && 
-          nvm install v12.22.1
-          which npm
-          # uninstall npm 6
-          sudo rm -rf /usr/local/bin/npm
-          source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
-          #sudo npm install -g npm@7.11.1
-          echo "NPM:" 
-          npm -v
-          which npm
-          echo "NVM:"
-          nvm -v
-          #which nvm #error
-          echo "Node:"
-          node -v
+      #     #install Node, sudo not working
+      #     #source ~/.nvm/nvm.sh && nvm use && 
+      #     nvm install v12.22.1
+      #     which npm
+      #     # uninstall npm 6
+      #     sudo rm -rf /usr/local/bin/npm
+      #     source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
+      #     #sudo npm install -g npm@7.11.1
+      #     echo "NPM:" 
+      #     npm -v
+      #     which npm
+      #     echo "NVM:"
+      #     nvm -v
+      #     #which nvm #error
+      #     echo "Node:"
+      #     node -v
 
-          source ~/.nvm/nvm.sh && nvm use && npm i
-          #source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
+      #     source ~/.nvm/nvm.sh && nvm use && npm i
+      #     #source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
 
       - name: Test Ruby
         run: |
