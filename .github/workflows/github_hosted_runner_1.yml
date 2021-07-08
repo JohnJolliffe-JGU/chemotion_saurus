@@ -4,7 +4,7 @@
 # https://docs.github.com/en/actions/guides/building-and-testing-ruby
 ###
 
-name: ELN GitHub Actions 1
+name: ELN GitHub Actions 2
 on:
   workflow_dispatch:
   push:
@@ -121,7 +121,7 @@ jobs:
             #echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
 
       - name: postgres
-        env:
+        # env:
           # PG_DATABASE: chemotion_test
           # PG_HOST: localhost
           # PG_USER: chemotion_test
