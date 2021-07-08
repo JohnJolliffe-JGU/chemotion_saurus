@@ -147,6 +147,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Cache bundle
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/bundle
+          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-bundle-
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6.6
+
+      - name: Install Bundle
+        run: |
+          cd $GITHUB_WORKSPACE
+          # TODO? --quiet
+          bundle install --jobs 4 --retry 3 --path bundle
+
       - name: Node
         run: |
           cd $GITHUB_WORKSPACE
@@ -174,25 +193,6 @@ jobs:
 
           source ~/.nvm/nvm.sh && nvm use && npm i
           source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
-
-      - name: Cache bundle
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/bundle
-          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
-          restore-keys: |
-            ${{ runner.os }}-bundle-
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6.6
-
-      - name: Install Bundle
-        run: |
-          cd $GITHUB_WORKSPACE
-          # TODO? --quiet
-          bundle install --jobs 4 --retry 3 --path bundle
 
       - name: Test Ruby
         run: |
