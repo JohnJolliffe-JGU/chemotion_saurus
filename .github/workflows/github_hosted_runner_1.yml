@@ -161,6 +161,8 @@ jobs:
         run: |
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           #export BABEL_LIBDIR=/opt/hostedtoolcache/Ruby/2.6.6/x64/lib
+          echo "POSTGRES"
+          sudo -u postgres pg_ctlcluster 12 main status
           cd $GITHUB_WORKSPACE
           # echo "WORKSPACE"
           # ls -la
