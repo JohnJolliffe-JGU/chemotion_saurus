@@ -18,7 +18,7 @@ jobs:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
       # TODO
       BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib/
-      #GEM_PATH: ${{ github.workspace }}/bundle
+      GEM_PATH: ${{ github.workspace }}/vendor/cache
       
     services:
       postgres:
@@ -62,12 +62,13 @@ jobs:
       - name: Download
         run: |
             cd  $GITHUB_WORKSPACE
-            rm Gemfile
-            # small test Gemfile 
-            wget --no-verbose -O Gemfile https://bwsyncandshare.kit.edu/s/ee9B5D8xTY9tG67/download
+            # small test Gemfile
+            #rm Gemfile
+            #wget --no-verbose -O Gemfile https://bwsyncandshare.kit.edu/s/ee9B5D8xTY9tG67/download
             #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
-            wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
-            tar -xf bundle
+            wget --no-verbose -O cache https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
+            tar -xf cache
+            mv cache vendor
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
             echo "DOWNLOADS"
@@ -131,13 +132,13 @@ jobs:
             ${{ runner.os }}-node-
 
       # TODO
-      # - name: Cache bundle
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ${{ github.workspace }}/bundle
-      #     key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-bundle-
+      - name: Cache bundle
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/vendor/cache
+          key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-bundle-
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -174,39 +175,39 @@ jobs:
           cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           ls -la
 
-          # echo "BABEL_LIBDIR"
-          # echo $BABEL_LIBDIR
-          # echo "LDD"
-          # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          # ldd openbabel.so
+          echo "BABEL_LIBDIR"
+          echo $BABEL_LIBDIR
+          echo "LDD"
+          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          ldd openbabel.so
 
-      # - name: Node
-      #   run: |
-      #     cd $GITHUB_WORKSPACE
-      #     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-      #     export NVM_DIR="$HOME/.nvm"
-      #     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-      #     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+      - name: Node
+        run: |
+          cd $GITHUB_WORKSPACE
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-      #     #install Node, sudo not working
-      #     #source ~/.nvm/nvm.sh && nvm use && 
-      #     nvm install v12.22.1
-      #     which npm
-      #     # uninstall npm 6
-      #     sudo rm -rf /usr/local/bin/npm
-      #     source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
-      #     #sudo npm install -g npm@7.11.1
-      #     echo "NPM:" 
-      #     npm -v
-      #     which npm
-      #     echo "NVM:"
-      #     nvm -v
-      #     #which nvm #error
-      #     echo "Node:"
-      #     node -v
+          #install Node, sudo not working
+          #source ~/.nvm/nvm.sh && nvm use && 
+          nvm install v12.22.1
+          which npm
+          # uninstall npm 6
+          sudo rm -rf /usr/local/bin/npm
+          source ~/.nvm/nvm.sh && nvm use 12.22.1 && npm install -g npm@7.11.1
+          #sudo npm install -g npm@7.11.1
+          echo "NPM:" 
+          npm -v
+          which npm
+          echo "NVM:"
+          nvm -v
+          #which nvm #error
+          echo "Node:"
+          node -v
 
-      #     source ~/.nvm/nvm.sh && nvm use && npm i
-      #     #source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
+          source ~/.nvm/nvm.sh && nvm use && npm i
+          source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
 
       - name: Test Ruby
         run: |
