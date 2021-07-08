@@ -153,6 +153,9 @@ jobs:
           # echo "GEM_PATH"
           # echo $GEM_PATH
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
+          echo "BUNDLE"
+          cd vendor/cache/bundle
+          ls
           # TODO? --quiet --path bundle
           bundle install --jobs 4 --retry 3 --path vendor/cache/bundle
 
