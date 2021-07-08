@@ -155,7 +155,7 @@ jobs:
           echo "RUBY ENV"
           gem env
           echo "SYSTEM RUBY"
-          cd ~
+          cd ~/.gem
           ls -la
 
           echo "LDD"
