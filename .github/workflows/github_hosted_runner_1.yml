@@ -65,6 +65,8 @@ jobs:
             #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
             wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
             tar -xf bundle
+            cd bundle/ruby/2.6.0/bundler/gems/
+            rm -r openbabel-gem-3e25548fd95c
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
 
@@ -96,7 +98,7 @@ jobs:
             # curl -sSL https://get.rvm.io | bash -s stable --ruby=2.6.6 --auto-dotfiles
             # # ERROR
             # echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc \
-            #echo 'if [ -f ~/.bashrc ]; then \n  source ~/.bashrc\nfi' > ~/.bash_profile
+            #echo 'if [ -f ~/.bashrc ]; then \n source ~/.bashrc\nfi' > ~/.bash_profile
 
       - name: postgres
         run: |
@@ -133,10 +135,11 @@ jobs:
       - name: Install Bundle
         run: |
           cd $GITHUB_WORKSPACE
-          bundle install --jobs 4 --retry 3 --quiet --path bundle
+          # --quiet
+          bundle install --jobs 4 --retry 3 --path bundle
           gem install rails -v 4.2.11.3 --no-document
           gem install libruby --no-document
-          gem install openbabel --no-document
+          #gem install openbabel --no-document
 
       - name: log
         run: |
@@ -160,19 +163,23 @@ jobs:
           ruby -v
           echo "RUBY ENV"
           gem env
+          echo "GEMS"
+          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/
+          ls -la
           echo "OPENBABEL"
           bundle info openbabel
-          gem which openbabel
-          gem list
-          echo "SYSTEM RUBY"
-          cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
-          ls -la
+
+          # gem which openbabel
+          # gem list
+          # echo "SYSTEM RUBY"
+          # cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
+          # ls -la
 
           # echo "BABEL_LIBDIR"
           # echo $BABEL_LIBDIR
-          echo "LDD"
-          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          ldd openbabel.so
+          #echo "LDD"
+          #cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          #ldd openbabel.so
 
       # WORKING
       # - name: Node
