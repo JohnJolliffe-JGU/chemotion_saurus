@@ -130,6 +130,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      # TODO
       # - name: Cache bundle
       #   uses: actions/cache@v2
       #   with:
@@ -142,7 +143,8 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6.6
-          bundler-cache: true
+          # error
+          #bundler-cache: true
 
       - name: Install Bundle
         run: |
