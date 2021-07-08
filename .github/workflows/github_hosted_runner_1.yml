@@ -147,7 +147,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install Node
+      - name: Node
         run: |
           cd $GITHUB_WORKSPACE
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
@@ -173,6 +173,7 @@ jobs:
           node -v
 
           source ~/.nvm/nvm.sh && nvm use && npm i
+          source ~/.nvm/nvm.sh && nvm use && npm test
 
       - name: Cache bundle
         uses: actions/cache@v2
@@ -192,6 +193,11 @@ jobs:
           cd $GITHUB_WORKSPACE
           # TODO?
           bundle install --jobs 4 --retry 3 --quiet --path bundle
+
+      - name: Test Ruby
+        run: |
+          cd $GITHUB_WORKSPACE
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb --backtrace
 
       # - name: bundle
       #   # env:
@@ -247,16 +253,6 @@ jobs:
       #     # ls -la
       #     #cat /etc/postgresql/12/main/postgresql.conf
       #     #cat /var/log/postgresql/postgresql-12-main.log
-      
-      - name: Test Node
-        run: |
-          cd $GITHUB_WORKSPACE
-          source ~/.nvm/nvm.sh && nvm use && npm test
-
-      - name: Test Ruby
-        run: |
-          cd $GITHUB_WORKSPACE
-          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb --backtrace
 
       # - name: node
       #   run: |
