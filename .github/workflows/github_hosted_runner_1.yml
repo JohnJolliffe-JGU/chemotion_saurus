@@ -154,6 +154,7 @@ jobs:
           # ls
           # TODO?  --path bundle
           bundle install --jobs 4 --retry 3 --quiet --path bundle
+          gem install rails -v 4.2.11.3 --no-document
           gem install libruby --no-document
 
       - name: log
@@ -161,8 +162,8 @@ jobs:
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           #export BABEL_LIBDIR=/opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           cd $GITHUB_WORKSPACE
-          echo "WORKSPACE"
-          ls -la
+          # echo "WORKSPACE"
+          # ls -la
           echo ".BUNDLE"
           cat .bundle/config
           echo "RAILS RUNNER"
