@@ -64,7 +64,7 @@ jobs:
             cd  $GITHUB_WORKSPACE
             rm Gemfile
             # small test Gemfile 
-            wget --no-verbose -O Gemfile https://bwsyncandshare.kit.edu/s/ee9B5D8xTY9tG67
+            wget --no-verbose -O Gemfile https://bwsyncandshare.kit.edu/s/ee9B5D8xTY9tG67/download
             #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
             wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
             tar -xf bundle
@@ -171,7 +171,7 @@ jobs:
           echo "SYSTEM RUBY"
           cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           ls -la
-          
+
           # echo "BABEL_LIBDIR"
           # echo $BABEL_LIBDIR
           # echo "LDD"
