@@ -17,7 +17,7 @@ jobs:
     env:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
       # TODO
-      BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib/:$BABEL_LIBDIR
+      BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
       GEM_PATH: ${{ github.workspace }}/bundle
       
     services:
@@ -154,7 +154,7 @@ jobs:
       - name: log
         run: |
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
-          #export BABEL_LIBDIR=/opt/hostedtoolcache/Ruby/2.6.6/x64/lib/:$BABEL_LIBDIR
+          #export BABEL_LIBDIR=/opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           cd $GITHUB_WORKSPACE
           echo "RUBY LOC"
           which ruby
@@ -200,7 +200,7 @@ jobs:
       #     source ~/.nvm/nvm.sh && nvm use && npm i
       #     #source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
 
-      # - name: Test Ruby
-      #   run: |
-      #     cd $GITHUB_WORKSPACE
-      #     RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb --backtrace
+      - name: Test Ruby
+        run: |
+          cd $GITHUB_WORKSPACE
+          RAILS_ENV=test bundle exec rake db:test:prepare && bundle exec rspec spec/models/collections_sample_spec.rb --backtrace
