@@ -161,7 +161,7 @@ jobs:
           echo "OPENBABEL"
           bundle info openbabel
           echo "SYSTEM RUBY"
-          cd /opt/hostedtoolcache/Ruby/2.6.6/x64
+          cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           ls -la
 
           echo "LDD"
