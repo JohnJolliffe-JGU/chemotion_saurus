@@ -151,7 +151,7 @@ jobs:
           # echo $GEM_PATH
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           # TODO? --quiet --path bundle
-          bundle install --jobs 4 --retry 3
+          bundle install --jobs 4 --retry 3 --path vendor/cache
 
       - name: log
         run: |
