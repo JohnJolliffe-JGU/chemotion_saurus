@@ -162,6 +162,7 @@ jobs:
           gem env
           echo "OPENBABEL"
           bundle info openbabel
+          gem which openbabel
           gem list
           echo "SYSTEM RUBY"
           cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
@@ -169,9 +170,9 @@ jobs:
 
           # echo "BABEL_LIBDIR"
           # echo $BABEL_LIBDIR
-          # echo "LDD"
-          # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          # ldd openbabel.so
+          echo "LDD"
+          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          ldd openbabel.so
 
       # WORKING
       # - name: Node
