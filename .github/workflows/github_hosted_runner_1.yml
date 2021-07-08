@@ -18,7 +18,7 @@ jobs:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
       # TODO
       BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib/
-      GEM_PATH: ${{ github.workspace }}/vendor/cache
+      #GEM_PATH: ${{ github.workspace }}/vendor/cache
       
     services:
       postgres:
@@ -66,9 +66,9 @@ jobs:
             #rm Gemfile
             #wget --no-verbose -O Gemfile https://bwsyncandshare.kit.edu/s/ee9B5D8xTY9tG67/download
             #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
-            wget --no-verbose -O cache https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
-            tar -xf cache
-            mv cache vendor
+            wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
+            tar -xf bundle
+            mv bundle vendor/cache
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
             echo "DOWNLOADS"
@@ -135,7 +135,7 @@ jobs:
       - name: Cache bundle
         uses: actions/cache@v2
         with:
-          path: ${{ github.workspace }}/vendor/cache
+          path: ${{ github.workspace }}/vendor/cache/bundle
           key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile') }}
           restore-keys: |
             ${{ runner.os }}-bundle-
@@ -154,7 +154,7 @@ jobs:
           # echo $GEM_PATH
           #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           # TODO? --quiet --path bundle
-          bundle install --jobs 4 --retry 3 --path vendor/cache
+          bundle install --jobs 4 --retry 3 --path vendor/cache/bundle
 
       - name: log
         run: |
