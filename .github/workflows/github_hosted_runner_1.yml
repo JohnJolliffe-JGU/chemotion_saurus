@@ -18,7 +18,7 @@ jobs:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
       # TODO
       BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib/
-      GEM_PATH: ${{ github.workspace }}/bundle
+      GEM_PATH: ${{ github.workspace }}/bundle/
       
     services:
       postgres:
@@ -163,9 +163,11 @@ jobs:
           cd $GITHUB_WORKSPACE
           echo "WORKSPACE"
           ls -la
-          # echo ".BUNDLE"
-          # cd vendor/cache
-          # ls -la
+          echo ".BUNDLE"
+          cat .bundle/config
+          echo "RAILS RUNNER"
+          rails runner lib/chemotion/open_babel_service.rb
+
           echo "RUBY LOC"
           which ruby
           ruby -v
@@ -177,11 +179,11 @@ jobs:
           cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           ls -la
 
-          echo "BABEL_LIBDIR"
-          echo $BABEL_LIBDIR
-          echo "LDD"
-          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
-          ldd openbabel.so
+          # echo "BABEL_LIBDIR"
+          # echo $BABEL_LIBDIR
+          # echo "LDD"
+          # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          # ldd openbabel.so
 
       - name: Node
         run: |
@@ -209,7 +211,7 @@ jobs:
           node -v
 
           source ~/.nvm/nvm.sh && nvm use && npm i
-          source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
+          #source ~/.nvm/nvm.sh && nvm use && RAILS_ENV=test bundle exec rake db:test:prepare && npm test
 
       - name: Test Ruby
         run: |
