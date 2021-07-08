@@ -150,7 +150,7 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v2
         with:
-          path: ${{ github.workspace }}/node_modules
+          path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
@@ -229,8 +229,6 @@ jobs:
           #install Node, sudo not working
           #source ~/.nvm/nvm.sh && nvm use && 
           nvm install v12.22.1
-          echo "NPM 6:" 
-          npm -v
           which npm
           # uninstall npm 6
           sudo rm -rf /usr/local/bin/npm
