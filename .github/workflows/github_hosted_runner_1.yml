@@ -151,6 +151,12 @@ jobs:
           cd $GITHUB_WORKSPACE
           echo "RUBY ENV"
           gem env
+          echo "SYSTEM RUBY"
+          cd /home/runner/.gem/ruby/2.6.0
+          ls -la
+          cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+          echo "LDD"
+          ldd openbabel.so
 
       # - name: Node
       #   run: |
