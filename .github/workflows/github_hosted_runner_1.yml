@@ -18,7 +18,7 @@ jobs:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
       # TODO
       BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib/:$BABEL_LIBDIR
-      GEM_PATHS: ${{ github.workspace }}/bundle
+      GEM_PATH: ${{ github.workspace }}/bundle
       
     services:
       postgres:
@@ -75,8 +75,8 @@ jobs:
       - name: Set up Ubuntu
         #shell: bash -lc {0}
         run: |
-          echo "BASH PROFILE"
-          cat ~/.bash_profile
+          # echo "BASH PROFILE"
+          # cat ~/.bash_profile
           #echo "UBUNTU: $(cat /etc/os-release)"
           #sudo apt-get install libboost-all-dev
           # cd /usr/lib/x86_64-linux-gnu/
@@ -145,14 +145,16 @@ jobs:
       - name: Install Bundle
         run: |
           cd $GITHUB_WORKSPACE
-          export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
+          echo "GEM_PATH"
+          echo $GEM_PATH
+          #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           # TODO? --quiet
           bundle install --jobs 4 --retry 3 --path bundle
 
       - name: log
         run: |
-          export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
-          export BABEL_LIBDIR=/opt/hostedtoolcache/Ruby/2.6.6/x64/lib/:$BABEL_LIBDIR
+          #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
+          #export BABEL_LIBDIR=/opt/hostedtoolcache/Ruby/2.6.6/x64/lib/:$BABEL_LIBDIR
           cd $GITHUB_WORKSPACE
           echo "RUBY LOC"
           which ruby
