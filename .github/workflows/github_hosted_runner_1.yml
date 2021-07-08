@@ -136,6 +136,7 @@ jobs:
           bundle install --jobs 4 --retry 3 --quiet --path bundle
           gem install rails -v 4.2.11.3 --no-document
           gem install libruby --no-document
+          gem install openbabel --no-document
 
       - name: log
         run: |
@@ -161,6 +162,7 @@ jobs:
           gem env
           echo "OPENBABEL"
           bundle info openbabel
+          gem list
           echo "SYSTEM RUBY"
           cd /opt/hostedtoolcache/Ruby/2.6.6/x64/lib
           ls -la
