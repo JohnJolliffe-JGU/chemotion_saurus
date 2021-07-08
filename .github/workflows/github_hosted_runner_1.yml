@@ -17,6 +17,7 @@ jobs:
     env:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
       BABEL_LIBDIR: /home/runner/.rvm/rubies/ruby-2.6.6/lib/:$BABEL_LIBDIR
+      GEM_PATHS: ${{ github.workspace }}/bundle
       
     services:
       postgres:
@@ -143,19 +144,22 @@ jobs:
       - name: Install Bundle
         run: |
           cd $GITHUB_WORKSPACE
+          export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           # TODO? --quiet
           bundle install --jobs 4 --retry 3 --path bundle
 
       - name: log
         run: |
+          export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
           cd $GITHUB_WORKSPACE
           echo "RUBY ENV"
           gem env
           echo "SYSTEM RUBY"
-          cd /home/runner/.gem/ruby/2.6.0
+          cd ~
           ls -la
-          cd bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
+
           echo "LDD"
+          cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           ldd openbabel.so
 
       # - name: Node
