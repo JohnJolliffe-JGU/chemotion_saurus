@@ -68,7 +68,12 @@ jobs:
             #wget --no-verbose -O rvm https://bwsyncandshare.kit.edu/s/zC8sgRmBo8Wis2r/download
             wget --no-verbose -O bundle https://bwsyncandshare.kit.edu/s/mRjsBD2eKLW9dkd/download
             tar -xf bundle
+            echo "workspace"
+            ls
             mv bundle vendor/cache
+            echo "vendor/cache"
+            cd vendor/cache
+            ls
             wget --no-verbose -O node_modules https://bwsyncandshare.kit.edu/s/y6D7kdApHrZCrfZ/download
             tar -xf node_modules
             echo "DOWNLOADS"
