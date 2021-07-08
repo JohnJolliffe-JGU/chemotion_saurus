@@ -12,11 +12,9 @@ on:
 
 jobs:
  TESTS:
-    #runs-on: self-hosted # not working --> postgres service
     runs-on: ubuntu-latest
     env:
       LD_LIBRARY_PATH: /home/runner/work/chemotion_saurus/chemotion_saurus/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib:/home/runner/.rvm/rubies/ruby-2.6.6/lib/:$LD_LIBRARY_PATH
-      # TODO
       BABEL_LIBDIR: /opt/hostedtoolcache/Ruby/2.6.6/x64/lib/
       GEM_PATH: ${{ github.workspace }}/bundle/
       
@@ -41,7 +39,6 @@ jobs:
           repository: ComPlat/chemotion_ELN
           path: .
 
-      # TODO
       - name: change config files
         run: |
             #echo "PWD: $(pwd)"
@@ -72,14 +69,7 @@ jobs:
             tar -xf node_modules
 
       - name: Set up Ubuntu
-        #shell: bash -lc {0}
         run: |
-          # echo "BASH PROFILE"
-          # cat ~/.bash_profile
-          #echo "UBUNTU: $(cat /etc/os-release)"
-          #sudo apt-get install libboost-all-dev
-          # cd /usr/lib/x86_64-linux-gnu/
-          # ls
           # from install_production.sh
           sudo apt-get -y update -qq > /dev/null
           sudo apt-get -y install -qq ca-certificates apt-transport-https git curl dirmngr gnupg gnupg2 \
@@ -127,7 +117,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # TODO
       - name: Cache bundle
         uses: actions/cache@v2
         with:
@@ -140,19 +129,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6.6
-          # error
-          #bundler-cache: true
 
       - name: Install Bundle
         run: |
           cd $GITHUB_WORKSPACE
-          # echo "GEM_PATH"
-          # echo $GEM_PATH
-          #export GEM_PATH=${{ github.workspace }}/bundle/:$GEM_PATH
-          echo "BUNDLE"
-          # cd vendor/cache/bundle
-          # ls
-          # TODO?  --path bundle
           bundle install --jobs 4 --retry 3 --quiet --path bundle
           gem install rails -v 4.2.11.3 --no-document
           gem install libruby --no-document
@@ -164,8 +144,6 @@ jobs:
           echo "POSTGRES"
           sudo -u postgres pg_ctlcluster 12 main status
           cd $GITHUB_WORKSPACE
-          # echo "WORKSPACE"
-          # ls -la
           echo ".BUNDLE"
           cat .bundle/config
 
@@ -174,6 +152,7 @@ jobs:
           RAILS_ENV=test bundle exec rake db:test:prepare
           echo "RAILS RUNNER"
           rails runner -e test lib/chemotion/open_babel_service.rb
+          rails runner -e test app/models/fingerprint.rb
 
           echo "RUBY LOC"
           which ruby
@@ -192,6 +171,7 @@ jobs:
           # cd ${{ github.workspace }}/bundle/ruby/2.6.0/bundler/gems/openbabel-gem-3e25548fd95c/openbabel/lib
           # ldd openbabel.so
 
+      # WORKING
       # - name: Node
       #   run: |
       #     cd $GITHUB_WORKSPACE
