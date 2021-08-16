@@ -48,18 +48,19 @@ jobs:
 
             cd chemotion_ELN
             export NODE_VERSION="${NODE_VERSION}:$(cat .nvmrc)"
-            sudo bash ./.github/workflows/config.sh
+            #sudo bash ./.github/workflows/config.sh
+            cd config
+            sudo cp database.yml.gitlab database.yml
+            sudo cp -f storage.yml.example storage.yml
+            sudo touch datacollectors.yml
+            sudo cp -f profile_default.yml.example profile_default.yml
+            sudo touch klasses.json
+            cd ..
 
             echo "POSTGRES"
             psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE ROLE ${{ matrix.pg_role }} LOGIN CREATEDB NOSUPERUSER PASSWORD '${{ matrix.pg_password }}'"
             psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE DATABASE ${{ matrix.pg_database }} OWNER ${{ matrix.pg_role }};"
             psql -d postgresql://${{ matrix.pg_role }}:${{ matrix.pg_password }}@postgres/${{ matrix.pg_database }} -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore"; CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
-
-            # psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE ROLE chemotion_test LOGIN CREATEDB NOSUPERUSER PASSWORD '123456'"
-            # psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE DATABASE chemotion_test OWNER chemotion_test;"
-            # psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE ROLE chemotion_dev LOGIN CREATEDB SUPERUSER PASSWORD '123456'"
-            # psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE DATABASE chemotion_dev OWNER chemotion_test;"
-            # psql -d postgresql://chemotion_test:123456@postgres/chemotion_test -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore"; CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 
             sudo chmod -R +x spec
             cd ..
