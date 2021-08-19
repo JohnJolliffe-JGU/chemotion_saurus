@@ -1,21 +1,38 @@
 name: Acceptance Tests
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ ELN ] #TODO
+    branches: [ github-actions-latest ] #TODO
+
+env:
+  NODE_OPTIONS: '--max_old_space_size=4096'
 
 jobs:
+  # GH_OS:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: networks
+  #       run: |
+  #         sudo apt-get install net-tools
+  #         echo "NETSTAT"
+  #         netstat -tulpn
+
   docker_container:
-    runs-on: self-hosted
+    if: "!contains(github.event.commits[0].message, 'skip all') && !contains(github.event.commits[0].message, 'skip acceptance')"
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         bundler: [1.17.3]
         npm: [7.11.1]
-        pg_role: [chemotion_test]
-        pg_database: [chemotion_test]
+        pg_role_dev: [chemotion_dev]
+        pg_database_dev: [chemotion_dev]
+        pg_role_test: [chemotion_test]
+        pg_database_test: [chemotion_test]
         pg_password: [123456]
     container: 
       image: complat/complat-ubuntu-runner:development-5.3
+      #options: --network host
 
     services:
       postgres:
@@ -36,31 +53,43 @@ jobs:
         env:
           POSTGRES_HOST: postgres
           POSTGRES_PORT: 5433
-          # POSTGRES_DB: chemotion_test
-          # POSTGRES_USER: chemotion_test
-          # POSTGRES_PASSWORD: 123456
         run: |
-            # owner was root before
             sudo chown -R gitlab-runner:gitlab-runner /github/home
             # TODO
-            sudo git clone --branch development-5 --depth 1 https://github.com/ComPlat/chemotion_ELN.git 
+            #cd chemotion_ELN
+            #sudo git checkout 1d72b588baf6c85d633839f62b58511eb3c45d57
+            sudo git clone --branch development-5 --depth 1 https://github.com/ComPlat/chemotion_ELN.git
+            # sudo git clone --branch github-actions-latest --depth 1 https://github.com/ComPlat/chemotion_ELN.git
             # sudo git clone --branch $(echo $GITHUB_REF | cut -d'/' -f 3) --depth 1 https://github.com/ComPlat/chemotion_ELN.git 
-
+            
             cd chemotion_ELN
-            export NODE_VERSION="${NODE_VERSION}:$(cat .nvmrc)"
-            #sudo bash ./.github/workflows/config.sh
+            export NODE_VERSION="$(cat .nvmrc)"
+
+            # TODO rm
             cd config
             sudo cp database.yml.gitlab database.yml
             sudo cp -f storage.yml.example storage.yml
             sudo touch datacollectors.yml
             sudo cp -f profile_default.yml.example profile_default.yml
             sudo touch klasses.json
+            echo "WEBPACKER.YML"
+            # download webpacker.yml:
+            #sudo rm webpacker.yml
+            sudo wget -O /home/gitlab-runner/chemotion_ELN/config/webpacker.yml https://bwsyncandshare.kit.edu/s/pN5fAWepH3fooS8/download
             cd ..
+            #sudo bash ./.github/workflows/config.sh
 
             echo "POSTGRES"
-            psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE ROLE ${{ matrix.pg_role }} LOGIN CREATEDB NOSUPERUSER PASSWORD '${{ matrix.pg_password }}'"
-            psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE DATABASE ${{ matrix.pg_database }} OWNER ${{ matrix.pg_role }};"
-            psql -d postgresql://${{ matrix.pg_role }}:${{ matrix.pg_password }}@postgres/${{ matrix.pg_database }} -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore"; CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+            # TODO rm
+            # psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE ROLE ${{ matrix.pg_role_dev }} LOGIN CREATEDB NOSUPERUSER PASSWORD '${{ matrix.pg_password }}'"
+            # psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE DATABASE ${{ matrix.pg_database_dev }} OWNER ${{ matrix.pg_role_dev }};"
+            # psql -d postgresql://${{ matrix.pg_role_dev }}:${{ matrix.pg_password }}@postgres/${{ matrix.pg_database_dev }} -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore"; CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+
+            psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE ROLE ${{ matrix.pg_role_test }} LOGIN CREATEDB NOSUPERUSER PASSWORD '${{ matrix.pg_password }}'"
+            psql -d postgresql://postgres:postgres@postgres/postgres -c "CREATE DATABASE ${{ matrix.pg_database_test }} OWNER ${{ matrix.pg_role_test }};"
+            psql -d postgresql://${{ matrix.pg_role_test }}:${{ matrix.pg_password }}@postgres/${{ matrix.pg_database_test }} -c 'CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "hstore"; CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+
+            psql -d postgresql://${{ matrix.pg_role_test }}:${{ matrix.pg_password }}@postgres/${{ matrix.pg_database_test }} -c '\du'
 
             sudo chmod -R +x spec
             cd ..
@@ -73,14 +102,54 @@ jobs:
             /bin/bash -l -c "source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && npm install -g npm@${{ matrix.npm }}"
             /bin/bash -l -c "source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && npm install yarn -g"
             /bin/bash -l -c "source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && yarn install"
+            sudo apt-get install net-tools
+            sudo apt install iproute2 -y
+
+      - name: log  
+        working-directory: /home/gitlab-runner/chemotion_ELN
+        run: |
+            echo "NETSTAT"
+            netstat -tulpn
+            # echo "BUNDLE"
+            # /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && bundle info webpacker"
+            # echo "NODE ENV"
+            # /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test $NODE_ENV"
+
+      # - name: test dev env
+      #   working-directory: /home/gitlab-runner/chemotion_ELN
+      #   env:
+      #     RAILS_ENV: development
+      #   run: |
+      #       /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=development bundle exec rake db:create"
+      #       /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=development bundle exec rake db:migrate"
+      #       /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=development bundle exec rails s -e development -d"
+      #       /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=development bundle exec bin/webpack-dev-server"
 
       - name: testacceptance
         working-directory: /home/gitlab-runner/chemotion_ELN
+        env:
+          RAILS_ENV: test
         run: |
             echo "RAKE DB"
             /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rake db:test:prepare"
-            echo "PRECOMPILE"
-            /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rake assets:precompile"
+
             mv public/welcome-message-sample.md public/welcome-message.md
+
+            echo "SERVER RAILS"
+            /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rails s -d"
+
+            echo "RUNNING?"
+            ip addr show
+            hostip=$(ip route show | awk '/default/ {print $3}')
+            #sudo ps -a
+            #sudo curl -vvv http://${hostip}:3000/
+
+            echo "SERVER WEBPACK"
+            # /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && nohup RAILS_ENV=test bundle exec bin/webpack-dev-server > /dev/null 2>&1&"
+            /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec bin/webpack-dev-server &"
+
+            # echo "RUNNING?"
+            # curl http://0.0.0.0:3000
+
             echo "TESTACCEPTANCE"
             /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rspec spec/features"
