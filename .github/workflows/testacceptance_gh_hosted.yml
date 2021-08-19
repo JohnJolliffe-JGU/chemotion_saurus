@@ -5,6 +5,9 @@ on:
   push:
     branches: [ ELN ] #TODO
 
+env:
+  NODE_OPTIONS: '--max_old_space_size=4096'
+
 jobs:
   docker_container:
     if: "!contains(github.event.commits[0].message, 'skip all') && !contains(github.event.commits[0].message, 'skip acceptance')"
