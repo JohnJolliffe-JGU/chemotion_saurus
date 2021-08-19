@@ -3,7 +3,7 @@ name: Acceptance Tests gh-hosted
 on:
   workflow_dispatch:
   push:
-    branches: [ github-actions-latest ] #TODO
+    branches: [ ELN ] #TODO
 
 env:
   NODE_OPTIONS: '--max_old_space_size=4096'
