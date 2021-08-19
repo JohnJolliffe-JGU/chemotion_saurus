@@ -128,9 +128,9 @@ jobs:
 
             echo "SERVER WEBPACK"
             # /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && nohup RAILS_ENV=test bundle exec bin/webpack-dev-server 2>&1&"
-            /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec bin/webpack-dev-server > webpack-dev-server.log 2>&1 &"
+            /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec bin/webpack-dev-server >  ~/webpack-dev-server.log 2>&1 &"
             echo "LOG"
-            cat webpack-dev-server.log
+            cat  ~/webpack-dev-server.log
 
             echo "TESTACCEPTANCE"
             /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rspec spec/features"
