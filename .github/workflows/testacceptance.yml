@@ -1,4 +1,4 @@
-name: Acceptance Tests
+name: Acceptance Tests gh-hosted
 
 on:
   workflow_dispatch:
