@@ -5,9 +5,6 @@ on:
   push:
     branches: [ ELN ] #TODO
 
-env:
-  NODE_OPTIONS: '--max_old_space_size=4096'
-
 jobs:
   docker_container:
     if: "!contains(github.event.commits[0].message, 'skip all') && !contains(github.event.commits[0].message, 'skip acceptance')"
@@ -118,8 +115,8 @@ jobs:
 
       - name: testacceptance
         working-directory: /home/gitlab-runner/chemotion_ELN
-        env:
-          RAILS_ENV: test
+        # env:
+        #   RAILS_ENV: test
         run: |
             echo "RAKE DB"
             /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rake db:test:prepare"
@@ -129,18 +126,11 @@ jobs:
             echo "SERVER RAILS"
             /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rails s -d"
 
-            echo "RUNNING?"
-            ip addr show
-            hostip=$(ip route show | awk '/default/ {print $3}')
-            #sudo ps -a
-            #sudo curl -vvv http://${hostip}:3000/
-
             echo "SERVER WEBPACK"
-            # /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && nohup RAILS_ENV=test bundle exec bin/webpack-dev-server > /dev/null 2>&1&"
-            /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec bin/webpack-dev-server &"
-
-            # echo "RUNNING?"
-            # curl http://0.0.0.0:3000
+            # /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && nohup RAILS_ENV=test bundle exec bin/webpack-dev-server 2>&1&"
+            /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec bin/webpack-dev-server > webpack-dev-server.log 2>&1 &"
+            echo "LOG"
+            cat webpack-dev-server.log
 
             echo "TESTACCEPTANCE"
             /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rspec spec/features"
