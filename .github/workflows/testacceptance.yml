@@ -9,15 +9,6 @@ env:
   NODE_OPTIONS: '--max_old_space_size=4096'
 
 jobs:
-  # GH_OS:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: networks
-  #       run: |
-  #         sudo apt-get install net-tools
-  #         echo "NETSTAT"
-  #         netstat -tulpn
-
   docker_container:
     if: "!contains(github.event.commits[0].message, 'skip all') && !contains(github.event.commits[0].message, 'skip acceptance')"
     runs-on: ubuntu-latest
