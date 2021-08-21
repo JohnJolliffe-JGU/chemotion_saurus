@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches: [ ELN ] #TODO
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '00 4 * * *'
 
 env:
   NODE_OPTIONS: '--max_old_space_size=4096'
@@ -63,9 +66,6 @@ jobs:
             sudo touch datacollectors.yml
             sudo cp -f profile_default.yml.example profile_default.yml
             sudo touch klasses.json
-            echo "WEBPACKER.YML"
-            # download webpacker.yml:
-            #sudo rm webpacker.yml
             sudo wget -O /home/gitlab-runner/chemotion_ELN/config/webpacker.yml https://bwsyncandshare.kit.edu/s/pN5fAWepH3fooS8/download
             cd ..
             #sudo bash ./.github/workflows/config.sh
@@ -114,8 +114,6 @@ jobs:
 
       - name: testacceptance
         working-directory: /home/gitlab-runner/chemotion_ELN
-        # env:
-        #   RAILS_ENV: test
         run: |
             echo "RAKE DB"
             /bin/bash -l -c "source /home/gitlab-runner/.rvm/scripts/rvm && source /home/gitlab-runner/.nvm/nvm.sh && nvm use $NODE_VERSION && RAILS_ENV=test bundle exec rake db:test:prepare"
