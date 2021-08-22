@@ -1,4 +1,4 @@
-name: Acceptance Tests
+name: Acceptance Tests self-hosted
 
 on:
   workflow_dispatch:
