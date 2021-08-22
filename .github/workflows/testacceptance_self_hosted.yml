@@ -84,7 +84,7 @@ jobs:
             /bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && bundle install"
             /bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && yarn install"
 
-      - name: server start
+      - name: precompile/server
         working-directory: /home/gitlab-runner/chemotion_ELN
         run: |
             echo "RAKE DB"
@@ -92,8 +92,8 @@ jobs:
 
             mv public/welcome-message-sample.md public/welcome-message.md
 
-            echo "SERVER RAILS"
-            /bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && RAILS_ENV=test bundle exec rails s -d"
+            # echo "SERVER RAILS"
+            # /bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && RAILS_ENV=test bundle exec rails s -d"
 
             echo "SERVER WEBPACK"
             # /bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && nohup RAILS_ENV=test bundle exec bin/webpack-dev-server > /dev/null 2>&1&"
