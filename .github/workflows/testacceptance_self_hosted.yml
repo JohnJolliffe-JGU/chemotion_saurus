@@ -97,7 +97,8 @@ jobs:
 
             echo "SERVER WEBPACK"
             # /bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && nohup RAILS_ENV=test bundle exec bin/webpack-dev-server > /dev/null 2>&1&"
-            /bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && RAILS_ENV=test bundle exec bin/webpack-dev-server &"
+            /bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && RAILS_ENV=test bundle exec rails webpacker:compile"
+            #/bin/bash -l -c "source /home/gitlab-runner/.asdf/asdf.sh && RAILS_ENV=test bundle exec bin/webpack-dev-server &"
             sleep 20
 
       - name: testacceptance
